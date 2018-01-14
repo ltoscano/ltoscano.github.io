@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning &amp; Cognitive</title>
+    <description>Lorenzo Toscano's Artificial Intelligence Articles and Projects</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 14 Jan 2018 15:48:14 -0500</pubDate>
+    <lastBuildDate>Sun, 14 Jan 2018 15:48:14 -0500</lastBuildDate>
+    <generator>Jekyll v3.6.2</generator>
+    
+      <item>
+        <title>Intuitions on the fly on Blockchain</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/blockchain.png&quot; /&gt;&lt;br /&gt;Image source: &lt;a href=&quot;https://icons8.com/&quot;&gt;Icons8&lt;/a&gt;. &lt;em&gt;Distributed under &lt;a href=&quot;https://creativecommons.org/licenses/by-nd/3.0/&quot;&gt;Creative Commons Attribution-NoDerivs 3.0 Unported.&lt;/a&gt;&lt;/em&gt;&lt;/span&gt;
+An increasing number of articles suggest fascinating combinations of Blockchain and Machine Learning. It could be useful to introduce some intuitions about what is a blockchain, before venturing forth.&lt;/p&gt;
+
+&lt;p&gt;In the 2008 &lt;a href=&quot;https://en.wikipedia.org/wiki/Bitcoin&quot;&gt;Bitcoin&lt;/a&gt; entered the market. It was a pioneering payment method and &lt;strong&gt;cryptocurrency&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The technology underlying Bitcoin is called &lt;strong&gt;Blockchain&lt;/strong&gt;. Nowadays Bitcoin is the most important implementation of Blockchain. However, in the last 2 years many opportunities have emerged and Blockchain has assumed a central role in different contexts.&lt;/p&gt;
+
+&lt;p&gt;It is not simple to exactly explain how Blockchain works because it is a &lt;a href=&quot;https://bitsonblocks.net/2015/09/09/a-gentle-introduction-to-blockchain-technology/&quot;&gt;combination of different technologies&lt;/a&gt;. More appropriately, Blockchain is an &lt;strong&gt;ecosystem&lt;/strong&gt; where different technologies, approaches and theories converge.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-bitcoin-intuitions/&quot;&gt;Intuitions on the fly on Blockchain&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 07 May 2017 17:04:01 -0400</pubDate>
+        <link>http://localhost:4000/articles/17/introduction-to-bitcoin-intuitions</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/17/introduction-to-bitcoin-intuitions</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Hype cycle e Apprendimento Automatico: in che fase siamo?</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/1118px-Gartner_Hype_Cycle.svg.png&quot; /&gt;&lt;br /&gt;Image source: &lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Gartner_Hype_Cycle.svg&quot;&gt;Wikimedia&lt;/a&gt;. &lt;em&gt;Distributed under &lt;a href=&quot;https://en.wikipedia.org/wiki/GNU_Free_Documentation_License&quot;&gt;GNU Free Documentation License&lt;/a&gt;&lt;/em&gt;&lt;/span&gt;
+Ogni trend tecnologico si sviluppa attraverso una successione di fasi che ne caratterizza il processo di maturazione: dall’emersione alla sua accettazione. Tale processo è sempre accompagnato da un “&lt;strong&gt;buzzing tecnologico&lt;/strong&gt;” che solitamente esplode nelle fasi iniziali di maggiore “illusione” per poi rimodularsi progressivamente in funzione dell’accettazione da parte del pubblico. Semplificando, il ben noto &lt;a href=&quot;https://en.wikipedia.org/wiki/Hype_cycle&quot;&gt;hype cycle&lt;/a&gt; (&lt;strong&gt;ciclo dell’esagerazione&lt;/strong&gt;) di Gartner potrebbe essere considerato come una metodologia che ci aiuta a riassumere graficamente lo stato del buzzing che avvolge una grande varietà di trend tecnologici.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Continua a leggere l’articolo originale &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo/&quot;&gt;Hype cycle e Apprendimento Automatico: in che fase siamo?&lt;/a&gt; sul mio vecchio blog.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 07 Apr 2017 17:04:01 -0400</pubDate>
+        <link>http://localhost:4000/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Emotions Detection Via Facial Expressions with python &amp; OpenCV</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/Universal_emotions7.jpg&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+In this tutorial I aim to quench a subset of your machine learning thirst; And for what other reason would you be here? This tutorial is based on training a computer to recognize not just your face but the emotion expressed on it. How cool is that? Imagine walking into your home after a long day of work, and your computer immediately knows what kind of therapeutic music to play based on how you are feeling, or when you are driving the car onboard computer is able to assess your ability to drive based on your emotions.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/emotions-detection-via-facial-expressions-with-python-opencv/&quot;&gt;Emotions Detection Via Facial Expressions with python &amp;amp; OpenCV&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Jan 2017 17:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Introduction to gradient-boosted trees and XGBoost hyperparameters tuning (with python)</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/ensembletree.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+XGBoost model is a supervised machine learning algorithm that takes in the training data and constructs a model that predicts the outcome of new data instances.&lt;/p&gt;
+
+&lt;p&gt;XGBoost has gained a lot of popularity in the machine learning community due to its ability to train versatile model with speed and quality performance. It’s an implementation of &lt;strong&gt;gradient boosted decision trees&lt;/strong&gt; which are constructed for speed and performance.&lt;/p&gt;
+
+&lt;p&gt;For an in-depth introduction visit this link for &lt;a href=&quot;http://xgboost.readthedocs.io/en/latest/model.html&quot;&gt;more technical details&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here we cover a gentle introduction of XGBoost model using python scikit-learn package.&lt;/p&gt;
+
+&lt;p&gt;By the end of this tutorial you will have learnt:&lt;/p&gt;
+
+&lt;p&gt;XGBoost installation for python use&lt;/p&gt;
+
+&lt;p&gt;XGBoost data preparation and model training&lt;/p&gt;
+
+&lt;p&gt;XGBoost model prediction&lt;/p&gt;
+
+&lt;p&gt;XGBoost hyperparameters tuning&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python/&quot;&gt;Introduction to gradient-boosted trees and XGBoost hyperparameters tuning (with python)&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Jan 2017 10:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Introduction to decision trees with BigML: a step by step guide </title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/bigml.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+The discussion on machine learning is the buzz word in the current tech tectonic waves. It’s all amber-hot as the machines are nearly on the verge of learning to do things and react to the environment around them in more &lt;a href=&quot;https://www.newscientist.com/article/2110522-googles-neural-networks-invent-their-own-encryption/&quot;&gt;human-like-unsupervised-design&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Machine learning is a field of neuro-computational studies, in which scientists work towards instilling learning capabilities in a computer memory. This is all possible through implementation of a set of supervised or unsupervised rules referred to as algorithms. The most popular machine learning algorithms are artificial neural networks, support vector machines, k-nearest neighbors and &lt;strong&gt;decision trees&lt;/strong&gt;. We will discuss the decision trees in this context.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-decision-trees-with-bigml-a-step-by-step-guide/&quot;&gt;Introduction to decision trees with BigML: a step by step guide&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 07 Dec 2016 10:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Machine Learning: the best cheat sheets in one page</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/human-1211467_1280-e1480808939595.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+Squeezed into a set of short tips and schemes, a cheat sheet is not only a source for visual inspiration but also a quick way to learn something new, as well as to refresh your knowledge about any particular subject.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/machine-learning-best-cheat-sheets-one-page/&quot;&gt;Machine Learning: the best cheat sheets in one page&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 07 Dec 2016 09:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/16/machine-learning-best-cheat-sheets-one-page</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/machine-learning-best-cheat-sheets-one-page</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Understanding Apache Ecosystem: stream processing</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/apache-ecosystem.jpg&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+In this article I will show how a normal big data/machine learning project progresses, taking in account the &lt;strong&gt;stream processing&lt;/strong&gt; and analysis part. I will try to functionally position a wide variety of Apache projects such as Sqoop, Flume, Kafka, Hadoop, Storm, Spark, Samza, Flink, Beam, Oozie, Thrift.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/stream-processing-and-analysis-to-move-within-the-apache-ecosystem/&quot;&gt;Understanding Apache Ecosystem: stream processing&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Nov 2016 15:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>A gentle introduction to TensorFlow with python (and RNN)</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/tensorflowpython.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+My quick and dirty introduction to TensorFlow.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/gentle-introduction-to-tensorflow-with-python-and-rnn/&quot;&gt;A gentle introduction to TensorFlow with python (and RNN)&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Nov 2016 12:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Riconoscimento vocale e analisi di testo non strutturato con Watson Developer Cloud Python SDK</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/blue-robot-vector-art-e1478100652986.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+In questo post illustro come: estrarre &lt;strong&gt;tracce audio&lt;/strong&gt; da filmati (usando, per esempio, YouTube), eseguire una &lt;strong&gt;conversione del parlato&lt;/strong&gt; in testo (&lt;em&gt;speech to text&lt;/em&gt;), estrarre &lt;strong&gt;conoscenza dal testo non strutturato della trascrizione&lt;/strong&gt;.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Continua a leggere l’articolo originale &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk/&quot;&gt;Riconoscimento vocale e analisi di testo non strutturato con Watson Developer Cloud Python SDK&lt;/a&gt; sul mio vecchio blog.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Nov 2016 11:04:01 -0500</pubDate>
+        <link>http://localhost:4000/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+      <item>
+        <title>Image recognition tutorial in Python/MXNet using deep convolutional</title>
+        <description>&lt;p&gt;&lt;label for=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/catimagecnn.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;
+I would like to introduce in this post some specific CNN implementations which are able to offer a cognitive image processing that is very close to the state of the art. The exemplary code is based on the use of &lt;a href=&quot;http://mxnet.incubator.apache.org/&quot;&gt;MXNet&lt;/a&gt; framework combined with the Python language.&lt;/p&gt;
+
+&lt;p&gt;MXNet is an open source project, distributed under the Apache License Version 2.0, a result of the research and development groups’ collaboration, belonging to important institutions such as CMU, NYU, NUS and MIT. It is a DMLC project. DMLC is a group of companies, laboratories and universities engaged in projects which are contributing from many years in defining the leading edge in the field of machine learning.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/image-recognition-tutorial-python-mxnet-deep-convolutional/&quot;&gt;Image recognition tutorial in Python/MXNet using deep convolutional&lt;/a&gt; on my old blog.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 07 Oct 2016 12:04:01 -0400</pubDate>
+        <link>http://localhost:4000/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</guid>
+        
+        
+        <category>post</category>
+        
+      </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Fondamenti: selezione attributi e rappresentazione dei documenti</title>
+  <meta name="description" content="⊕Questo post è il primo di una serie denominata “Fondamenti”. L’obiettivo della serie è fornire una panoramica delle principali tecniche utilizzate per estra...">
+
+  <script src="https://use.fontawesome.com/42ac583ec1.js"></script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+  <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/articles/16/selezione-attributi-e-rappresentazione-dei-documenti">
+
+  <link rel="alternate" type="application/rss+xml" title="Machine Learning & Cognitive" href="http://localhost:4000/feed.xml" />
+
+  <script src="/assets/jquery-1.12.4.min.js"></script>
+  <script src="/assets/totop.min.js"></script>
+
+  <style>
+    .totop {
+              position: fixed;
+              bottom: 50px;
+              right: 50px;
+              cursor: pointer;
+              display: none;
+              background: #a05b7e;
+              color: #fff;
+              border-radius: 25px;
+              height: 50px;
+              line-height: 50px;
+              padding: 0 30px;
+              font-size: 18px;
+      }
+  </style>
+
+</head>
+
+  <body> 
+    <a name="TopOfPage"></a>
+<!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/badge_1.png" alt="CH"></a>
+  <span class="blogtitle">Machine Learning & Cognitive - ApprendimentoAutomatico.it</span><br/>
+  
+    <a href="/">Blog</a>
+  
+  
+  
+    
+    
+    
+  	
+    
+    
+    
+  	
+    
+    
+    
+  	
+    
+  	
+    
+    
+		    
+		      <a href="/resources/">Resources</a>
+		    
+	    
+    
+  	
+    
+    
+		    
+		      <a href="/about/">About</a>
+		    
+	    
+    
+  	
+    
+    
+		    
+		      <a href="/privacy/">Privacy & Cookie (ita)</a>
+		    
+	    
+    
+  	
+	</nav>
+</header>
+
+    <article class="group">
+      <h1>Fondamenti: selezione attributi e rappresentazione dei documenti</h1>
+<p class="subtitle">July, 2016</p>
+
+<p><label for="mf-id-whatever" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-whatever" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/keywordsmagnify.jpg" /><br /></span>
+Questo post è il primo di una serie denominata “Fondamenti”. L’obiettivo della serie è fornire una panoramica delle principali tecniche utilizzate per estrarre automaticamente conoscenza da testo non strutturato, come pagine web, email, forum e documenti in generale.</p>
+
+<p>Il focus principale è sul topic modeling, ossia l’approccio semantico per <strong>identificare gli argomenti trattati in documenti, attraverso l’analisi della distribuzione delle parole</strong>. Il topic modeling è una delle tante applicazioni del text mining<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle" /><span class="sidenote">Il <strong>data mining</strong> estrae sapere o conoscenza a partire da grandi quantità di dati, attraverso metodi automatici o semi-automatici. Il <strong>text mining</strong> o text data mining è una forma particolare di data mining dove i dati sono costituiti da testi scritti in linguaggio naturale, quindi da documenti “destrutturati”. </span> e si fonda su algoritmi di apprendimento che suddividono la collezione di documenti in raggruppamenti ciascuno facente riferimento ad un certo <strong>topic</strong> o <strong>argomento in senso generale</strong>. L’individuazione dei raggruppamenti avviene in modo automatico senza ausilio di addestramenti basati su esempi e quindi senza una preventiva supervisione da parte dell’uomo: il topic modeling rientra pertanto nella classe dei <strong>metodi di apprendimento non supervisionati su dati testuali</strong>.<!--more--></p>
+
+<p>Solitamente, i suddetti argomenti richiedono una competenza multidisciplinare e i materiali per lo studio, quando disponibili in Italiano, tendono ad approfondire aspetti teorici tralasciando gli impieghi pratici. Scopo della serie “Fondamenti” è riassumere i concetti chiave, fornendo un apparato nozionistico ridotto ai fondamenti e focalizzando l’impiego pratico attraverso esempi concreti su una estesa varietà di ambienti di programmazione (tra cui, in primis, Python e R) e librerie specializzate (e.g. scikit-learn, gensim, NLTK, Pattern). L’obiettivo della serie è anche suggerire un percorso attraverso una molteplicità di strumenti tecnici, lasciando poi al lettore ogni approfondimento e applicazione ai suoi casi particolari.</p>
+
+<p>In questo post, introdurremo gli elementi per giungere alla piena comprensione del concetto di <strong>modello di rappresentazione dei documenti</strong> di una collezione (corpus). Il modello di rappresentazione è l’elemento centrale attorno al quale si sviluppa ogni processo di analisi automatica del testo.</p>
+
+<p>Un <strong>corpus</strong> (il plurale è <strong>corpora</strong>) è un insieme di testi confrontabili tra di loro e appartenenti a uno stesso contesto. Considereremo un testo come una sequenza di frasi e una frase come una sequenza di <strong>token</strong><label for="2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="2" class="margin-toggle" /><span class="sidenote">Tokenizzare un testo significa dividere le sequenze di caratteri in unità minime di analisi dette appunto token. </span>. Nelle lingue segmentate come l’Italiano, un modo per estrarre i token consiste nell’usare gli spazi come delimitatori dei token stessi<label for="3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="3" class="margin-toggle" /><span class="sidenote">Nelle lingue segmentate i confini di parola sono marcati da spazi bianchi. Nelle lingue non segmentate i confini di parola non sono marcati esplicitamente nella scrittura (p.e. cinese, giapponese) e il processo di tokenizzazione richiede un tipo speciale di segmentazione chiamata <strong>word segmentation</strong> (p.e. basata sull’<a href="https://it.wikipedia.org/wiki/Algoritmo_di_Viterbi">algoritmo di Viterbi</a>). </span>. L’algoritmo di estrazione dei token è chiamato <strong>tokenizzatore</strong> ed esistono molteplici implementazioni, ciascuna basata su specifici criteri di estrazione.</p>
+
+<p>Un tipo particolare di token sono le parole testuali (<strong>word token</strong>) che possono denotare: un oggetto (sostantivo), un’azione o uno stato (verbo), una qualità (aggettivo, avverbio), una relazione (preposizione). Altri tipi di token sono: date, numeri, valute, titoli, sigle, abbreviazioni. Le parole testuali sono da considerare come un sottoinsieme dei possibili token estraibili da un testo<label for="4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="4" class="margin-toggle" /><span class="sidenote">La nozione di token è distinta da quella di parola, poiché la tokenizzazione non si basa generalmente su criteri morfosintattici o semantici: la forma “mandarglielo” corrisponde a 1 token ma ha 3 parole morfologiche (mandare + gli + lo). </span>.</p>
+
+<blockquote>
+  <p>Tecnicamente considereremo un testo come una sequenza di caratteri in codifica Unicode UTF-8 (tipo stringa in Python) e un corpus come una <strong>sequenza ordinata di stringhe</strong> ognuna identificata da un indice numerico (il tipo lista in Python).</p>
+</blockquote>
+
+<p>A titolo esemplificativo, definiamo il seguente corpus a cui in seguito ci riferiremo con il nome di <code class="highlighter-rouge">rawcorpus1</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rawcorpus1</span><span class="o">=</span><span class="p">[</span><span class="s">"La volpe voleva mangiare l'uva"</span><span class="p">,</span>
+            <span class="s">"L'uva era troppo in alto per la volpe"</span><span class="p">,</span>
+            <span class="s">"La volpe non riusciva a raggiungere l'uva"</span><span class="p">,</span>
+            <span class="s">"La volpe rinunciò sostenendo che l'uva non era ancora matura"</span><span class="p">,</span>
+            <span class="s">"La volpe era furba, ma a volte la furbizia non paga"</span>
+           <span class="p">]</span></code></pre></figure>
+
+<blockquote>
+  <p>In queste note assumiamo che i documenti del corpus siano già stati sottoposti a text cleaning, ossia siano stati ripuliti da tutti gli elementi che potrebbero alterarne le successive elaborazioni: si è eseguita una spoliazione dei formati di gestione del testo (XML o altro). Per esempio, i testi sorgenti potrebbero essere stati incapsulati in pagine HTML e in tal caso si sarebbe resa necessaria la rimozione del mark-up HTML, l’eliminazione dei titoli per la barra di navigazione, frammenti di codice JavaScript, link, ecc. Altre forme di cleaning (non necessariamente legate ad HTML) prevedono la rimozione di tabelle, didascalie delle figure, intestazioni delle pagine e in generale materiale ripetuto per ragioni tipografiche.</p>
+</blockquote>
+
+<p>Non tutte le parole in un testo sono significative, per esempio: articoli, congiunzioni e preposizioni contengono uno scarso potere informativo e quindi non sono utili alla nostra analisi. Se queste parole fossero conservate si incrementerebbe il numero di parametri (<strong>dimensioni</strong>) da elaborare con una penalizzazione sui costi computazionali e con il rischio di confondere i risultati<label for="5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="5" class="margin-toggle" /><span class="sidenote">L’incremento del numero di parametri influenzerebbe la dimensione del corpus di documenti nel senso che sarebbero richiesti molti documenti in più per poter condurre il text mining. Corpus limitati e un elevato numero di parametri inducono gli algoritmi di text mining nel difettare in generalizzazione, non riuscendo ad operare in modo accettabile su documenti aggiunti successivamente. </span>.</p>
+
+<p>In particolare, definiamo <strong>vuote</strong> le parole che non sono portatrici di significato autonomo (dette anche <strong>stop word</strong>), in quanto elementi necessari alla costruzione della frase; oppure sono parole strumentali con funzioni grammaticali e/o sintattiche (e.g. “hanno”, “questo”, “perché”, “non”, “tuttavia”). La rimozione delle stop word è eseguita mediante un filtraggio basato su <strong>stop list</strong>. Una stop list è un elenco precostituito di stop word. Esistono stop list per ogni lingua. Tecnicamente sono disponibili molte implementazioni di filtri basati su stop list. Ne valutiamo due.</p>
+
+<p>1) <strong>Impiego della libreria NLTK</strong>. <a href="https://pypi.python.org/pypi/nltk">NLTK</a> è un’ampia libreria con funzioni per la processazione del linguaggio naturale (<em>Natural Language Processing</em>, NLP) e con estensioni multilingua (incluso il supporto dell’Italiano per gran parte delle funzionalità). Tra le funzioni offerte è incluso il supporto per il filtraggio con stop list. Nell’esempio seguente, si ottiene da NLTK la stop list per l’Italiano e si visualizza il numero di stop word contenute nella lista.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s">'italian'</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">stoplist</span><span class="p">)</span>
+<span class="c">#=&gt; 219</span></code></pre></figure>
+
+<p>2) <strong>Impiego della libreria stop-words</strong>. <a href="https://pypi.python.org/pypi/stop-words">stop-words</a> è un libreria multilingua specializzata unicamente nel filtraggio su stop list. Nell’esempio seguente, si ottiene la stop list per l’Italiano e si visualizza il numero di stop word contenute nella lista<label for="6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="6" class="margin-toggle" /><span class="sidenote">La stop list della libreria stop-words appare più selettiva, includendo un numero maggiore di stop word. </span>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">stop_words</span> <span class="kn">import</span> <span class="n">get_stop_words</span>
+<span class="n">stoplist</span><span class="o">=</span><span class="n">get_stop_words</span><span class="p">(</span><span class="s">'italian'</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">stoplist</span><span class="p">)</span>
+<span class="c">#=&gt; 308</span></code></pre></figure>
+
+<p>Il filtraggio mediante stop list si ottiene in Python con una riga di codice:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">filtered_corpus</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">document</span><span class="p">,</span><span class="s">'utf-8'</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stoplist</span><span class="p">]</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus1</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">filtered_corpus</span>
+<span class="c">#=&gt; [[u'volpe', u'voleva', u'mangiare', u"l'uva"]</span>
+<span class="c">#=&gt;  [u"l'uva", u'troppo', u'alto', u'volpe']</span>
+<span class="c">#=&gt;  [u'volpe', u'riusciva', u'raggiungere', u"l'uva"]</span>
+<span class="c">#=&gt;  [u'volpe', u'rinunciò', u'sostenendo', u"l'uva", u'matura']</span>
+<span class="c">#=&gt;  [u'volpe', u'furba,', u'volte', u'furbizia', u'paga']]</span></code></pre></figure>
+
+<p>Dopo il filtraggio, ogni documento del corpus consiste di una lista di token “sopravvissuti” alla rimozione. I token possono essere parole singole o anche combinazioni di parole dette <strong>n-grammi</strong> (come vedremo negli approfondimenti in calce al presente post).</p>
+
+<p>Il complesso di token estratti e filtrati dal corpus prende il nome di <strong>vocabolario</strong> (solitamente indicato con la lettera <strong>V</strong>). In seguito chiameremo <strong>attributo</strong> ogni generico token contenuto nel vocabolario. Ad ogni corpus è sempre associato un vocabolario.</p>
+
+<p>Il vocabolario è un oggetto speciale che incapsula un elenco indicizzato degli attributi. A ciascun attributo è associato un indice numerico univoco<label for="7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="7" class="margin-toggle" /><span class="sidenote">In Python è un intero positivo che parte da 0. </span>.</p>
+
+<p>Utilizzando la liberia <a href="https://radimrehurek.com/gensim/">gensim</a> che è specializzata nella modellazione e recupero di contenuti testuali, la creazione di un vocabolario si risolve in poche istruzioni:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">gensim</span> <span class="kn">import</span> <span class="n">corpora</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">filtered_corpus</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">)):</span>
+  <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">token2id</span><span class="p">)</span>
+<span class="c">#=&gt; 0 voleva</span>
+<span class="c">#=&gt; 1 l'uva</span>
+<span class="c">#=&gt; 2 volpe</span>
+<span class="c">#=&gt; ...</span>
+<span class="c">#=&gt; 14 volte</span>
+<span class="c">#=&gt; {u'alto': 4, u'rinunciò': 8,</span>
+<span class="c">#=&gt;  u"l'uva": 1, u'furba,': 13,</span>
+<span class="c">#=&gt;  u'raggiungere': 7, u'voleva': 0,</span>
+<span class="c">#=&gt;  u'matura': 10, u'troppo': 5,</span>
+<span class="c">#=&gt;  u'furbizia': 11, u'sostenendo': 9,</span>
+<span class="c">#=&gt;  u'volpe': 2, u'mangiare': 3,</span>
+<span class="c">#=&gt;  u'riusciva': 6, u'paga': 12,</span>
+<span class="c">#=&gt;  u'volte': 14}</span></code></pre></figure>
+
+<p>Nell’esempio precedente, abbiamo visualizzato il vocabolario per avere un’evidenza delle associazioni tra ciascun attributo e il rispettivo indice numerico.</p>
+
+<blockquote>
+  <p>Con riferimento all’esempio precedente, il <a href="https://radimrehurek.com/gensim/corpora/dictionary.html">vocabolario gensim</a> (chiamato dizionario) è un oggetto complesso dotato di molte funzioni e proprietà. Per esempio, la proprietà <code class="highlighter-rouge">token2id</code> è un array associativo contenente il numero di occorrenze nel corpus di ogni attributo.</p>
+</blockquote>
+
+<blockquote>
+  <p>Vocabolario o <a href="https://it.wikipedia.org/wiki/Dizionario">Dizionario</a>? Vocabolario e dizionario non sono la stessa cosa. Il termine vocabolario, rispetto a dizionario, può avere anche il significato di corpus lessicale ossia “patrimonio lessicale di una lingua” o “insieme dei vocaboli propri di un certo settore o di un singolo autore”. In tal senso, per i nostri scopi appare più indicato l’impiego della parola vocabolario. Comunque, i due termini sono spesso usati in modo interscambiabile.</p>
+</blockquote>
+
+<p>Un vocabolario agevola la rappresentazione dei documenti nel corpus come vettori. Se <strong>N</strong> è il numero di documenti di un corpus e <strong>M</strong> è il numero di attributi indicizzati nel vocabolario, il corpus può essere rappresentato come una matrice di dimensioni <strong>NxM</strong> chiamata <strong>matrice documento-termine</strong> (DTM).</p>
+
+<p>L’i-esima riga di una matrice DTM corrisponde alla rappresentazione vettoriale dell’i-esimo documento del corpus ed è chiamato <strong>vettore documento</strong>. A volte si preferisce usare la trasposta della DTM che è chiamata <strong>matrice termine-documento</strong> (TDM). Le matrici DTM e TDM sono anche chiamate <strong>matrici lessicali</strong>.</p>
+
+<p>Gli elementi di un vettore documento sono chiamati <strong>pesi</strong> e ciascun peso è associato ad uno specifico attributo di V. Per calcolare i valori dei pesi sono disponibili varie <strong>metriche di pesatura</strong>. Una metrica basilare consiste nell’assegnare il valore 0 per indicare l’assenza dell’attributo nel documento e il valore 1 per indicarne la presenza. In questo caso si parla di <strong>schema di rappresentazione booleano</strong> del corpus.</p>
+
+<p>Un’altra metrica è quella <strong>frequentista</strong> e assegna un valore che è pari al numero di occorrenze dell’attributo nel documento: il generico peso <span>​<script type="math/tex">w_{ij}</script></span> ha un valore corrispondente al numero di occorrenze dell’attributo i-esimo di V nel documento j-esimo. Usando la metrica frequentista, si ottiene una rappresentazione del corpus chiamata <strong>schema di ponderazione</strong> o più comunemente bag of words (BOW). Più specificatamente, si parla di <strong>schema di rappresentazione BOW del corpus</strong>.</p>
+
+<blockquote>
+  <p>A seconda dello schema di rappresentazione utilizzato il contenuto della matrice DTM (o TDM) cambia.</p>
+</blockquote>
+
+<p>In gensim la creazione di uno schema BOW del corpus si ottiene così:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">corpus_bow</span> <span class="o">=</span> <span class="p">[</span><span class="n">V</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">document</span><span class="p">)</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">filtered_corpus</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">corpus_bow</span>
+<span class="c">#=&gt; [[(0, 1), (1, 1), (2, 1), (3, 1)],</span>
+<span class="c">#=&gt;  [(1, 1), (2, 1), (4, 1), (5, 1)],</span>
+<span class="c">#=&gt;  [(1, 1), (2, 1), (6, 1), (7, 1)],</span>
+<span class="c">#=&gt;  [(1, 1), (2, 1), (8, 1), (9, 1), (10, 1)],</span>
+<span class="c">#=&gt;  [(2, 1), (11, 1), (12, 1), (13, 1), (14, 1)]]</span></code></pre></figure>
+
+<p>Nell’esempio precedente, è stato anche visualizzato il corpus BOW. Come si può notare, gensim non memorizza esattamente il corpus come una matrice NxM, ma ne crea una versione compressa dove ogni documento è rappresentato come una lista di coppie di valori (tante coppie quanti sono gli attributi con peso non nullo nel documento). Nella generica coppia (i,<span>​<script type="math/tex">w_{ij}</script></span>): i è l’indice dell’attributo in V e <span>​<script type="math/tex">w_{ij}</script></span> è il peso dell’attributo nel documento j-esimo. Dunque, con riferimento all’esempio precedente, nel primo documento del corpus, gli attributi voleva (<code class="highlighter-rouge">0</code>), l’uva (<code class="highlighter-rouge">1</code>), volpe (<code class="highlighter-rouge">2</code>), mangiare (<code class="highlighter-rouge">3</code>) compaiono rispettivamente con occorrenza unitaria.</p>
+
+<p>Anche con la libreria di apprendimento automatico <a href="http://scikit-learn.org/stable/">scikit-learn</a> (in seguito sklearn), l’operazione di creazione di un dizionario e della rappresentazione BOW del corpus è alla portata di poche linee di codice Python:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction</span> <span class="kn">import</span> <span class="n">text</span>
+<span class="n">my_stop_words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">ENGLISH_STOP_WORDS</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">get_stop_words</span><span class="p">(</span><span class="s">'italian'</span><span class="p">))</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">analyzer</span><span class="o">=</span><span class="s">u'word'</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">my_stop_words</span><span class="p">))</span>
+<span class="n">corpus_bow</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">rawcorpus1</span><span class="p">)</span>
+<span class="n">corpus_bow</span><span class="o">.</span><span class="n">shape</span> <span class="c"># visualizza la dimensione della matrice DTM</span>
+<span class="c">#=&gt; (5,15)</span></code></pre></figure>
+
+<p>sklearn dispone di un facilitatore nativo per il filtraggio delle stop word e già integra una stop list localizzata in inglese. Come mostrato nell’esempio precedente, la stop list nativa di sklearn può essere facilmente estesa con altre liste (p.e. quella ottenuta con la libreria stop-words). Un vettorizzatore (<code class="highlighter-rouge">CountVectorizer</code>) provvede a creare la rappresentazione BOW. Il risultato è una rappresentazione matriciale del corpus avente dimensioni 5×15 (N=5, M=15). Per comparazione con gensim, diamo ora uno sguardo al vocabolario e al corpus BOW ottenuti con sklearn:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">V</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">)):</span>
+  <span class="k">print</span> <span class="n">i</span><span class="p">,</span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">corpus_bow</span>
+<span class="n">corpus_bow</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="c">#=&gt; 0 alto</span>
+<span class="c">#=&gt; 1 furba</span>
+<span class="c">#=&gt; 2 furbizia</span>
+<span class="c">#=&gt; 3 mangiare</span>
+<span class="c">#=&gt; 4 matura</span>
+<span class="c">#=&gt; ...</span>
+<span class="c">#=&gt; 14 volte</span>
+<span class="c">#=&gt; (0, 13) 1</span>
+<span class="c">#=&gt; (0, 12) 1</span>
+<span class="c">#=&gt; (0, 3) 1</span>
+<span class="c">#=&gt; (0, 11) 1</span>
+<span class="c">#=&gt; (1, 13) 1</span>
+<span class="c">#=&gt; ...</span>
+<span class="c">#=&gt; (4, 5) 1</span>
+<span class="c">#=&gt; [[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],</span>
+<span class="c">#=&gt;  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0],</span>
+<span class="c">#=&gt;  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0],</span>
+<span class="c">#=&gt;  [0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0],</span>
+<span class="c">#=&gt;  [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]]</span></code></pre></figure>
+
+<p>sklearn gestice la rappresentazione matriciale del corpus mediante la classe <a href="https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.sparse.csr_matrix.html">csr_matrix</a> della libreria scientifica <a href="https://www.scipy.org/">SciPy</a>. Nell’esempio precedente, è immediato ottenere la visualizzazione in formato sparso (non compresso) della matrice DTM, mediante una semplice invocazione del metodo <code class="highlighter-rouge">todense</code>.</p>
+
+<p>Come si può notare la matrice DTM è composta da un gran numero di zeri (poiché non tutti gli attributi di V sono presenti in ogni documento, in ogni riga ci saranno molti pesi nulli corrispondenti ad occorrenze nulle dei vari attributi in ciascun documento). In analisi numerica, una matrice i cui valori sono quasi tutti uguali a zero è definita <a href="https://it.wikipedia.org/wiki/Matrice_sparsa">matrice sparsa</a>.</p>
+
+<h3 id="approfondimento-1-rimozione-parole-in-base-a-specifiche-soglie-di-occorrenza">Approfondimento 1: Rimozione parole in base a specifiche soglie di occorrenza</h3>
+
+<p>Quando si costruisce un vocabolario si potrebbe decidere di rimuovere gli attributi aventi un’occorrenza superiore ad una soglia massima e/o inferiore ad una soglia minima (quest’ultima chiamata <em>cut-off</em>). L’assegnazione di valori alle soglie minima e massima può richiedere un’indagine preliminare sul corpus.</p>
+
+<p>Per quanto concerne il cut-off, un valore potrebbe essere 1, cioè decidiamo di rimuovere tutte le parole che compaiono una sola volta nell’intero corpus (queste parole sono chiamate <a href="https://it.wikipedia.org/wiki/Hapax_legomenon">hapax</a>).</p>
+
+<p>Con la libreria gensim si può procedere come segue:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">iteritems</span>
+<span class="n">once_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenid</span> <span class="k">for</span> <span class="n">tokenid</span><span class="p">,</span> <span class="n">docfreq</span> <span class="ow">in</span> <span class="n">iteritems</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">dfs</span><span class="p">)</span> <span class="k">if</span> <span class="n">docfreq</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">V</span><span class="o">.</span><span class="n">filter_tokens</span><span class="p">(</span><span class="n">once_ids</span><span class="p">)</span></code></pre></figure>
+
+<p>Con la libreria sklearn basta istanziare il vettorizzatore specificando il parametro <code class="highlighter-rouge">min_df</code> a cui possiamo assegnare un valore reale oppure intero. Il valore intero specifica il numero di occorrenze minimo al di sotto del quale un attributo deve essere scartato. Un valore reale (tra 0 e 1) specifica invece la quota percentuale di documenti in cui un attributo deve comparire per non essere scartato. Per esempio, gli attributi <code class="highlighter-rouge">uva</code> e <code class="highlighter-rouge">volpe</code> sono quelli più presenti nel corpus. In particolare, l’attributo <code class="highlighter-rouge">uva</code> compare in 4 documenti su 5 ossia nell’80% del corpus. Se impostiamo <code class="highlighter-rouge">mid_df</code> a 0.8, nel dizionario saranno certamente inclusi gli attributi <code class="highlighter-rouge">volpe</code> e <code class="highlighter-rouge">uva</code>. Se impostiamo a 0.9 (90%), nel dizionario sarà incluso solo l’onnipresente <code class="highlighter-rouge">volpe</code>. Per escludere gli attributi che occorrono una sola volta (cioè considerare solo quelli che compaiono almeno 2 volte), possiamo procedere come segue:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">analyzer</span><span class="o">=</span><span class="s">u'word'</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">my_stop_words</span><span class="p">),</span> <span class="n">mid_df</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<p>I codici esemplificativi mostrati in precedenza possono essere facilmente adattati per la gestione di una soglia massima. Nel caso di gensim basta modificare la condizione nell’istruzione <code class="highlighter-rouge">if</code>. Nel caso di sklearn il parametro da impostare è <code class="highlighter-rouge">max_df</code> che può assumere valore intero (per un conteggio assoluto) o reale (indicante una proporzione di documenti come nel caso di <code class="highlighter-rouge">min_df</code>).</p>
+
+<h3 id="approfondimento-2-rimozione-punteggiatura">Approfondimento 2: Rimozione punteggiatura</h3>
+
+<p>Nel processo di tokenizzazione assume particolare importanza il trattamento della punteggiatura. I segni di punteggiatura devono essere trattati come segni indipendenti anche quando sono attaccati ad una parola. Sono difficilmente gestibili perché possono avere impieghi differenti. Per esempio il punto può indicare la fine della frase, un’abbreviazione, il punto decimale in valori numerici, ecc. L’apostrofo che compare di norma in mezzo a due parole diverse, secondo il criterio di tokenizzazione basato su spazi bianchi, comporterebbe l’errata identificazione delle due parole come un’unica.</p>
+
+<p>Dagli esempi precedenti possiamo verificare che il vettorizzatore integrato nella libreria sklearn esegue una processazione dei testi più robusta riconoscendo come separatori lo spazio bianco, la punteggiatura, le virgolette, i trattini (-\/|), le parentesi ([{}]) e i caratteri speciali (#\@$\%\°\&amp;\^*).</p>
+
+<p>Nel caso in cui abbiamo usato gensim, invece, avendo implementato una tokenizzazione basata esclusivamente sugli spazi bianchi, ci ritroviamo con attributi estratti come <code class="highlighter-rouge">l'uva</code> e <code class="highlighter-rouge">furba,</code> che contengono punteggiatura; potrebbe dunque essere utile applicare preliminarmente un ulteriore filtro sulla punteggiatura come segue:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<span class="n">filtered_corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">ur"[^\w\d'\s]+"</span><span class="p">,</span><span class="s">''</span><span class="p">,</span><span class="n">document</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus1</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">filtered_corpus</span>
+<span class="c">#=&gt; [['La', 'volpe', 'voleva', 'mangiare', "l'uva"],</span>
+<span class="c">#=&gt;  ["L'uva", 'era', 'troppo', 'in', 'alto', 'per', 'la', 'volpe'],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'non', 'riusciva', 'a', 'raggiungere', "l'uva"],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'rinunciò', 'sostenendo', 'che', "l'uva", 'non', 'era', 'ancora', 'matura'],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'era', 'furba', 'ma', 'a', 'volte', 'la', 'furbizia', 'non', 'paga']]</span></code></pre></figure>
+
+<p>oppure usando il tokenizzatore <code class="highlighter-rouge">wordpunct_tokenize</code> incluso nella libreria NLTK e in grado di suddividere il testo usando gli spazi bianchi e i segni di punteggiatura (;:,.!?):</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">nltk</span>
+<span class="n">filtered_corpus</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus1</span><span class="p">:</span>
+  <span class="n">tokens</span><span class="o">=</span><span class="n">nltk</span><span class="o">.</span><span class="n">wordpunct_tokenize</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+  <span class="n">text</span><span class="o">=</span><span class="n">nltk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+  <span class="n">filtered_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">print</span> <span class="n">filtered_corpus</span>
+
+<span class="c">#=&gt; [['La', 'volpe', 'voleva', 'mangiare', 'uva'],</span>
+<span class="c">#=&gt;  ['uva', 'era', 'troppo', 'in', 'alto', 'per', 'la', 'volpe'],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'non', 'riusciva', 'raggiungere', 'uva'],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'rinunciò', 'sostenendo', 'che', 'uva', 'non', 'era', 'ancora', 'matura'],</span>
+<span class="c">#=&gt;  ['La', 'volpe', 'era', 'furba', 'ma', 'volte', 'la', 'furbizia', 'non', 'paga']]</span></code></pre></figure>
+
+<p>Dopo la rimozione della punteggiatura si può applicare il filtraggio con stop list.</p>
+
+<h3 id="approfondimento-3-bag-of-n-grams">Approfondimento 3: Bag of N-grams</h3>
+
+<p>Data una sequenza ordinata di elementi, un n-gramma è una sua sottosequenza di n elementi. Secondo l’applicazione, gli elementi in questione possono essere fonemi, sillabe, lettere, parole, ecc. Un n-gramma è di lunghezza 1 è chiamato “unigramma”, di lunghezza 2 “digramma”, di lunghezza 3 “trigramma” e, da lunghezza 4 in poi, “n-gramma”. La vettorizzazione del corpus che abbiamo analizzato fino a questo momento prevede la selezione di attributi che sono essenzialmente <em>unigrammi</em>. Tuttavia è possibile estendere la selezione ad attributi che sono anche combinazioni di 2 o più attributi. Il modello di rappresentazione BOW esteso agli n-grammi è chiamato <em>Bag of N-grams</em>.</p>
+
+<p>Seguono alcuni esempi per chiarire il punto.</p>
+
+<p>Usando la libreria sklearn, possiamo eseguire una vettorizzazione basata sulla selezione sia di unigrammi sia di digrammi, impostando il parametro <code class="highlighter-rouge">ngram_range</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">analyzer</span><span class="o">=</span><span class="s">u'word'</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">my_stop_words</span><span class="p">),</span> <span class="n">ngram_range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">V</span><span class="p">)):</span> <span class="k">print</span> <span class="n">i</span><span class="p">,</span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="c">#=&gt; 0 alto</span>
+<span class="c">#=&gt; 1 alto volpe</span>
+<span class="c">#=&gt; 2 furba</span>
+<span class="c">#=&gt; 4 furbizia</span>
+<span class="c">#=&gt; 5 furbizia paga</span>
+<span class="c">#=&gt; 6 mangiare</span>
+<span class="c">#=&gt; 8 matura</span>
+<span class="c">#=&gt; 9 paga</span>
+<span class="c">#=&gt; 10 raggiungere</span>
+<span class="c">#=&gt; 11 raggiungere uva</span>
+<span class="c">#=&gt; 12 rinunciò</span>
+<span class="c">#=&gt; 13 rinunciò sostenendo</span>
+<span class="c">#=&gt; ...</span>
+<span class="c">#=&gt; 31 volte furbizia</span></code></pre></figure>
+
+<p>Utilizzando la libreria gensim in combinazione con NLTK, possiamo procedere nel seguente modo:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">Phrases</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="n">bigram</span> <span class="o">=</span> <span class="n">Phrases</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+  <span class="n">document</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">]</span>
+  <span class="n">bigram</span><span class="o">.</span><span class="n">add_vocab</span><span class="p">([</span><span class="n">document</span><span class="p">])</span>
+<span class="n">bigram</span><span class="o">.</span><span class="n">vocab</span>
+<span class="c">#=&gt; defaultdict(int, {'a': 2,</span>
+<span class="c">#=&gt;                   'a_raggiungere': 1,</span>
+<span class="c">#=&gt;                   'a_volte': 1,</span>
+<span class="c">#=&gt;                   'alto': 1,</span>
+<span class="c">#=&gt;                   'alto_per': 1,</span>
+<span class="c">#=&gt;                   'ancora': 1,</span>
+<span class="c">#=&gt;                   'ancora_matura': 1,</span>
+<span class="c">#=&gt;                   ...,</span>
+<span class="c">#=&gt;                   'volte_la': 1})</span></code></pre></figure>
+
+<p>Incrementare il numero di attributi vuol dire aumentare la dimensione delle rappresentazioni vettoriali dei documenti. Di conseguenza, le operazioni che implicheranno l’uso di questi vettori ne risentiranno sul piano computazionale.</p>
+
+<blockquote>
+  <p>L’espressione <a href="https://en.wikipedia.org/wiki/Curse_of_dimensionality">maledizione della dimensionalità</a> (coniata da <a href="https://it.wikipedia.org/wiki/Richard_Bellman">Richard Bellman</a> indica il problema derivante dal rapido incremento delle dimensioni dello spazio matematico associato all’aggiunta di variabili (qui degli attributi); questo incremento porta ad una maggiore dispersione dei dati all’interno dello spazio descritto dalle variabili rilevate (qui la sparsità della matrice termine-documento), ad una maggiore difficoltà nella stima e, in generale, nel cogliere delle strutture nei dati stessi.</p>
+</blockquote>
+
+<h3 id="approfondimento-4-analisi-del-testo-un-breve-recap">Approfondimento 4: Analisi del testo, un breve recap</h3>
+
+<p>Nelle note precedenti abbiamo visto che il testo grezzo (<em>raw</em>) necessita di opportuni pre-trattamenti. La tokenizzazione, ovvero l’operazione mediante la quale si suddivide il testo in token si estrinseca in passi di identificazione ed estrazione secondo specifici criteri di trattamento dei caratteri di separazione. I token comprendono svariate categorie di parti del testo (parole, punteggiatura, numeri, ecc) o possono anche essere delle unità complesse (come le date). E’ bene ricordare che esistono implementazioni più sofisticate della semplice suddivisione basata su spazi che abbiamo adottato in uno dei nostri esempi precedenti. La libreria NLTK offre una varietà di tokenizzatori (questo è il nome degli algoritmi che eseguono la tokenizzazione).</p>
+
+<p>Nell’esempio seguente, definiremo per comodità un corpus a cui ci riferiremo con il nome di <code class="highlighter-rouge">rawcorpus2</code> e, riusando del codice esemplificativo già introdotto in precedenza per la libreria gensim, richiameremo il tokenizzatore Word Tokenizer di NLTK:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rawcorpus2</span><span class="o">=</span><span class="p">[</span><span class="s">"Il 12 GENNAIO 2002 l'Euro diventa moneta corrente in 12 paesi dell'Unione Europea"</span><span class="p">,</span> <span class="s">'Il 29/10/1929, definito in seguito come il giovedì nero, avvenne il crollo finanziario della borsa di Wall Street'</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="kn">import</span> <span class="n">word_tokenize</span>
+<span class="n">filtered_corpus</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">document</span><span class="p">,</span><span class="s">"utf-8"</span><span class="p">))]</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus2</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">filtered_corpus</span>
+<span class="c">#=&gt; [[u'Il', u'12', u'GENNAIO', u'2002', u"l'Euro", u'diventa', u'moneta', u'corrente', u'in', u'12', u'paesi', u"dell'Unione", u'Europea'],</span>
+<span class="c">#=&gt;  [u'Il', u'29/10/1929', u',', u'definito', u'in', u'seguito', u'come', u'il', u'giovedì', u'nero', u',', u'avvenne', u'il', u'crollo', u'finanziario', u'della', u'borsa', u'di', u'Wall', u'Street']]</span></code></pre></figure>
+
+<p>Si noti dall’output dell’esempio come la versione filtrata dei documenti consista di token che sono parole, numeri, date, punteggiatura<label for="7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="7" class="margin-toggle" /><span class="sidenote">Il Word Tokenizer di NLTK si basa su semplici regole euristiche: le sequenze di stringhe alfabetiche ininterrotte fanno parte di un unico token; i token sono separati fra loro tramite spazi o simboli di punteggiatura. </span>. Questi token sono candidati ad essere gli attributi che compariranno nel vocabolario, si rendono dunque necessari ulteriori filtraggi.</p>
+
+<p>Un passaggio ulteriore, per un filtraggio più selettivo, consiste della rimozione delle stop word. Sempre su <code class="highlighter-rouge">rawcorpus2</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">stop_words</span> <span class="kn">import</span> <span class="n">get_stop_words</span>
+<span class="n">stoplist</span><span class="o">=</span><span class="n">get_stop_words</span><span class="p">(</span><span class="s">'italian'</span><span class="p">)</span>
+<span class="n">filtered_corpus</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">document</span><span class="p">,</span><span class="s">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stoplist</span> <span class="ow">and</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">]</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus2</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">filtered_corpus</span>
+<span class="c">#=&gt; [[u'12', u'gennaio', u'2002', u"l'euro", u'diventa', u'moneta', u'corrente', u'12', u'paesi', u"dell'unione", u'europea'],</span>
+<span class="c">#=&gt;  [u'29/10/1929', u'definito', u'seguito', u'giovedì', u'nero', u'avvenne', u'crollo', u'finanziario', u'borsa', u'wall', u'street']]</span></code></pre></figure>
+
+<blockquote>
+  <p>A volte conviene eliminare le stop word, altre volte invece è preferibile mantenerle nel corpus stesso. La rimozione delle stop word dal testo potrebbe causare una perdita di informazioni rilevanti. Le stopword sono utili, per esempio, quando sono presenti in una parola composta (per esempio l’articolo nel titolo di un film), oppure l’eliminazione della negazione “non” in una frase cambierebbe completamente il messaggio dell’autore. Dunque, è necessario valutare, caso per caso, l’eliminazione delle stop word ed eventualmente ricorrere a normalizzazioni preliminari (p.e. basate su elenchi predefiniti) per selezionare le parole che non dovrebbero essere trattate come stop word (p.e. mediante la costruzione di digrammi o n-grammi).</p>
+</blockquote>
+
+<p>Nell’esempio precedente contestualmente alla rimozione delle stopword si è anche provveduto a: rimuovere i token corrispondenti a caratteri speciali, parentesi e trattini; trasformare tutti i caratteri in minuscoli.</p>
+
+<p>Il passaggio di trasformazione in minuscolo può essere inteso come una forma semplificata di <strong>normalizzazione</strong>. La normalizzazione consente di escludere ogni possibile differenza del tipo maiuscolo/minuscolo (p.e. abbassando le maiuscole non rilevanti<label for="8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="8" class="margin-toggle" /><span class="sidenote">Nel nostro esempio abbiamo ridotto le maiuscole in modo massivo, senza una specifica distinzione per parola. </span>), uniformando la grafia dei nomi propri, sigle ed altre entità, trasformando gli apostrofi in accenti<label for="9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="9" class="margin-toggle" /><span class="sidenote">Quando forme tipografiche diverse vengono condotte a una stessa forma standard, si dice che sono state ricondotte a una <strong>forma normalizzata</strong>. </span>. Per rendere più efficace la normalizzazione, si possono utilizzare elenchi precompilati di parole specifiche per ogni lingua e/o argomento.</p>
+
+<p>Tra le possibili pre-elaborazioni c’è lo <strong>stemming</strong> (troncamento) delle parole. Lo stemming sostituisce ad una parola il suo rispettivo <em>stem</em>. Uno stem è la porzione di parola ottenuta rimuovendo prefissi e suffissi. Un esempio è dato da <strong>mang</strong> che potrebbe essere lo stem per <strong>mangiare</strong>, <strong>mangio</strong>, <strong>mangiato</strong>, <strong>mangi</strong>, ecc. Lo stemming è utile perchè riduce le varianti di una stessa parola-radice ad un concetto comune (rappresentato appunto dallo stem) contribuendo altresì a ridurre il numero di attributi che andranno a comporre il vocabolario.</p>
+
+<blockquote>
+  <p>Lo stemming a volte può causare ambiguità e, in particolare, negli algoritmi di stemming si possono verificare due tipi di errore:
+<br />
+<strong>Overstemming</strong>: lo stemmer rende alla stessa radice parole che, in realtà, hanno significati diversi facendo sì che il termine non sia correttamente interpretato;
+<br />
+<strong>Understemming</strong>: lo stemmer crea diverse radici da parole che, in realtà, hanno la stessa origine.</p>
+</blockquote>
+
+<p>La libreria NLTK include l’implementazione di diversi algoritmi per lo stemming (e.g. Porter, Lancaster, Snowball) chiamati <strong>stemmer</strong>. Nell’esempio seguente usiamo lo Snowball Stemmer sul corpus <code class="highlighter-rouge">rawcorpus2</code> tokenizzato mediante <code class="highlighter-rouge">wordpunct_tokenize</code> di NLTK:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">SnowballStemmer</span>
+<span class="n">stemmed_corpus</span><span class="o">=</span><span class="p">[[</span><span class="n">snowball_stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">document</span><span class="p">]</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">filtered_corpus</span><span class="p">]</span>
+<span class="n">stemmed_corpus</span>
+<span class="c">#=&gt; [[u'12',</span>
+<span class="c">#=&gt;   u'gennai',</span>
+<span class="c">#=&gt;   u'2002',</span>
+<span class="c">#=&gt;   u"l'eur",</span>
+<span class="c">#=&gt;   u'divent',</span>
+<span class="c">#=&gt;   u'monet',</span>
+<span class="c">#=&gt;   u'corrent',</span>
+<span class="c">#=&gt;   u'12',</span>
+<span class="c">#=&gt;   u'paes',</span>
+<span class="c">#=&gt;   u"dell'union",</span>
+<span class="c">#=&gt;   u'europe'],</span>
+<span class="c">#=&gt;  [u'29/10/1929',</span>
+<span class="c">#=&gt;   u'defin',</span>
+<span class="c">#=&gt;   u'segu',</span>
+<span class="c">#=&gt;   u'gioved',</span>
+<span class="c">#=&gt;   u'ner',</span>
+<span class="c">#=&gt;   u'avvenn',</span>
+<span class="c">#=&gt;   u'croll',</span>
+<span class="c">#=&gt;   u'finanziar',</span>
+<span class="c">#=&gt;   u'bors',</span>
+<span class="c">#=&gt;   u'wall',</span>
+<span class="c">#=&gt;   u'street']]</span></code></pre></figure>
+
+<p>Mentre lo stemmer esegue un troncamento della parola, il <strong>lemmatizzatore</strong> è un algoritmo che riconduce ogni parola di un testo alla <strong>forma base</strong> o <strong>canonica</strong> chiamata <strong>lemma</strong>, ossia nella forma in cui comparirebbe in un dizionario. Dunque un lemmatizzatore assocerebbe alla parola “mangiato” la parola “mangiare” piuttosto che una versione troncata come “mang” dello stemmer.</p>
+
+<p>Esistono varie implementazioni di lemmatizzatori che risultano specializzate a seconda delle lingue supportate<label for="10" class="margin-toggle sidenote-number"></label><input type="checkbox" id="10" class="margin-toggle" /><span class="sidenote">Anche gli stemmer, come i lemmatizzatori, sono specializzati a seconda delle lingue supportate. </span>. Il lemmatizzatore individua il lemma corrispondente ad ogni parola, attribuendo allo stesso lemma tutte le parole che da quel lemma derivano. Un vocabolario si dice lemmatizzato se contiene solo le forme canoniche delle parole (lemmi). Un vocabolario lemmatizzato ha dimensioni significativamente ridotte rispetto ad un vocabolario completo cioè contenente le forme flesse (mangiato, mangio, ecc.)<label for="11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="11" class="margin-toggle" /><span class="sidenote">Nelle lingue ricche di forme flesse, come l’Italiano, il Tedesco o il Francese, un vocabolario completo può avere anche dieci o venti volte il numero di parole di un vocabolario lemmatizzato. Anche nelle lingue povere di versioni flesse, un vocabolario completo ha però tipicamente almeno il doppio dei termini di un vocabolario lemmatizzato. Per esempio, nel caso dell’Inglese che è una lingua povera di forme flesse, la forma canonica di un verbo prevede la creazione di tre forme flesse aggiuntive, mediante suffissazione con -s (per la terza persona singolare del presente), <em>-ed</em> (per il passato) e con <em>-ing</em> (per il gerundio). </span>.</p>
+
+<p>Un’implementazione efficace di lemmatizzatore è fornita dal tool <a href="http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/">TreeTragger</a>, sviluppato dall’Institute for Computational Linguistics of the University of Stuttgart con licenza parzialmente libera, che supporta una estesa varietà di lingue tra cui l’Italiano. TreeTragger non è sviluppato nativamente in Python ma è disponibile un wrapper (<code class="highlighter-rouge">TreeTaggerWrapper</code>) che consente un’integrazione più stretta con il linguaggio.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">treetaggerwrapper</span>
+<span class="n">tagger</span><span class="o">=</span><span class="n">treetaggerwrapper</span><span class="o">.</span><span class="n">TreeTagger</span><span class="p">(</span><span class="n">TAGLANG</span><span class="o">=</span><span class="s">'it'</span><span class="p">)</span>
+<span class="n">lemmatized_corpus</span><span class="o">=</span><span class="p">[</span><span class="n">tagger</span><span class="o">.</span><span class="n">make_tags</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">document</span><span class="p">,</span><span class="s">"utf-8"</span><span class="p">))</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus2</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">lemmatized_corpus</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">element</span>
+<span class="c">#=&gt; Il DET:def il</span>
+<span class="c">#=&gt; 12 NUM @card@</span>
+<span class="c">#=&gt; GENNAIO NOM gennaio</span>
+<span class="c">#=&gt; 2002 NUM @card@</span>
+<span class="c">#=&gt; l' DET:def il</span>
+<span class="c">#=&gt; Euro NOM euro</span>
+<span class="c">#=&gt; diventa VER:pres diventare</span>
+<span class="c">#=&gt; moneta NOM moneta</span>
+<span class="c">#=&gt; corrente ADJ corrente</span>
+<span class="c">#=&gt; in PRE in</span>
+<span class="c">#=&gt; 12 NUM @card@</span>
+<span class="c">#=&gt; paesi NOM paese</span>
+<span class="c">#=&gt; dell' PRE:det del</span>
+<span class="c">#=&gt; Unione NOM unione</span>
+<span class="c">#=&gt; Europea ADJ europeo</span>
+<span class="c">#=&gt; Il DET:def il</span>
+<span class="c">#=&gt; 29 NUM @card@</span>
+<span class="c">#=&gt; / PON /</span>
+<span class="c">#=&gt; 10 NUM @card@</span>
+<span class="c">#=&gt; / PON /</span>
+<span class="c">#=&gt; 1929 NUM @card@</span>
+<span class="c">#=&gt; , PON ,</span>
+<span class="c">#=&gt; definito VER:pper definire</span>
+<span class="c">#=&gt; in PRE in</span>
+<span class="c">#=&gt; seguito NOM seguito</span>
+<span class="c">#=&gt; come CON come</span>
+<span class="c">#=&gt; il DET:def il</span>
+<span class="c">#=&gt; giovedì NOM giovedì</span>
+<span class="c">#=&gt; nero ADJ nero</span>
+<span class="c">#=&gt; , PON ,</span>
+<span class="c">#=&gt; avvenne VER:remo avvenire</span>
+<span class="c">#=&gt; il DET:def il</span>
+<span class="c">#=&gt; crollo NOM crollo</span>
+<span class="c">#=&gt; finanziario ADJ finanziario</span>
+<span class="c">#=&gt; della PRE:det del</span>
+<span class="c">#=&gt; borsa NOM borsa</span>
+<span class="c">#=&gt; di PRE di</span>
+<span class="c">#=&gt; Wall NPR Wall</span>
+<span class="c">#=&gt; Street NPR Street</span></code></pre></figure>
+
+<p>Nell’esempio è visualizzata la versione lemmatizzata del corpus <code class="highlighter-rouge">rawcorpus2</code>. La processazione del linguaggio naturale prevede una fase chiamata <strong>Part-Of-Speech tagging</strong> o <strong>POS-tagging</strong> (in italiano la traduzione sarebbe “etichettatura delle parti del discorso”) in cui a ogni attributo estratto dal testo si associa un’etichetta indicante la sua categoria grammaticale. Nell’esempio precedente queste etichette sono visualizzate in corrispondenza di ciascuna parola  e ad ogni parola è automaticamente associato il lemma riconosciuto. Le etichette, o tag, sono reperite attraverso tagset<label for="12" class="margin-toggle sidenote-number"></label><input type="checkbox" id="12" class="margin-toggle" /><span class="sidenote">Il tagset per l’Italiano usato in TreeTagger è disponibile seguendo il link <a href="http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/italian-tagset.txt">Italian tagset used in the TreeTagger parameter file</a>. </span>.</p>
+
+<p>L’etichettatura POS permette di estrarre parole in funzione della forma grammaticale. Nell’esempio che segue, si estraggono i lemmi dei soli verbi riconosciuti.</p>
+
+<p>Un’implementazione nativa in Python di lemmatizzatore compatibile anche con l’Italiano è inclusa nella libreria <a href="https://www.clips.uantwerpen.be/pages/pattern">Pattern</a> del CLiPS (Conputational Linguistics &amp; Psycholinguistics Research Center), i cui sorgenti sono rilasciati sotto licenze BSD. Pattern è una libreria estesa che include funzionalità per il data mining, processazione del linguaggio naturale<label for="13" class="margin-toggle sidenote-number"></label><input type="checkbox" id="13" class="margin-toggle" /><span class="sidenote">Il tagset utilizzato da Pattern è disponibile su <a href="https://www.clips.uantwerpen.be/pages/mbsp-tags">Penn Treebank II tag set</a>. </span> (tra cui il lemmatizzatore), apprendimento automatico, analisi delle reti e visualizzazione.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pattern.it</span> <span class="kn">import</span> <span class="n">parsetree</span>
+<span class="kn">from</span> <span class="nn">pattern.search</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="n">lemmatized_corpus</span><span class="o">=</span><span class="p">[</span><span class="n">parsetree</span><span class="p">(</span><span class="n">document</span><span class="p">,</span><span class="n">relations</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">lemmata</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">rawcorpus2</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">lemmatized_corpus</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">search</span><span class="p">(</span><span class="s">'VB'</span><span class="p">,</span><span class="n">document</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+      <span class="k">print</span> <span class="n">words</span><span class="o">.</span><span class="n">tags</span>
+<span class="c">#=&gt; [[Sentence("Il/DT/B-NP/O/O/il 12/CD/I-NP/O/O/12 GENNAIO/NN/I-NP/O/O/gennaio 2002/CD/B-NP/O/NP-SBJ-1/2002 l´/DT/I-NP/O/NP-SBJ-1/l´ Euro/NN/I-NP/O/NP-SBJ-1/euro diventa/VB/B-VP/O/VP-1/diventare moneta/NN/B-NP/O/NP-OBJ-1/moneta corrente/NN/I-NP/O/NP-OBJ-1/corrente in/IN/B-PP/B-PNP/O/in 12/CD/B-NP/I-PNP/O/12 paesi/NNS/I-NP/I-PNP/O/paese dell´/IN/B-PP/B-PNP/O/dell´ Unione/NNP/B-NP/I-PNP/O/unione Europea/NNP/I-NP/I-PNP/O/europea")],</span>
+<span class="c">#=&gt;  [Sentence('Il/DT/O/O/O/il 29&amp;slash;10&amp;slash;1929/CD/O/O/O/29 ,/,/O/O/O/, definito/JJ/B-ADJP/O/O/definito in/IN/B-PP/B-PNP/O/in seguito/NN/B-NP/I-PNP/O/seguito come/IN/B-PP/B-PNP/O/come il/DT/B-NP/I-PNP/O/il giovedì/NN/I-NP/I-PNP/O/giovedì nero/JJ/I-NP/I-PNP/O/nero ,/,/O/O/O/, avvenne/NNS/B-NP/O/O/avvenna il/DT/B-NP/O/O/il crollo/NN/I-NP/O/O/crollo finanziario/JJ/I-NP/O/O/finanziario della/IN/B-PP/B-PNP/O/della borsa/NN/B-NP/I-PNP/O/borsa di/IN/B-PP/B-PNP/O/di Wall/NNP/B-NP/I-PNP/O/wall Street/NNP/I-NP/I-PNP/O/street')]]</span>
+<span class="c">#=&gt; [u'diventa', u'VB', u'B-VP', 'O', 'VP-1', u'diventare']</span></code></pre></figure>
+
+<p>E’ interessante notare le differenze tra gli output dei due lemmatizzatori sulla lingua italiana. In particolare il POS tagging in Pattern non ha riconosciuto come verbi le parole “definito” e “avvenne”, di conseguenza, i lemmi generati non sono quelli attesi. TreeTagger appare raggiungere un più elevato livello di qualità nella individuazione del giusto lemma per l’Italiano. C’è da aggiungere, comunque, che Pattern è una libreria con una grande quantità di funzioni non specializzata esclusivamente su POS tagging e lemmatizzazione. Si noti, inoltre, che le prestazioni degli strumenti di processazione del linguaggio naturale, in termini di precisione ed accuratezza, sono superiori per la lingua inglese rispetto ad altre lingue e ciò è confermato anche da molteplici risultati di ricerche in letteratura.</p>
+
+<blockquote>
+  <p>Una delle due domande più frequenti quando si tratta di filtrare documenti grezzi è: <strong>quali e quanti filtraggi applicare e in che ordine?</strong> Non esiste una risposta unica. Il pretrattamento della collezione di documenti grezzi è finalizzato alla selezione degli attributi per la costruzione del vocabolario V. La dimensione di V impatta direttamente sui vettori usati per la rappresentazione dei documenti e sul peso computazionale delle operazioni eseguite sui vettori stessi. Bisogna tuttavia considerare un aspetto fondamentale: sebbene fino a questo momento si sia considerato il solo modello di rappresentazione BOW, come vedremo nei prossimi post della serie “Fondamenti”, esistono altri modelli che trasformano la BOW in rappresentazioni più sofisticate e ridotte (in termini dimensionali dei vettori) in grado di catturare secondo vari approcci (e.g. algebrico, probabilistico) gli elementi più significativi dei testi.
+In generale, la rimozione delle stop word è un tipo di filtraggio che ben si adatta alla maggioranza dei modelli di rappresentazione.
+Alcuni modelli (e.g. probabilistici o deep basati su reti neurali) manifestano un’intrinseca capacità di selezione delle parole anche in assenza di un esplicito prefiltraggio. Tuttavia non è possibile generalizzare e ogni corpus richiede una specifica attenzione. Comunque, un fattore comune a tutti i modelli è che un mancato prefiltraggio influenza la dimensionalità delle rappresentazioni e ciò ha sempre un impatto negativo sui tempi di elaborazione e richiede corpus più estesi (cioè composti da un numero maggiore di documenti rispetto al caso con prefiltraggio).
+In altri casi un pretrattamento appare condizione essenziale per ottenere prestazioni migliori, per esempio il modello <em>Random Indexing</em> che incontreremo in uno dei prossimi post della serie “Fondamenti”, nonostante la sua leggerezza in termini computazionali, è in grado di raggiungere e superare le prestazioni di modelli più complessi (come il <em>Latent Semantic Analysis</em>) se si applica in via preventiva una catena di prefiltraggio basata su normalizzazione e stemming.</p>
+</blockquote>
+
+<hr class="slender" />
+
+<p>Ulteriori link per approfondimenti:</p>
+
+<ul>
+<li><a href="https://blogs.princeton.edu/etc/files/2014/03/Text-Analysis-with-NLTK-Cheatsheet.pdf" target="_blank">Text Analysis with NLTK Cheatsheet</a></li>
+<li><a href="http://labcdnew.humnet.unipi.it/wp-content/uploads/2015/01/Lorenzo-Marinelli-Analisi-automatica-dei-test.pdf" target="_blank">Analisi automatica dei testi: le basi e gli strumenti.</a></li>
+<li><a href="http://applieddatamining.blogspot.it/2013/06/nlp-using-python-and-nltk.html" target="_blank">NLP using Python and NLTK</a></li>
+<li><a href="http://didattica.uniroma2.it/assets/uploads/corsi/39157/Analisi_di_dati_testuali.pdf" target="_blank">Analisi statistica di dati testuali </a></li>
+<li><a href="http://www.uniroma2.it/didattica/Statistica_Sociale/deposito/bolasco.pdf" target="_blank">Statistica testuale e text mining : alcuni paradigmi applicativi</a></li>
+<li><a href="http://www.unimib.it/upload/gestioneFiles/Symphonya/lastita/f20032/saccardiita22003.pdf" target="_blank">Data Mining e Marketing Intelligence</a></li>
+<li><a href="http://sameekhan.org/pub/I_K_2015_KER.pdf" target="_blank">A Survey on Text Mining in Social Networks</a></li>
+<li><a href="http://textminingonline.com/dive-into-nltk-part-iv-stemming-and-lemmatization" target="_blank">Dive Into NLTK, Part IV: Stemming and Lemmatization</a></li>
+<li><a href="https://www.apprendimentoautomatico.it/" target="_blank">Processing Raw Text (NLTK official doc)</a></li>
+<li><a href="http://users.dsic.upv.es/~prosso/resources/CalcagnoTesina.pdf" target="_blank">Implementazione e Valutazione di Tecniche di Information Retrieval basate su Stem, Lemma e Synset</a></li>
+<li><a href="http://ww2.unime.it/annalieconomia/file/num1/latona.pdf" target="_blank">Analisi Automatica dei Testi</a></li>
+<li><a href="http://tesi.cab.unipd.it/25036/1/Tesi_per_pdf.pdf" target="_blank">Natural Language Processing e Tecniche Semantiche per il supporto alla diagnosi: un esperimento</a></li>
+<li><a href="http://amslaurea.unibo.it/6433/1/dipaolo_denis_tesi.pdf" target="_blank">Predictive Text Mining: Metodi di previsione di indici di borsa basati su twitter</a></li>
+<li><a href="http://mcburton.net/blog/joy-of-tm/" target="_blank">The Joy of Topic Modeling</a></li>
+<li><a href="http://www.memotef.uniroma1.it/sites/dipartimento/files/file%20lezioni/3%20dispensa%20ADT%20x%20MEAD%202012.pdf" target="_blank">Tipi, livelli e fasi dell’analisi automatica dei testi</a></li>
+<li><a href="http://www.aisv.it/AISVScuolaEstiva2009/materials/1IntroduzioneallaStatisticaTestuale.pdf" target="_blank">Lezione 1/Introduzione alla Statistica Testuale</a></li>
+<li><a href="http://bugs.unica.it/~gppe/did/ca/tesine/2012/12deiana_dessi.pdf" target="_blank">Text Mining: Teoria e Applicazioni Numeriche</a></li>
+<li><a href="https://www.apprendimentoautomatico.it/wp-content/uploads/2016/08/docslide.it_tesi-fabio-donofrio.pdf" target="_blank">Information extraction da testi non strutturati</a></li>
+</ul>
+
+
+    </article>
+    <span class="print-footer">Fondamenti: selezione attributi e rappresentazione dei documenti - July 7, 2016 - lorenzo toscano</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    <li><a href="mailto:lorenzo.toscano@gmail.com"><span class="icon-mail"></span></a></li>
+    
+      <li>
+        <a href="//www.twitter.com/BEmatic"><span class="icon-twitter"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.linkedin.com/in/lorenzotoscano"><span class="icon-linkedin"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/ltoscano"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.scoop.it/t/knowmatic"><span class="icon-bullhorn"></span></a>
+      </li>
+    
+      <li>
+        <a href="/feed"><span class="icon-feed"></span></a>
+      </li>
+    
+  </ul>
+<div class="credits">
+<span>&copy; 2018 &nbsp;&nbsp;LORENZO TOSCANO</span></br> <br>
+<!--<span>This site created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme for ApprendimentoAutomatico.it </a> in <a href="//jekyllrb.com">Jekyll</a>.</span> -->
+</div>
+</footer>
+<div class="totop"><i class="fa fa-angle-up"></i> To Top</div>
+<script>
+      $('.totop').tottTop({
+          scrollTop: 100
+      });
+</script>
+<!--Start Cookie Script--> <script type="text/javascript" charset="UTF-8" src="//cookie-script.com/s/f67066386a32612237b658624241e0af.js"></script> <!--End Cookie Script-->
+
+  </body>
+</html>
