@@ -3,10 +3,10 @@
   <channel>
     <title>Machine Learning &amp; Cognitive</title>
     <description>Lorenzo Toscano's Artificial Intelligence Articles and Projects</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 14 Jan 2018 15:48:14 -0500</pubDate>
-    <lastBuildDate>Sun, 14 Jan 2018 15:48:14 -0500</lastBuildDate>
+    <link>https://ltoscano.github.com/</link>
+    <atom:link href="https://ltoscano.github.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 14 Jan 2018 17:22:11 -0500</pubDate>
+    <lastBuildDate>Sun, 14 Jan 2018 17:22:11 -0500</lastBuildDate>
     <generator>Jekyll v3.6.2</generator>
     
       <item>
@@ -23,8 +23,8 @@ An increasing number of articles suggest fascinating combinations of Blockchain 
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-bitcoin-intuitions/&quot;&gt;Intuitions on the fly on Blockchain&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Sun, 07 May 2017 17:04:01 -0400</pubDate>
-        <link>http://localhost:4000/articles/17/introduction-to-bitcoin-intuitions</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/17/introduction-to-bitcoin-intuitions</guid>
+        <link>https://ltoscano.github.com/articles/17/introduction-to-bitcoin-intuitions</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/17/introduction-to-bitcoin-intuitions</guid>
         
         
         <category>post</category>
@@ -39,8 +39,8 @@ Ogni trend tecnologico si sviluppa attraverso una successione di fasi che ne car
 &lt;p&gt;Continua a leggere l’articolo originale &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo/&quot;&gt;Hype cycle e Apprendimento Automatico: in che fase siamo?&lt;/a&gt; sul mio vecchio blog.&lt;/p&gt;
 </description>
         <pubDate>Fri, 07 Apr 2017 17:04:01 -0400</pubDate>
-        <link>http://localhost:4000/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</guid>
+        <link>https://ltoscano.github.com/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/17/hype-cycle-e-apprendimento-automatico-in-che-fase-siamo</guid>
         
         
         <category>post</category>
@@ -55,8 +55,8 @@ In this tutorial I aim to quench a subset of your machine learning thirst; And f
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/emotions-detection-via-facial-expressions-with-python-opencv/&quot;&gt;Emotions Detection Via Facial Expressions with python &amp;amp; OpenCV&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Jan 2017 17:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</guid>
+        <link>https://ltoscano.github.com/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/17/emotions-detection-via-facial-expressions-with-python-opencv</guid>
         
         
         <category>post</category>
@@ -87,8 +87,8 @@ XGBoost model is a supervised machine learning algorithm that takes in the train
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python/&quot;&gt;Introduction to gradient-boosted trees and XGBoost hyperparameters tuning (with python)&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Jan 2017 10:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</guid>
+        <link>https://ltoscano.github.com/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/17/introduction-to-gradient-boosted-trees-and-xgboost-hyperparameters-tuning-with-python</guid>
         
         
         <category>post</category>
@@ -105,8 +105,8 @@ The discussion on machine learning is the buzz word in the current tech tectonic
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/introduction-to-decision-trees-with-bigml-a-step-by-step-guide/&quot;&gt;Introduction to decision trees with BigML: a step by step guide&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Wed, 07 Dec 2016 10:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</guid>
+        <link>https://ltoscano.github.com/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/introduction-to-decision-trees-with-bigml-a-step-by-step-guide</guid>
         
         
         <category>post</category>
@@ -121,8 +121,8 @@ Squeezed into a set of short tips and schemes, a cheat sheet is not only a sourc
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/machine-learning-best-cheat-sheets-one-page/&quot;&gt;Machine Learning: the best cheat sheets in one page&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Wed, 07 Dec 2016 09:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/16/machine-learning-best-cheat-sheets-one-page</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/machine-learning-best-cheat-sheets-one-page</guid>
+        <link>https://ltoscano.github.com/articles/16/machine-learning-best-cheat-sheets-one-page</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/machine-learning-best-cheat-sheets-one-page</guid>
         
         
         <category>post</category>
@@ -137,8 +137,8 @@ In this article I will show how a normal big data/machine learning project progr
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/stream-processing-and-analysis-to-move-within-the-apache-ecosystem/&quot;&gt;Understanding Apache Ecosystem: stream processing&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Mon, 07 Nov 2016 15:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</guid>
+        <link>https://ltoscano.github.com/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/stream-processing-and-analysis-to-move-within-the-apache-ecosystem</guid>
         
         
         <category>post</category>
@@ -153,8 +153,8 @@ My quick and dirty introduction to TensorFlow.&lt;!--more--&gt;&lt;/p&gt;
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/gentle-introduction-to-tensorflow-with-python-and-rnn/&quot;&gt;A gentle introduction to TensorFlow with python (and RNN)&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Mon, 07 Nov 2016 12:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</guid>
+        <link>https://ltoscano.github.com/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/gentle-introduction-to-tensorflow-with-python-and-rnn</guid>
         
         
         <category>post</category>
@@ -169,8 +169,8 @@ In questo post illustro come: estrarre &lt;strong&gt;tracce audio&lt;/strong&gt;
 &lt;p&gt;Continua a leggere l’articolo originale &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk/&quot;&gt;Riconoscimento vocale e analisi di testo non strutturato con Watson Developer Cloud Python SDK&lt;/a&gt; sul mio vecchio blog.&lt;/p&gt;
 </description>
         <pubDate>Mon, 07 Nov 2016 11:04:01 -0500</pubDate>
-        <link>http://localhost:4000/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</guid>
+        <link>https://ltoscano.github.com/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/riconoscimento-vocale-analisi-testo-watson-developer-cloud-python-sdk</guid>
         
         
         <category>post</category>
@@ -187,8 +187,8 @@ I would like to introduce in this post some specific CNN implementations which a
 &lt;p&gt;Please continue to read the original post &lt;a href=&quot;https://ltoscano.github.io/apprendimentoautomatico-wpblog/en/image-recognition-tutorial-python-mxnet-deep-convolutional/&quot;&gt;Image recognition tutorial in Python/MXNet using deep convolutional&lt;/a&gt; on my old blog.&lt;/p&gt;
 </description>
         <pubDate>Fri, 07 Oct 2016 12:04:01 -0400</pubDate>
-        <link>http://localhost:4000/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</link>
-        <guid isPermaLink="true">http://localhost:4000/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</guid>
+        <link>https://ltoscano.github.com/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</link>
+        <guid isPermaLink="true">https://ltoscano.github.com/articles/16/image-recognition-tutorial-python-mxnet-deep-convolutional</guid>
         
         
         <category>post</category>
