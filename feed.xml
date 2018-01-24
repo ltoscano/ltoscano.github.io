@@ -5,8 +5,8 @@
     <description>Lorenzo Toscano's Artificial Intelligence Articles and Projects</description>
     <link>https://ltoscano.github.com/</link>
     <atom:link href="https://ltoscano.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 24 Jan 2018 08:42:33 -0500</pubDate>
-    <lastBuildDate>Wed, 24 Jan 2018 08:42:33 -0500</lastBuildDate>
+    <pubDate>Wed, 24 Jan 2018 08:50:12 -0500</pubDate>
+    <lastBuildDate>Wed, 24 Jan 2018 08:50:12 -0500</lastBuildDate>
     <generator>Jekyll v3.6.2</generator>
     
       <item>
@@ -29,7 +29,7 @@ In questo articolo propongo un approccio per il deployment di un modello custom 
 
 &lt;p&gt;Il primo passo consiste nell’accedere alla console di SageMaker e da questa attivare (o creare) una &lt;strong&gt;notebook instance&lt;/strong&gt;. A seguire, facendo click su &lt;code class=&quot;highlighter-rouge&quot;&gt;Open&lt;/code&gt;, accediamo all’istanza &lt;strong&gt;Jupyter&lt;/strong&gt;. Dalla finestra di Jupyter, facciamo click su &lt;code class=&quot;highlighter-rouge&quot;&gt;New&lt;/code&gt; e apriamo una finestra &lt;code class=&quot;highlighter-rouge&quot;&gt;Terminal&lt;/code&gt; nel browser, ossia una shell sulla nostra istanza EC2. Siamo loggati come utenti &lt;code class=&quot;highlighter-rouge&quot;&gt;ec2-user&lt;/code&gt;.&lt;label for=&quot;mf-id-sageinstance&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-sageinstance&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/sagemaker_2.png&quot; /&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;Dalla linea di comando digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd SageMaker&lt;/code&gt;, quindi cloniamo (&lt;code class=&quot;highlighter-rouge&quot;&gt;git clone&lt;/code&gt;) il package git &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/ltoscano/CNTK_KERAS_SAGEMAKER.git&lt;/code&gt; che ho appositamente predisposto per agevolare le prossime operazioni.&lt;/p&gt;
+&lt;p&gt;Dalla linea di comando digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd SageMaker&lt;/code&gt;, quindi cloniamo (&lt;code class=&quot;highlighter-rouge&quot;&gt;git clone&lt;/code&gt;) il package git &lt;a href=&quot;https://github.com/ltoscano/CNTK_KERAS_SAGEMAKER.git&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CNTK_KERAS_SAGEMAKER&lt;/code&gt;&lt;/a&gt; che ho appositamente predisposto per agevolare le prossime operazioni.&lt;/p&gt;
 
 &lt;p&gt;Digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd CNTK_KERAS_SAGEMAKER/container&lt;/code&gt; per spostarci all’interno del package appena clonato. Per semplicità, chiamiamo questo punto di accesso &lt;strong&gt;cartella base&lt;/strong&gt;.&lt;/p&gt;
 
