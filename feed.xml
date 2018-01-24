@@ -5,8 +5,8 @@
     <description>Lorenzo Toscano's Artificial Intelligence Articles and Projects</description>
     <link>https://ltoscano.github.com/</link>
     <atom:link href="https://ltoscano.github.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 24 Jan 2018 08:26:05 -0500</pubDate>
-    <lastBuildDate>Wed, 24 Jan 2018 08:26:05 -0500</lastBuildDate>
+    <pubDate>Wed, 24 Jan 2018 08:42:33 -0500</pubDate>
+    <lastBuildDate>Wed, 24 Jan 2018 08:42:33 -0500</lastBuildDate>
     <generator>Jekyll v3.6.2</generator>
     
       <item>
@@ -31,7 +31,7 @@ In questo articolo propongo un approccio per il deployment di un modello custom 
 
 &lt;p&gt;Dalla linea di comando digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd SageMaker&lt;/code&gt;, quindi cloniamo (&lt;code class=&quot;highlighter-rouge&quot;&gt;git clone&lt;/code&gt;) il package git &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/ltoscano/CNTK_KERAS_SAGEMAKER.git&lt;/code&gt; che ho appositamente predisposto per agevolare le prossime operazioni.&lt;/p&gt;
 
-&lt;p&gt;Digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd CNTK_KERAS_SAGEMAKER/container&lt;/code&gt; per spostarci all’interno del package appena clonato. Per semplicità, indicheremo questo punto di accesso con il nome di &lt;strong&gt;cartella base&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Digitiamo &lt;code class=&quot;highlighter-rouge&quot;&gt;cd CNTK_KERAS_SAGEMAKER/container&lt;/code&gt; per spostarci all’interno del package appena clonato. Per semplicità, chiamiamo questo punto di accesso &lt;strong&gt;cartella base&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;La cartella base è così organizzata:&lt;/p&gt;
 
