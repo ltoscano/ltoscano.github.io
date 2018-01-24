@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Amazon SageMaker con Microsoft CNTK/Keras</title>
+  <meta name="description" content="⊕I marchi sono di proprietà dei legittimi proprietari.SageMaker è l’ambiente di Amazon che agevola la costruzione e distribuzione di modelli Machine/Deep Lea...">
+
+  <script src="https://use.fontawesome.com/42ac583ec1.js"></script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+  <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="https://ltoscano.github.com/articles/18/how-to-microsoft-cntk-keras-aws-sagemaker">
+
+  <link rel="alternate" type="application/rss+xml" title="Machine Learning & Cognitive" href="https://ltoscano.github.com/feed.xml" />
+
+  <script src="/assets/jquery-1.12.4.min.js"></script>
+  <script src="/assets/totop.min.js"></script>
+
+  <style>
+    .totop {
+              position: fixed;
+              bottom: 50px;
+              right: 50px;
+              cursor: pointer;
+              display: none;
+              background: #a05b7e;
+              color: #fff;
+              border-radius: 25px;
+              height: 50px;
+              line-height: 50px;
+              padding: 0 30px;
+              font-size: 18px;
+      }
+  </style>
+
+</head>
+
+  <body> 
+    <a name="TopOfPage"></a>
+<!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/badge_1.png" alt="CH"></a>
+  <span class="blogtitle">Machine Learning & Cognitive - ApprendimentoAutomatico.it</span><br/>
+  
+    <a href="/">Blog</a>
+  
+  
+  
+    
+    
+    
+  	
+    
+    
+    
+  	
+    
+    
+    
+  	
+    
+  	
+    
+    
+		    
+		      <a href="/resources/">Resources</a>
+		    
+	    
+    
+  	
+    
+    
+		    
+		      <a href="/about/">About</a>
+		    
+	    
+    
+  	
+    
+    
+		    
+		      <a href="/privacy/">Privacy & Cookie (ita)</a>
+		    
+	    
+    
+  	
+    
+    
+    
+  	
+	</nav>
+</header>
+
+    <article class="group">
+      <h1>Amazon SageMaker con Microsoft CNTK/Keras</h1>
+<p class="subtitle">January, 2018</p>
+
+<p><label for="mf-id-cntk_k_aws" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-cntk_k_aws" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/cntk_k_aws.jpg" /><br /><em>I marchi sono di proprietà dei legittimi proprietari.</em></span>
+<a href="https://aws.amazon.com/it/sagemaker/">SageMaker</a> è l’ambiente di Amazon che agevola la costruzione e distribuzione di modelli Machine/Deep Learning. Sostanzialmente è un servizio gestito della piattaforma <a href="https://aws.amazon.com/it/">AWS</a> che agevola l’adozione di un paradigma di design &amp; deploy basato su containerizzazione <a href="https://www.docker.com">Docker</a>, packaging di web service su <em>lightweight serving stack</em> come Nginx + Gunicorn + Flask e diverse altre amenità.</p>
+
+<p><label for="mf-id-whatever" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-whatever" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/stack.png" /><br />Serving stack utilizzato in SageMaker. <em>Nginx è il server HTTP e reverse proxy, open source e ad alte prestazioni, noto per le sue elevate prestazioni, stabilità, ricco set di funzioni, semplicità di configurazione e basso consumo di risorse. Nginx assolve il ruolo di server di buffering di interfaccia. Green Unicorn (gunicorn) è un server HTTP/<a href="https://it.wikipedia.org/wiki/Web_Server_Gateway_Interface">WSGI</a> (porting del progetto Ruby Unicorn) con bilanciamento del carico tramite pre-fork e socket condivisi. <a href="https://goo.gl/zkiEux">Flask</a> è un framework scritto in Python, basato su librerie altamente performanti per la gestione del protocollo WSGI e il templating.</em></span><!--more-->
+In questo articolo propongo un approccio per il deployment di un modello custom ML/DL basato sulla libreria <a href="https://github.com/Microsoft/CNTK">Microsoft CNTK</a>, sfruttando le funzionalità di SageMaker. Assumo che il lettore abbia già una conoscenza operativa di Docker.</p>
+
+<p>Il modello di distribuzione di SageMaker prevede l’incapsulamento dei modelli ML/DL in immagini Docker. Semplificando, da un’immagine, è dinamicamente generato un container che è eseguito automaticamente su un’istanza EC2<label for="sh-id-ec2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sh-id-ec2" class="margin-toggle" /><span class="sidenote"><a href="https://aws.amazon.com/it/ec2/">Amazon Elastic Computer Cloud</a> </span> dedicata e ottimizzata per l’impiego ML<label for="sh-mlistance" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sh-mlistance" class="margin-toggle" /><span class="sidenote"><a href="https://aws.amazon.com/sagemaker/pricing/instance-types/">Amazon SageMaker ML Instance Types</a> </span>. Il modello è pacchettizzato in modo da essere accessibile attraverso una RESTful API che è automaticamente collegata ad un endpoint HTTPS in grado di offrire un punto di contatto robusto e scalabile verso il modo esterno. Questo tipo di approccio ben si coniuga con uno <strong>stile architetturale a microservizi</strong>.</p>
+
+<blockquote>
+  <p>Lo stile architetturale a microservizi è un approccio allo sviluppo di una singola applicazione come insieme di piccoli servizi, ciascuno dei quali viene eseguito da un proprio processo e comunica con un meccanismo snello, spesso una HTTP API. <em><a href="https://martinfowler.com">Martin Fowler</a></em></p>
+</blockquote>
+
+<p>SageMaker offre anche un insieme di immagini Docker preconfigurate in cui sono incapsulati framework ML/DL e implementazioni di algoritmi base. Utilizzando queste immagini è possibile costruire rapidamente semplici modelli facilmente distribuibili.</p>
+
+<h2 id="creazione-di-una-notebook-instance-su-sagemaker">Creazione di una <em>notebook instance</em> su SageMaker</h2>
+
+<p>Il primo passo consiste nell’accedere alla console di SageMaker e da questa attivare (o creare) una <strong>notebook instance</strong>. A seguire, facendo click su <code class="highlighter-rouge">Open</code>, accediamo all’istanza <strong>Jupyter</strong>. Dalla finestra di Jupyter, facciamo click su <code class="highlighter-rouge">New</code> e apriamo una finestra <code class="highlighter-rouge">Terminal</code> nel browser, ossia una shell sulla nostra istanza EC2. Siamo loggati come utenti <code class="highlighter-rouge">ec2-user</code>.<label for="mf-id-sageinstance" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-sageinstance" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/sagemaker_2.png" /><br /></span></p>
+
+<p>Dalla linea di comando digitiamo <code class="highlighter-rouge">cd SageMaker</code>, quindi cloniamo (<code class="highlighter-rouge">git clone</code>) il package git <code class="highlighter-rouge">https://github.com/ltoscano/CNTK_KERAS_SAGEMAKER.git</code> che ho appositamente predisposto per agevolare le prossime operazioni.</p>
+
+<p>Digitiamo <code class="highlighter-rouge">cd CNTK_KERAS_SAGEMAKER/container</code> per spostarci all’interno del package appena clonato. Per semplicità, indicheremo questo punto di accesso con il nome di <strong>cartella base</strong>.</p>
+
+<p>La cartella base è così organizzata:</p>
+
+<p><code class="highlighter-rouge">build_and_push_to_ecr.sh</code>: lo script file per la generazione dell’immagine e il pushing sul registro Docker ECR<label for="sn-id-ecr" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-ecr" class="margin-toggle" /><span class="sidenote"><a href="https://aws.amazon.com/it/ecr/">Amazon Elastic Container Registry</a> </span>;</p>
+
+<p><code class="highlighter-rouge">Dockefile</code>: il file di testo contenente le istruzioni necessarie per creare una nuova immagine basata su Microsoft CNTK (versione 2.3 con supporto per Py27 e CPU<label for="sn-id-ecr" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-ecr" class="margin-toggle" /><span class="sidenote">Il file può essere facilmente modificato per selezionare una versione più recente di CNTK sia con supporto GPU sia Py2 o Py3. Per ulteriori informazioni consultare la pagina <a href="https://docs.microsoft.com/en-us/cognitive-toolkit/CNTK-Docker-Containers">CNTK Docker Containers</a>. </span>);</p>
+
+<p><code class="highlighter-rouge">keras.json</code>: il file di testo contente le impostazioni per il framework Keras (versione 2.0.6 o superiore) incluso nell’immagine. Queste impostazioni consentono l’integrazione di Keras con la libreria CNTK. Il file è automaticamente caricato all’interno dell’immagine durante la fase di <em>building</em>;</p>
+
+<p><code class="highlighter-rouge">context</code>: la cartella che contiene i file dati e di configurazione per la creazione del modello;</p>
+
+<p><code class="highlighter-rouge">setup</code>: la cartella che contiene i file script che permettono a SageMaker di istanziare un container e attivare un modello richiamando le funzioni di addestramento e predizione;</p>
+
+<p><code class="highlighter-rouge">evaluation</code>: la cartella con file dati esemplificativi e i notebook jupyter che illustrano come utilizzare il modello basato su CNTK da un notebook in SageMaker.</p>
+
+<h2 id="test-in-locale">Test in locale</h2>
+
+<p>Partiamo con l’esame della cartella <code class="highlighter-rouge">context</code>. La cartella è utilizzata esclusivamente per finalità di test in locale (ossia prima di operare su ECR e con SageMaker) e replica al suo interno una gerarchia che riflette esattamente il funzionamento a regime di SageMaker. In <code class="highlighter-rouge">input</code>, carichiamo il file json <code class="highlighter-rouge">hyperparameters.json</code> che contiene i parametri di configurazione del nostro modello (imposteremo parametri simili anche attraverso SageMaker). Sempre in <code class="highlighter-rouge">input</code>, in apposita sottocartella, carichiamo i file CSV <code class="highlighter-rouge">trainset.csv</code> e <code class="highlighter-rouge">testset.csv</code> contenenti rispettivamente training e testing set, per l’addestramento del modello. Infine, le sottocartelle <code class="highlighter-rouge">model</code> e <code class="highlighter-rouge">output</code> sono utilizzate per il salvataggio del modello addestrato (pesi e architettura) e per logging. A differenza della cartella di configurazione, il popolamento delle cartelle <code class="highlighter-rouge">model</code> e <code class="highlighter-rouge">output</code> è automatico, a valle della fase di addestramento del modello.</p>
+
+<p>Per testare in modalità locale il funzionamento del container e del modello in esso incapsulato, è necessario spostarsi nella cartella base e creare un’immagine Docker locale usando il comando:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker build -t cntkdemo .
+</code></pre></div></div>
+
+<p>Dopo la creazione dell’immagine <code class="highlighter-rouge">cntkdemo</code> è possibile spostarsi nella cartella <code class="highlighter-rouge">evaluation</code> e digitare uno dei seguenti comandi:</p>
+
+<p><code class="highlighter-rouge">./run_local.sh train</code>: per istanziare il modello ed eseguire il training;</p>
+
+<p><code class="highlighter-rouge">./run_local.sh serve</code>: per attivare il modello in modalità <em>serving</em> (in attesa di richieste);</p>
+
+<p><code class="highlighter-rouge">./predict.py eval_data.csv</code>: per richiedere una predizione (p.e. usando un file di dati di validazione). Questo script richiede che un’istanza del modello sia funzionante in modalità <em>serving</em> (vedi punto precedente) in una finestra <code class="highlighter-rouge">Terminal</code> dedicata. Nella cartella <code class="highlighter-rouge">evaluation</code> sono anche memorizzati i file <code class="highlighter-rouge">eval_data.csv</code> ed <code class="highlighter-rouge">eval_pred.csv</code> contententi dati di validazione del modello.</p>
+
+<h2 id="programmazione-del-modello">Programmazione del modello</h2>
+
+<p>La programmazione del modello è confinata entro specifici file memorizzati all’interno della cartella <code class="highlighter-rouge">setup</code>. In particolare, gli unici due punti dove inseriamo i nostri sviluppi custom sono:</p>
+
+<p><code class="highlighter-rouge">train</code>: in questo file, all’interno della funzione omonima <code class="highlighter-rouge">train()</code> è confinato il codice per: la lettura dei file di training e testing; la lettura dei parametri di configurazione; la costruzione del modello; l’addestramento e la serializzazione delle impostazioni (pesi e architettura). Nell’esempio fornito, si utilizza Keras per interfacciarsi a CNTK e creare una semplice rete neurale. Ovviamente, è possibile utilizzare qualsiasi libreria Python, istanziare più algoritmi ML/DL, etc.., per la creazione di modelli di qualsivoglia complessità;</p>
+
+<p><code class="highlighter-rouge">predictor.py</code>: in questo file, all’interno della funzione <code class="highlighter-rouge">get_model()</code> è confinato il codice per l’istanziazione del modello (a partire dai file dei pesi e dell’architettura creati con l’esecuzione di <code class="highlighter-rouge">train</code>) e l’implementazione della funzione di predizione. Null’altro è richiesto.</p>
+
+<h2 id="generazione-dellimmagine-e-caricamento-su-ecr">Generazione dell’immagine e caricamento su ECR</h2>
+
+<p>Dopo aver verificato, in locale, il corretto funzionamento del container e del modello in esso incapsulato, possiamo generare (<em>build</em>) una nuova immagine e spedirla (<em>push</em>) al registro Docker ECR. Per questa operazione dobbiamo spostarci nella cartella base ed eseguire l’istruzione:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ./build_and_push_to_ecr.sh cntkdemo-ecr-4
+</code></pre></div></div>
+<p>dove <code class="highlighter-rouge">cntkdemo-ecr-4</code> è un nome che ho arbitrariamente assegnato all’immagine.</p>
+
+<p>Possiamo visualizzare l’elenco delle immagini (sia in locale sia su ECR) digitando l’istruzione:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker images
+</code></pre></div></div>
+
+<h2 id="configurazione-di-un-modello-e-creazione-dellartifact">Configurazione di un modello e creazione dell’artifact</h2>
+
+<p>Abbandondiamo la finestra del <code class="highlighter-rouge">Terminal</code> e accediamo al Jupyter su SageMaker. Quindi, spostiamoci nella cartella <code class="highlighter-rouge">CNTK_KERAS_SAGEMAKER/container/evaluation</code>. In questa cartella sono precaricati tre notebook.</p>
+
+<p>Selezioniamo il notebook <code class="highlighter-rouge">HowToPrepareModel</code>. Il notebook contiene le istruzioni per:</p>
+
+<p>il caricamento dei dataset di training e testing dalla cartella locale <code class="highlighter-rouge">context</code> ad una cartella remota sullo storage S3<label for="sh-id-s3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sh-id-s3" class="margin-toggle" /><span class="sidenote"><a href="https://aws.amazon.com/it/s3/">Amazon Simple Storage</a> </span> associato all’utenza che abbiamo usato per accedere a SageMaker;</p>
+
+<p>la predisposizione del container, attraverso l’impiego dell’interfaccia <code class="highlighter-rouge">sage.estimator.Estimator</code><label for="sn-id-estimator" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-estimator" class="margin-toggle" /><span class="sidenote">Consultare <a href="http://sagemaker.readthedocs.io/en/latest/estimators.html">Amazon SageMaker Python SDK</a> per ulteriori dettagli sull’SDK Python per SageMaker. </span> e avendo cura di specificare: il riferimento all’immagine precedentemente caricata su ECR; il tipo di istanza EC2 da attivare; il puntamento alla cartella su S3 creata e popolata al passo precedente;</p>
+
+<p>la configurazione dei parametri<label for="sn-id-sagemakerjsonconf" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-sagemakerjsonconf" class="margin-toggle" /><span class="sidenote">I parametri sono esattamente gli stessi che in locale abbiamo specificato all’interno del file <code class="highlighter-rouge">hyperparameters.json</code>. SageMaker provvede automaticamente alla creazione di un file json analogo a quello che abbiamo usato per i nostri test in locale. </span> del modello attraverso il metodo <code class="highlighter-rouge">set_hyperparameters</code> dell’<code class="highlighter-rouge">Estimator</code>;</p>
+
+<p>l’addestramento del modello attraverso l’invocazione del metodo <code class="highlighter-rouge">fit</code> dell’<code class="highlighter-rouge">Estimator</code>.</p>
+
+<p>Al termine dell’addestramento, i file dei pesi e dell’architettura saranno automaticamente compressi nell’archivio <code class="highlighter-rouge">model.tar.gz</code> che è salvato su S3. L’insieme dei file contenenti pesi e architettura è chiamato <strong>model artifact</strong>. Possiamo ottenere l’indirizzo esteso del model artifact memorizzato su S3 eseguendo l’istruzione:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  estimator.model_data
+</code></pre></div></div>
+
+<h2 id="incapsulare-il-modello-in-container-e-associare-un-endpoint">Incapsulare il modello in container e associare un endpoint</h2>
+
+<p>Selezioniamo il notebook <code class="highlighter-rouge">HowToDeployModel</code>. Il notebook contiene le istruzioni per:</p>
+
+<p>istanziare il modello partendo dal model artifact generato nella sezione precedente;</p>
+
+<p>assegnare il container ad un endpoint HTTPS;</p>
+
+<p>attivare l’endpoint (l’attivazione può richiedere qualche minuto).</p>
+
+<h2 id="accedere-allendpoint">Accedere all’endpoint</h2>
+
+<p>Selezioniamo il notebook <code class="highlighter-rouge">HowToInvokeModel</code>. Il notebook contiene le istruzioni per:</p>
+
+<p>caricare i dati di validazione dal file locale <code class="highlighter-rouge">eval_data.csv</code>;</p>
+
+<p>accedere all’endpoint HTTPS per invocare la funzione di predizione. L’accesso all’endpoint avviene attraverso il metodo <code class="highlighter-rouge">invoke_endpoint</code> comodamente richiamabile attraverso il modulo <code class="highlighter-rouge">boto3</code><label for="sh-id-boto3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sh-id-boto3" class="margin-toggle" /><span class="sidenote"><a href="http://boto3.readthedocs.io/en/latest/">boto3</a> è l’SDK Python per l’accesso ai servizi AWS. </span>. Il payload dell’invocazione è composto dai dati di validazione che abbiamo opportunamente letto e pre-trattato per l’invio (vedi passo precedente).</p>
+
+<p>Il notebook include istruzioni esemplificative per l’estrazione dei risultati dalla <em>response</em> e la valutazione dell’accuratezza usando i dati <em>ground truth</em> memorizzati in <code class="highlighter-rouge">eval_pred.csv</code>, ma questi sono passaggi semplici.</p>
+
+<p>Buon divertimento con il vostro nuovo modello custom!</p>
+
+
+    </article>
+    <span class="print-footer">Amazon SageMaker con Microsoft CNTK/Keras - January 21, 2018 - lorenzo toscano</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    <li><a href="mailto:lorenzo.toscano@gmail.com"><span class="icon-mail"></span></a></li>
+    
+      <li>
+        <a href="//www.twitter.com/BEmatic"><span class="icon-twitter"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.linkedin.com/in/lorenzotoscano"><span class="icon-linkedin"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/ltoscano"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.scoop.it/t/knowmatic"><span class="icon-bullhorn"></span></a>
+      </li>
+    
+      <li>
+        <a href="/feed"><span class="icon-feed"></span></a>
+      </li>
+    
+  </ul>
+<div class="credits">
+<span>&copy; 2018 &nbsp;&nbsp;LORENZO TOSCANO</span></br> <br>
+<a href="/disclaimer">Blog Disclaimer</a>
+<!--<span>This site created with the <a href="//github.com/clayh53/tufte-jekyll">Tufte theme for ApprendimentoAutomatico.it </a> in <a href="//jekyllrb.com">Jekyll</a>.</span> -->
+</div>
+</footer>
+<div class="totop"><i class="fa fa-angle-up"></i> To Top</div>
+<script>
+      $('.totop').tottTop({
+          scrollTop: 100
+      });
+</script>
+<!--Start Cookie Script--> <script type="text/javascript" charset="UTF-8" src="//cookie-script.com/s/f67066386a32612237b658624241e0af.js"></script> <!--End Cookie Script-->
+
+  </body>
+</html>
