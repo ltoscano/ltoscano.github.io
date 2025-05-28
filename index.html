@@ -605,6 +605,56 @@
     let currentPage = 1;
     let allPosts = []; // Array per conservare tutti i post
     
+    // Funzione per formattare la data Medium
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return 'Today';
+        } else if (diffDays === 1) {
+            return 'Yesterday';
+        } else if (diffDays < 7) {
+            return `${diffDays} days ago`;
+        } else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+        } else if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+        } else {
+            const years = Math.floor(diffDays / 365);
+            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+        }
+    }
+    
+    // Funzione per formattare la data Substack
+    function formatSubstackDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return 'Today';
+        } else if (diffDays === 1) {
+            return 'Yesterday';
+        } else if (diffDays < 7) {
+            return `${diffDays} days ago`;
+        } else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+        } else if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+        } else {
+            const years = Math.floor(diffDays / 365);
+            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+        }
+    }
+    
     // Funzione globale per caricare i post Medium dal file JSON locale
     window.fetchPosts = function(attempt = 1, maxAttempts = 3) {
         const feedContainer = document.getElementById('feed-container');
@@ -732,31 +782,6 @@
         const nextButton = document.getElementById('next-page');
         const pageInfo = document.getElementById('page-info');
         const username = 'thegoodprogrammer';
-        
-        // Funzione per formattare la data
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffTime = Math.abs(now - date);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return 'Today';
-            } else if (diffDays === 1) {
-                return 'Yesterday';
-            } else if (diffDays < 7) {
-                return `${diffDays} days ago`;
-            } else if (diffDays < 30) {
-                const weeks = Math.floor(diffDays / 7);
-                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-            } else if (diffDays < 365) {
-                const months = Math.floor(diffDays / 30);
-                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-            } else {
-                const years = Math.floor(diffDays / 365);
-                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-            }
-        }
         
         // Funzione per estrarre elementi dal contenuto (per compatibilità con CORS proxy)
         function extractContentElements(content) {
@@ -1159,31 +1184,6 @@
         const substackNextButton = document.getElementById('substack-next-page');
         const substackPageInfo = document.getElementById('substack-page-info');
         
-        // Funzione per formattare la data Substack
-        function formatSubstackDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffTime = Math.abs(now - date);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return 'Today';
-            } else if (diffDays === 1) {
-                return 'Yesterday';
-            } else if (diffDays < 7) {
-                return `${diffDays} days ago`;
-            } else if (diffDays < 30) {
-                const weeks = Math.floor(diffDays / 7);
-                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-            } else if (diffDays < 365) {
-                const months = Math.floor(diffDays / 30);
-                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-            } else {
-                const years = Math.floor(diffDays / 365);
-                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-            }
-        }
-        
         // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
         function processSubstackItem(item) {
             const title = item.querySelector('title')?.textContent || 'No title';
@@ -1315,31 +1315,6 @@
         ];
         
         const substackFeedUrl = 'https://bematic.substack.com/feed';
-        
-        // Funzione per formattare la data Substack
-        function formatSubstackDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffTime = Math.abs(now - date);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return 'Today';
-            } else if (diffDays === 1) {
-                return 'Yesterday';
-            } else if (diffDays < 7) {
-                return `${diffDays} days ago`;
-            } else if (diffDays < 30) {
-                const weeks = Math.floor(diffDays / 7);
-                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-            } else if (diffDays < 365) {
-                const months = Math.floor(diffDays / 30);
-                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-            } else {
-                const years = Math.floor(diffDays / 365);
-                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-            }
-        }
         
         // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
         function processSubstackItem(item) {
