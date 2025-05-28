@@ -2,8 +2,8 @@ name: Update RSS Feeds
 
 on:
   schedule:
-    # Esegui ogni 6 ore
-    - cron: '0 */6 * * *'
+    # Esegui ogni 12 ore invece di 8 per ridurre ulteriormente la pressione sui server
+    - cron: '0 */12 * * *'
   workflow_dispatch: # Permetti esecuzione manuale
 
 jobs:
@@ -25,16 +25,52 @@ jobs:
         npm install rss-parser node-fetch
         
     - name: Fetch and process feeds
-      run: node scripts/update-feeds.js
+      id: fetch-feeds
+      run: |
+        echo "Starting RSS feed update..."
+        # Add random delay between 0-300 seconds (5 minutes) to avoid predictable patterns
+        DELAY=$((RANDOM % 300))
+        echo "Adding random delay of $DELAY seconds..."
+        sleep $DELAY
+        node scripts/update-feeds.js
+        echo "RSS feed update completed"
+      continue-on-error: true
+      
+    - name: Check if data directory exists and has content
+      run: |
+        if [ -d "data/feeds" ]; then
+          echo "Feed data directory exists"
+          ls -la data/feeds/
+        else
+          echo "Feed data directory does not exist"
+        fi
       
     - name: Commit and push if changed
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add data/feeds/
+        git add data/feeds/ || echo "No feeds directory to add"
+        
         if git diff --staged --quiet; then
           echo "No changes to commit"
+          echo "CHANGES=false" >> $GITHUB_ENV
         else
+          echo "Changes detected, committing..."
           git commit -m "Update RSS feeds data $(date)"
           git push
+          echo "CHANGES=true" >> $GITHUB_ENV
+        fi
+        
+    - name: Report status
+      run: |
+        if [ "${{ steps.fetch-feeds.outcome }}" = "success" ]; then
+          echo "✅ RSS feeds updated successfully"
+        else
+          echo "⚠️ RSS feed update completed with some errors, but may have partial data"
+        fi
+        
+        if [ "${{ env.CHANGES }}" = "true" ]; then
+          echo "📝 Changes were committed and pushed"
+        else
+          echo "📋 No changes to commit"
         fi
