@@ -603,6 +603,71 @@
     let currentPage = 1;
     let allPosts = []; // Array per conservare tutti i post
     
+    // Funzioni globali per i pulsanti retry
+    window.fetchPosts = function(attempt = 1, maxAttempts = 10) {
+        const feedContainer = document.getElementById('feed-container');
+        const corsProxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://corsproxy.io/?'
+        ];
+        const mediumFeedUrl = 'https://medium.com/feed/@thegoodprogrammer';
+        
+        feedContainer.innerHTML = `<div class="loading">Loading posts... ${attempt}/${maxAttempts}</div>`;
+        
+        // Usa un proxy diverso per ogni tentativo (ciclico)
+        const proxyIndex = (attempt - 1) % corsProxies.length;
+        const proxyUrl = `${corsProxies[proxyIndex]}${encodeURIComponent(mediumFeedUrl)}`;
+        
+        // Recupera e analizza il feed RSS
+        fetch(proxyUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+            .then(data => {
+                const items = data.querySelectorAll('item');
+                
+                if (items.length === 0) {
+                    throw new Error('No posts found in feed');
+                }
+                
+                // Salva tutti i post
+                allPosts = Array.from(items).map(item => {
+                    return processItem(item);
+                });
+                
+                // Aggiorna il display della pagina
+                updatePageDisplay();
+                
+                // Mostra i post della pagina corrente
+                displayPosts();
+            })
+            .catch(error => {
+                console.error(`Attempt ${attempt} failed:`, error);
+                
+                if (attempt < maxAttempts) {
+                    // Riprova dopo 2 secondi
+                    setTimeout(() => {
+                        window.fetchPosts(attempt + 1, maxAttempts);
+                    }, 2000);
+                } else {
+                    // Tutti i tentativi falliti
+                    feedContainer.innerHTML = `
+                        <div class="error">
+                            <p>Error loading posts from Medium after ${maxAttempts} attempts.</p>
+                            <p>This may be due to CORS restrictions or network issues.</p>
+                            <p><button onclick="fetchPosts(1, 10)" style="background: #03a87c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                            <p>Or try opening the feed directly: <a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
+                        </div>
+                    `;
+                }
+            });
+    };
+    
     document.addEventListener('DOMContentLoaded', function() {
         const feedContainer = document.getElementById('feed-container');
         const prevButton = document.getElementById('prev-page');
@@ -742,51 +807,6 @@
             return categories;
         }
         
-        // Funzione per recuperare tutti i post
-        function fetchPosts() {
-            feedContainer.innerHTML = '<div class="loading">Loading posts...</div>';
-            const proxyUrl = `${corsProxies[0]}${encodeURIComponent(mediumFeedUrl)}`;
-            
-            // Recupera e analizza il feed RSS
-            fetch(proxyUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-                .then(data => {
-                    const items = data.querySelectorAll('item');
-                    
-                    if (items.length === 0) {
-                        feedContainer.innerHTML = '<div class="error">No posts found</div>';
-                        return;
-                    }
-                    
-                    // Salva tutti i post
-                    allPosts = Array.from(items).map(item => {
-                        return processItem(item);
-                    });
-                    
-                    // Aggiorna il display della pagina
-                    updatePageDisplay();
-                    
-                    // Mostra i post della pagina corrente
-                    displayPosts();
-                })
-                .catch(error => {
-                    console.error('There was a problem fetching the feed:', error);
-                    feedContainer.innerHTML = `
-                        <div class="error">
-                            <p>Error loading posts from Medium.</p>
-                            <p>This may be due to CORS restrictions. Try opening the feed directly:</p>
-                            <p><a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
-                        </div>
-                    `;
-                });
-        }
-        
         // Funzione per processare un singolo item
         function processItem(item) {
             const title = item.querySelector('title')?.textContent || 'No title';
@@ -868,8 +888,8 @@
         // Inizializza la paginazione
         updatePageDisplay();
         
-        // Avvia il caricamento dei post all'inizio
-        fetchPosts();
+        // Avvia il caricamento dei post all'inizio con retry automatico
+        window.fetchPosts(1, 10);
     });
 </script>
 
@@ -879,6 +899,67 @@
     const SUBSTACK_POSTS_PER_PAGE = 4;
     let substackCurrentPage = 1;
     let substackAllPosts = [];
+    
+    // Funzione globale per retry Substack
+    window.fetchSubstackPosts = function(attempt = 1, maxAttempts = 10) {
+        const substackFeedContainer = document.getElementById('substack-feed-container');
+        const substackCorsProxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://corsproxy.io/?'
+        ];
+        const substackFeedUrl = 'https://bematic.substack.com/feed';
+        
+        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts... ${attempt}/${maxAttempts}</div>`;
+        
+        // Usa un proxy diverso per ogni tentativo (ciclico)
+        const proxyIndex = (attempt - 1) % substackCorsProxies.length;
+        const proxyUrl = `${substackCorsProxies[proxyIndex]}${encodeURIComponent(substackFeedUrl)}`;
+        
+        fetch(proxyUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+            .then(data => {
+                const items = data.querySelectorAll('item');
+                
+                if (items.length === 0) {
+                    throw new Error('No Substack posts found in feed');
+                }
+                
+                // Salva tutti i post Substack
+                substackAllPosts = Array.from(items).map(item => {
+                    return processSubstackItem(item);
+                });
+                
+                updateSubstackPageDisplay();
+                displaySubstackPosts();
+            })
+            .catch(error => {
+                console.error(`Substack attempt ${attempt} failed:`, error);
+                
+                if (attempt < maxAttempts) {
+                    // Riprova dopo 2 secondi
+                    setTimeout(() => {
+                        window.fetchSubstackPosts(attempt + 1, maxAttempts);
+                    }, 2000);
+                } else {
+                    // Tutti i tentativi falliti
+                    substackFeedContainer.innerHTML = `
+                        <div class="substack-error">
+                            <p>Error loading posts from Substack after ${maxAttempts} attempts.</p>
+                            <p>This may be due to CORS restrictions or network issues.</p>
+                            <p><button onclick="fetchSubstackPosts(1, 10)" style="background: #FF6719; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                            <p>Or try opening the feed directly: <a href="${substackFeedUrl}" target="_blank">${substackFeedUrl}</a></p>
+                        </div>
+                    `;
+                }
+            });
+    };
     
     document.addEventListener('DOMContentLoaded', function() {
         const substackFeedContainer = document.getElementById('substack-feed-container');
@@ -959,47 +1040,6 @@
                 const years = Math.floor(diffDays / 365);
                 return `${years} ${years === 1 ? 'year' : 'years'} ago`;
             }
-        }
-        
-        // Funzione per recuperare tutti i post Substack
-        function fetchSubstackPosts() {
-            substackFeedContainer.innerHTML = '<div class="substack-loading">Loading Substack posts...</div>';
-            const proxyUrl = `${substackCorsProxies[0]}${encodeURIComponent(substackFeedUrl)}`;
-            
-            fetch(proxyUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-                .then(data => {
-                    const items = data.querySelectorAll('item');
-                    
-                    if (items.length === 0) {
-                        substackFeedContainer.innerHTML = '<div class="substack-error">No Substack posts found</div>';
-                        return;
-                    }
-                    
-                    // Salva tutti i post Substack
-                    substackAllPosts = Array.from(items).map(item => {
-                        return processSubstackItem(item);
-                    });
-                    
-                    updateSubstackPageDisplay();
-                    displaySubstackPosts();
-                })
-                .catch(error => {
-                    console.error('There was a problem fetching the Substack feed:', error);
-                    substackFeedContainer.innerHTML = `
-                        <div class="substack-error">
-                            <p>Error loading posts from Substack.</p>
-                            <p>This may be due to CORS restrictions. Try opening the feed directly:</p>
-                            <p><a href="${substackFeedUrl}" target="_blank">${substackFeedUrl}</a></p>
-                        </div>
-                    `;
-                });
         }
         
         // Funzione per processare un singolo item Substack
@@ -1124,8 +1164,8 @@
         // Inizializza la paginazione Substack
         updateSubstackPageDisplay();
         
-        // Avvia il caricamento dei post Substack
-        fetchSubstackPosts();
+        // Avvia il caricamento dei post Substack con retry automatico
+        window.fetchSubstackPosts(1, 10);
     });
 </script>
 
