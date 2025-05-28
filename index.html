@@ -9,6 +9,7 @@
   <meta name="description" content="Lorenzo Toscano's Artificial Intelligence Articles and Projects">
 
   <script src="https://use.fontawesome.com/42ac583ec1.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
@@ -45,6 +46,235 @@
               padding: 0 30px;
               font-size: 18px;
       }
+      
+      /* Medium Feed Widget Styles */
+      .medium-container {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: white;
+          box-sizing: border-box;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .medium-branding {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 30px;
+      }
+      
+      .medium-logo {
+          width: 40px;
+          height: 40px;
+      }
+      
+      .feed-container {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-top: 20px;
+      }
+      
+      .feed-item {
+          border: 1px solid #eee;
+          border-radius: 8px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .feed-item:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .post-image-container {
+          width: 100%;
+          height: 0;
+          padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+          position: relative;
+          overflow: hidden;
+      }
+      
+      .post-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+      }
+      
+      .post-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+      }
+      
+      .feed-item:hover .post-image img {
+          transform: scale(1.05);
+      }
+      
+      .post-content {
+          padding: 15px;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+      }
+      
+      .title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #222;
+      }
+      
+      .title a {
+          text-decoration: none;
+          color: #222;
+          transition: color 0.2s;
+      }
+      
+      .title a:hover {
+          color: #03a87c; /* Medium green */
+      }
+      
+      .subtitle {
+          font-size: 0.95rem;
+          font-weight: 400;
+          margin-bottom: 10px;
+          color: #555;
+          font-style: italic;
+      }
+      
+      .date {
+          font-size: 0.8rem;
+          color: #757575;
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+      }
+      
+      .date i {
+          margin-right: 5px;
+          color: #03a87c;
+      }
+      
+      .excerpt {
+          color: #444;
+          margin-bottom: 15px;
+          font-size: 0.9rem;
+          /* Support for multi-line ellipsis */
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          flex-grow: 1;
+      }
+      
+      .categories {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-top: auto;
+          padding-top: 12px;
+          margin-bottom: 12px;
+      }
+      
+      .category {
+          display: inline-block;
+          background-color: #f2f2f2;
+          color: #555;
+          font-size: 0.7rem;
+          padding: 3px 10px;
+          border-radius: 20px;
+          border: 1px solid #e0e0e0;
+      }
+      
+      .read-more {
+          display: inline-block;
+          color: #03a87c;
+          font-weight: 500;
+          text-decoration: none;
+          transition: opacity 0.2s;
+          padding: 5px 0;
+          font-size: 0.9rem;
+          align-self: flex-start;
+      }
+      
+      .read-more:hover {
+          opacity: 0.8;
+      }
+      
+      .loading {
+          text-align: center;
+          padding: 40px;
+          font-size: 1.2rem;
+          color: #757575;
+          grid-column: 1 / -1;
+      }
+      
+      .error {
+          color: #e53935;
+          text-align: center;
+          padding: 20px;
+          grid-column: 1 / -1;
+      }
+      
+      .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 30px;
+          margin-bottom: 20px;
+          gap: 20px;
+      }
+      
+      .page-btn {
+          background-color: #03a87c;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 25px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          font-weight: 500;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      .page-btn:hover {
+          background-color: #028e69;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+      
+      .page-btn:active {
+          transform: translateY(0);
+      }
+      
+      .page-btn i {
+          margin: 0 5px;
+      }
+      
+      #page-info {
+          font-size: 0.9rem;
+          color: #666;
+          font-weight: 500;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+          .feed-container {
+              grid-template-columns: 1fr;
+          }
+      }
   </style>
 
 </head>
@@ -76,10 +306,27 @@
   Welcome to my web pages! The tabs at the top lead to my latest articles via RSS feeds from Medium and Substack, an <em>historical</em> archive of older articles, <em>resources</em> about machine learning and cognitive computing, or info <em>about</em> me.
 </p>
 
-  <div class="rss-container">
-    <rssapp-wall id="nWYRdHUMGowex1Zu"></rssapp-wall>
-    <script src="https://widget.rss.app/v1/wall.js" type="text/javascript" async></script>
-  </div>
+  <div class="medium-container">
+        <div class="medium-branding">
+            <svg width="40" height="40" viewBox="0 0 1043.63 592.71" class="medium-logo">
+                <g data-name="Layer 2">
+                    <g data-name="Layer 1">
+                        <path d="M588.67 296.36c0 163.67-131.78 296.35-294.33 296.35S0 460 0 296.36 131.78 0 294.34 0s294.33 132.69 294.33 296.36M911.56 296.36c0 154.06-65.89 279-147.17 279s-147.17-124.94-147.17-279 65.88-279 147.16-279 147.17 124.9 147.17 279M1043.63 296.36c0 138-23.17 249.94-51.76 249.94s-51.75-111.91-51.75-249.94 23.17-249.94 51.75-249.94 51.76 111.9 51.76 249.94" fill="#2cbe8e"></path>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div id="feed-container" class="feed-container">
+            <div class="loading">Loading posts...</div>
+        </div>
+        
+        <div class="pagination">
+            <button id="prev-page" class="page-btn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span id="page-info">Page 1</span>
+            <button id="next-page" class="page-btn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
 
     </article>
     <span class="print-footer">Latest Posts - lorenzo toscano</span>
@@ -120,6 +367,284 @@
           scrollTop: 100
       });
 </script>
+
+<script>
+    // Configurazione
+    const LENGTH_EXCERPT = 500; // Lunghezza dell'estratto da mostrare
+    const POSTS_PER_PAGE = 4; // Numero di post per pagina
+    let currentPage = 1;
+    let allPosts = []; // Array per conservare tutti i post
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const feedContainer = document.getElementById('feed-container');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        const pageInfo = document.getElementById('page-info');
+        const username = 'thegoodprogrammer';
+        
+        // Gestione dei pulsanti di paginazione
+        prevButton.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePageDisplay();
+                displayPosts();
+            }
+        });
+        
+        nextButton.addEventListener('click', function() {
+            if (currentPage * POSTS_PER_PAGE < allPosts.length) {
+                currentPage++;
+                updatePageDisplay();
+                displayPosts();
+            }
+        });
+        
+        // Funzione per aggiornare il display della pagina
+        function updatePageDisplay() {
+            pageInfo.textContent = `Page ${currentPage}`;
+            
+            // Abilita/disabilita i pulsanti in base alla pagina corrente
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage * POSTS_PER_PAGE >= allPosts.length;
+            
+            // Applica stile visivo per i pulsanti disabilitati
+            if (prevButton.disabled) {
+                prevButton.style.opacity = "0.5";
+                prevButton.style.cursor = "not-allowed";
+            } else {
+                prevButton.style.opacity = "1";
+                prevButton.style.cursor = "pointer";
+            }
+            
+            if (nextButton.disabled) {
+                nextButton.style.opacity = "0.5";
+                nextButton.style.cursor = "not-allowed";
+            } else {
+                nextButton.style.opacity = "1";
+                nextButton.style.cursor = "pointer";
+            }
+        }
+        
+        // Usa CORS proxy (prova diversi in caso uno fallisca)
+        const corsProxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://corsproxy.io/?'
+        ];
+        
+        const mediumFeedUrl = `https://medium.com/feed/@${username}`;
+        
+        // Funzione per formattare la data
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return 'Today';
+            } else if (diffDays === 1) {
+                return 'Yesterday';
+            } else if (diffDays < 7) {
+                return `${diffDays} days ago`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+            } else if (diffDays < 365) {
+                const months = Math.floor(diffDays / 30);
+                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+            } else {
+                const years = Math.floor(diffDays / 365);
+                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+            }
+        }
+        
+        // Funzione per estrarre elementi dal contenuto
+        function extractContentElements(content) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            
+            // Estrai elementi
+            const result = {
+                subtitle: '',
+                image: '',
+                excerpt: ''
+            };
+            
+            // Trova il primo h4 come sottotitolo
+            const h4 = tempDiv.querySelector('h4');
+            if (h4) {
+                result.subtitle = h4.textContent.trim();
+            }
+            
+            // Trova la prima figura con immagine
+            const figure = tempDiv.querySelector('figure');
+            if (figure) {
+                const img = figure.querySelector('img');
+                if (img && img.src) {
+                    result.image = img.src;
+                }
+            }
+            
+            // Trova il primo paragrafo per l'estratto
+            const firstP = tempDiv.querySelector('p');
+            if (firstP) {
+                let excerpt = firstP.textContent.trim();
+                if (excerpt.length > LENGTH_EXCERPT) {
+                    excerpt = excerpt.substring(0, LENGTH_EXCERPT) + '...';
+                }
+                result.excerpt = excerpt;
+            }
+
+            return result;
+        }
+        
+        // Funzione per estrarre categorie dal contenuto
+        function extractCategories(item) {
+            const categories = [];
+            const categoryElements = item.querySelectorAll('category');
+            
+            categoryElements.forEach(category => {
+                const categoryText = category.textContent.trim();
+                if (categoryText && !categories.includes(categoryText)) {
+                    categories.push(categoryText);
+                }
+            });
+            
+            return categories;
+        }
+        
+        // Funzione per recuperare tutti i post
+        function fetchPosts() {
+            feedContainer.innerHTML = '<div class="loading">Loading posts...</div>';
+            const proxyUrl = `${corsProxies[0]}${encodeURIComponent(mediumFeedUrl)}`;
+            
+            // Recupera e analizza il feed RSS
+            fetch(proxyUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+                .then(data => {
+                    const items = data.querySelectorAll('item');
+                    
+                    if (items.length === 0) {
+                        feedContainer.innerHTML = '<div class="error">No posts found</div>';
+                        return;
+                    }
+                    
+                    // Salva tutti i post
+                    allPosts = Array.from(items).map(item => {
+                        return processItem(item);
+                    });
+                    
+                    // Aggiorna il display della pagina
+                    updatePageDisplay();
+                    
+                    // Mostra i post della pagina corrente
+                    displayPosts();
+                })
+                .catch(error => {
+                    console.error('There was a problem fetching the feed:', error);
+                    feedContainer.innerHTML = `
+                        <div class="error">
+                            <p>Error loading posts from Medium.</p>
+                            <p>This may be due to CORS restrictions. Try opening the feed directly:</p>
+                            <p><a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
+                        </div>
+                    `;
+                });
+        }
+        
+        // Funzione per processare un singolo item
+        function processItem(item) {
+            const title = item.querySelector('title')?.textContent || 'No title';
+            const link = item.querySelector('link')?.textContent || '#';
+            const pubDate = item.querySelector('pubDate')?.textContent || '';
+            const formattedDate = pubDate ? formatDate(pubDate) : 'Unknown date';
+            
+            // Ottieni categorie
+            const categories = extractCategories(item);
+            
+            // Ottieni contenuto
+            let content = '';
+            const contentEncoded = item.querySelector('content\\:encoded, encoded')?.textContent;
+            const description = item.querySelector('description')?.textContent;
+            
+            if (contentEncoded) {
+                content = contentEncoded;
+            } else if (description) {
+                content = description;
+            }
+            
+            // Estrai elementi dal contenuto
+            const elements = extractContentElements(content);
+            
+            return {
+                title,
+                link,
+                pubDate,
+                formattedDate,
+                categories,
+                elements
+            };
+        }
+        
+        // Funzione per mostrare i post della pagina corrente
+        function displayPosts() {
+            // Calcola l'indice di inizio e fine per la pagina corrente
+            const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+            const endIndex = Math.min(startIndex + POSTS_PER_PAGE, allPosts.length);
+            
+            // Ottieni i post per la pagina corrente
+            const postsToShow = allPosts.slice(startIndex, endIndex);
+            
+            // Genera l'HTML per i post
+            let feedHTML = '';
+            
+            postsToShow.forEach(post => {
+                // Crea HTML del sottotitolo se disponibile
+                const subtitleHTML = post.elements.subtitle 
+                    ? `<div class="subtitle">${post.elements.subtitle}</div>` 
+                    : '';
+                
+                feedHTML += `
+                    <div class="feed-item">
+                        ${post.elements.image ? `
+                        <div class="post-image-container">
+                            <div class="post-image">
+                                <img src="${post.elements.image}" alt="${post.title}" />
+                            </div>
+                        </div>` : ''}
+                        <div class="post-content">
+                            <div class="title"><a href="${post.link}" target="_blank">${post.title}</a></div>
+                            ${subtitleHTML}
+                            <div class="date"><i class="far fa-calendar-alt"></i> ${post.formattedDate}</div>
+                            <div class="excerpt">${post.elements.excerpt || 'No excerpt available'}</div>
+                            <div class="categories">
+                                ${post.categories.map(cat => `<span class="category">${cat}</span>`).join('')}
+                            </div>
+                            <a href="${post.link}" class="read-more" target="_blank">Read the full post</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Aggiorna il contenitore
+            feedContainer.innerHTML = feedHTML;
+        }
+        
+        // Inizializza la paginazione
+        updatePageDisplay();
+        
+        // Avvia il caricamento dei post all'inizio
+        fetchPosts();
+    });
+</script>
+
 <!--Start Cookie Script--> <script type="text/javascript" charset="UTF-8" src="//cookie-script.com/s/f67066386a32612237b658624241e0af.js"></script> <!--End Cookie Script-->
 
   </body>
