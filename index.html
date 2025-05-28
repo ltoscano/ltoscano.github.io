@@ -599,273 +599,628 @@
 </script>
 
 <script>
-    // Configurazione
-    const LENGTH_EXCERPT = 500; // Lunghezza dell'estratto da mostrare
-    const POSTS_PER_PAGE = 4; // Numero di post per pagina
-    let currentPage = 1;
-    let allPosts = []; // Array per conservare tutti i post
-    
-    // Funzione per formattare la data Medium
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays === 0) {
-            return 'Today';
-        } else if (diffDays === 1) {
-            return 'Yesterday';
-        } else if (diffDays < 7) {
-            return `${diffDays} days ago`;
-        } else if (diffDays < 30) {
-            const weeks = Math.floor(diffDays / 7);
-            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-        } else if (diffDays < 365) {
-            const months = Math.floor(diffDays / 30);
-            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-        } else {
-            const years = Math.floor(diffDays / 365);
-            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-        }
-    }
-    
-    // Funzione per formattare la data Substack
-    function formatSubstackDate(dateString) {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays === 0) {
-            return 'Today';
-        } else if (diffDays === 1) {
-            return 'Yesterday';
-        } else if (diffDays < 7) {
-            return `${diffDays} days ago`;
-        } else if (diffDays < 30) {
-            const weeks = Math.floor(diffDays / 7);
-            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-        } else if (diffDays < 365) {
-            const months = Math.floor(diffDays / 30);
-            return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-        } else {
-            const years = Math.floor(diffDays / 365);
-            return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-        }
-    }
-    
-    // Funzione globale per caricare i post Medium dal file JSON locale
-    window.fetchPosts = function(attempt = 1, maxAttempts = 3) {
-        const feedContainer = document.getElementById('feed-container');
-        
-        feedContainer.innerHTML = `<div class="loading">Loading Medium posts... ${attempt}/${maxAttempts}</div>`;
-        
-        // Carica i dati dal file JSON locale generato da GitHub Actions
-        fetch('/data/feeds/medium.json?' + new Date().getTime()) // Cache busting
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load Medium data: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.posts || data.posts.length === 0) {
-                    throw new Error('No posts found in Medium data');
-                }
-                
-                // Processa i post dal JSON
-                allPosts = data.posts.map(post => {
-                    return {
-                        title: post.title,
-                        link: post.link,
-                        pubDate: post.pubDate,
-                        formattedDate: formatDate(post.pubDate),
-                        categories: [], // Le categorie non sono nel JSON semplificato
-                        elements: {
-                            subtitle: '',
-                            image: post.image || '',
-                            excerpt: post.excerpt || 'No excerpt available'
-                        }
-                    };
-                });
-                
-                // Aggiorna il display della pagina
-                updatePageDisplay();
-                
-                // Mostra i post della pagina corrente
-                displayPosts();
-            })
-            .catch(error => {
-                console.error(`Medium attempt ${attempt} failed:`, error);
-                
-                if (attempt < maxAttempts) {
-                    // Riprova dopo 2 secondi
-                    setTimeout(() => {
-                        window.fetchPosts(attempt + 1, maxAttempts);
-                    }, 2000);
-                } else {
-                    // Fallback al metodo CORS proxy se il file JSON non è disponibile
-                    console.log('Falling back to CORS proxy method...');
-                    fetchPostsWithProxy(1, 10);
-                }
-            });
-    };
-    
-    // Funzione fallback con CORS proxy (mantenuta per compatibilità)
-    window.fetchPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
-        const corsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://corsproxy.io/?'
-        ];
-        const mediumFeedUrl = 'https://medium.com/feed/@thegoodprogrammer';
-        
-        feedContainer.innerHTML = `<div class="loading">Loading posts via proxy... ${attempt}/${maxAttempts}</div>`;
-        
-        // Usa un proxy diverso per ogni tentativo (ciclico)
-        const proxyIndex = (attempt - 1) % corsProxies.length;
-        const proxyUrl = `${corsProxies[proxyIndex]}${encodeURIComponent(mediumFeedUrl)}`;
-        
-        // Recupera e analizza il feed RSS
-        fetch(proxyUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-            .then(data => {
-                const items = data.querySelectorAll('item');
-                
-                if (items.length === 0) {
-                    throw new Error('No posts found in feed');
-                }
-                
-                // Salva tutti i post
-                allPosts = Array.from(items).map(item => {
-                    return processItem(item);
-                });
-                
-                // Aggiorna il display della pagina
-                updatePageDisplay();
-                
-                // Mostra i post della pagina corrente
-                displayPosts();
-            })
-            .catch(error => {
-                console.error(`Proxy attempt ${attempt} failed:`, error);
-                
-                if (attempt < maxAttempts) {
-                    // Riprova dopo 2 secondi
-                    setTimeout(() => {
-                        window.fetchPostsWithProxy(attempt + 1, maxAttempts);
-                    }, 2000);
-                } else {
-                    // Tutti i tentativi falliti
-                    feedContainer.innerHTML = `
-                        <div class="error">
-                            <p>Error loading posts from Medium after ${maxAttempts} attempts.</p>
-                            <p>This may be due to CORS restrictions or network issues.</p>
-                            <p><button onclick="fetchPosts(1, 3)" style="background: #03a87c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
-                            <p>Or try opening the feed directly: <a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
-                        </div>
-                    `;
-                }
-            });
-    };
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const feedContainer = document.getElementById('feed-container');
-        const prevButton = document.getElementById('prev-page');
-        const nextButton = document.getElementById('next-page');
-        const pageInfo = document.getElementById('page-info');
-        const username = 'thegoodprogrammer';
-        
-        // Funzione per estrarre elementi dal contenuto (per compatibilità con CORS proxy)
-        function extractContentElements(content) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            
-            const result = {
-                subtitle: '',
-                image: '',
-                excerpt: ''
-            };
-            
-            const h4 = tempDiv.querySelector('h4');
-            if (h4) {
-                result.subtitle = h4.textContent.trim();
-            }
-            
-            const figure = tempDiv.querySelector('figure');
-            if (figure) {
-                const img = figure.querySelector('img');
-                if (img && img.src) {
-                    result.image = img.src;
-                }
-            }
-            
-            const firstP = tempDiv.querySelector('p');
-            if (firstP) {
-                let excerpt = firstP.textContent.trim();
-                if (excerpt.length > LENGTH_EXCERPT) {
-                    excerpt = excerpt.substring(0, LENGTH_EXCERPT) + '...';
-                }
-                result.excerpt = excerpt;
-            }
+// ========================================
+// CONFIGURAZIONE GLOBALE
+// ========================================
+const LENGTH_EXCERPT = 500;
+const POSTS_PER_PAGE = 4;
+const SUBSTACK_LENGTH_EXCERPT = 500;
+const SUBSTACK_POSTS_PER_PAGE = 4;
 
-            return result;
-        }
+// ========================================
+// VARIABILI GLOBALI
+// ========================================
+let currentPage = 1;
+let allPosts = [];
+let substackCurrentPage = 1;
+let substackAllPosts = [];
+
+// ========================================
+// FUNZIONI UTILITY
+// ========================================
+
+// Funzione per formattare la data Medium
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+        return 'Today';
+    } else if (diffDays === 1) {
+        return 'Yesterday';
+    } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+    } else if (diffDays < 30) {
+        const weeks = Math.floor(diffDays / 7);
+        return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+    } else if (diffDays < 365) {
+        const months = Math.floor(diffDays / 30);
+        return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+    } else {
+        const years = Math.floor(diffDays / 365);
+        return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+    }
+}
+
+// Funzione per formattare la data Substack (stessa logica)
+function formatSubstackDate(dateString) {
+    return formatDate(dateString);
+}
+
+// ========================================
+// FUNZIONI MEDIUM
+// ========================================
+
+// Funzione per aggiornare il display della pagina Medium
+function updatePageDisplay() {
+    const pageInfo = document.getElementById('page-info');
+    const prevButton = document.getElementById('prev-page');
+    const nextButton = document.getElementById('next-page');
+    
+    if (!pageInfo || !prevButton || !nextButton) return;
+    
+    pageInfo.textContent = `Page ${currentPage}`;
+    
+    // Abilita/disabilita i pulsanti in base alla pagina corrente
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage * POSTS_PER_PAGE >= allPosts.length;
+    
+    // Applica stile visivo per i pulsanti disabilitati
+    if (prevButton.disabled) {
+        prevButton.style.opacity = "0.5";
+        prevButton.style.cursor = "not-allowed";
+    } else {
+        prevButton.style.opacity = "1";
+        prevButton.style.cursor = "pointer";
+    }
+    
+    if (nextButton.disabled) {
+        nextButton.style.opacity = "0.5";
+        nextButton.style.cursor = "not-allowed";
+    } else {
+        nextButton.style.opacity = "1";
+        nextButton.style.cursor = "pointer";
+    }
+}
+
+// Funzione per mostrare i post Medium della pagina corrente
+function displayPosts() {
+    const feedContainer = document.getElementById('feed-container');
+    if (!feedContainer) return;
+    
+    // Calcola l'indice di inizio e fine per la pagina corrente
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+    const endIndex = Math.min(startIndex + POSTS_PER_PAGE, allPosts.length);
+    
+    // Ottieni i post per la pagina corrente
+    const postsToShow = allPosts.slice(startIndex, endIndex);
+    
+    // Genera l'HTML per i post
+    let feedHTML = '';
+    
+    postsToShow.forEach(post => {
+        // Crea HTML del sottotitolo se disponibile
+        const subtitleHTML = post.elements.subtitle 
+            ? `<div class="subtitle">${post.elements.subtitle}</div>` 
+            : '';
         
-        // Funzione per estrarre categorie dal contenuto (per compatibilità con CORS proxy)
-        function extractCategories(item) {
-            const categories = [];
-            const categoryElements = item.querySelectorAll('category');
-            
-            categoryElements.forEach(category => {
-                const categoryText = category.textContent.trim();
-                if (categoryText && !categories.includes(categoryText)) {
-                    categories.push(categoryText);
-                }
-            });
-            
-            return categories;
+        feedHTML += `
+            <div class="feed-item">
+                ${post.elements.image ? `
+                <div class="post-image-container">
+                    <div class="post-image">
+                        <img src="${post.elements.image}" alt="${post.title}" />
+                    </div>
+                </div>` : ''}
+                <div class="post-content">
+                    <div class="title"><a href="${post.link}" target="_blank">${post.title}</a></div>
+                    ${subtitleHTML}
+                    <div class="date"><i class="far fa-calendar-alt"></i> ${post.formattedDate}</div>
+                    <div class="excerpt">${post.elements.excerpt || 'No excerpt available'}</div>
+                    <div class="categories">
+                        ${post.categories.map(cat => `<span class="category">${cat}</span>`).join('')}
+                    </div>
+                    <a href="${post.link}" class="read-more" target="_blank">Read the full post</a>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Aggiorna il contenitore
+    feedContainer.innerHTML = feedHTML;
+}
+
+// Funzione per estrarre elementi dal contenuto (per compatibilità con CORS proxy)
+function extractContentElements(content) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    
+    const result = {
+        subtitle: '',
+        image: '',
+        excerpt: ''
+    };
+    
+    const h4 = tempDiv.querySelector('h4');
+    if (h4) {
+        result.subtitle = h4.textContent.trim();
+    }
+    
+    const figure = tempDiv.querySelector('figure');
+    if (figure) {
+        const img = figure.querySelector('img');
+        if (img && img.src) {
+            result.image = img.src;
         }
-        
-        // Funzione per processare un singolo item (per compatibilità con CORS proxy)
-        function processItem(item) {
-            const title = item.querySelector('title')?.textContent || 'No title';
-            const link = item.querySelector('link')?.textContent || '#';
-            const pubDate = item.querySelector('pubDate')?.textContent || '';
-            const formattedDate = pubDate ? formatDate(pubDate) : 'Unknown date';
-            
-            const categories = extractCategories(item);
-            
-            let content = '';
-            const contentEncoded = item.querySelector('content\\:encoded, encoded')?.textContent;
-            const description = item.querySelector('description')?.textContent;
-            
-            if (contentEncoded) {
-                content = contentEncoded;
-            } else if (description) {
-                content = description;
+    }
+    
+    const firstP = tempDiv.querySelector('p');
+    if (firstP) {
+        let excerpt = firstP.textContent.trim();
+        if (excerpt.length > LENGTH_EXCERPT) {
+            excerpt = excerpt.substring(0, LENGTH_EXCERPT) + '...';
+        }
+        result.excerpt = excerpt;
+    }
+
+    return result;
+}
+
+// Funzione per estrarre categorie dal contenuto (per compatibilità con CORS proxy)
+function extractCategories(item) {
+    const categories = [];
+    const categoryElements = item.querySelectorAll('category');
+    
+    categoryElements.forEach(category => {
+        const categoryText = category.textContent.trim();
+        if (categoryText && !categories.includes(categoryText)) {
+            categories.push(categoryText);
+        }
+    });
+    
+    return categories;
+}
+
+// Funzione per processare un singolo item Medium (per compatibilità con CORS proxy)
+function processItem(item) {
+    const title = item.querySelector('title')?.textContent || 'No title';
+    const link = item.querySelector('link')?.textContent || '#';
+    const pubDate = item.querySelector('pubDate')?.textContent || '';
+    const formattedDate = pubDate ? formatDate(pubDate) : 'Unknown date';
+    
+    const categories = extractCategories(item);
+    
+    let content = '';
+    const contentEncoded = item.querySelector('content\\:encoded, encoded')?.textContent;
+    const description = item.querySelector('description')?.textContent;
+    
+    if (contentEncoded) {
+        content = contentEncoded;
+    } else if (description) {
+        content = description;
+    }
+    
+    const elements = extractContentElements(content);
+    
+    return {
+        title,
+        link,
+        pubDate,
+        formattedDate,
+        categories,
+        elements
+    };
+}
+
+// Funzione globale per caricare i post Medium dal file JSON locale
+window.fetchPosts = function(attempt = 1, maxAttempts = 3) {
+    const feedContainer = document.getElementById('feed-container');
+    if (!feedContainer) return;
+    
+    feedContainer.innerHTML = `<div class="loading">Loading Medium posts... ${attempt}/${maxAttempts}</div>`;
+    
+    // Carica i dati dal file JSON locale generato da GitHub Actions
+    fetch('/data/feeds/medium.json?' + new Date().getTime()) // Cache busting
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load Medium data: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.posts || data.posts.length === 0) {
+                throw new Error('No posts found in Medium data');
             }
             
-            const elements = extractContentElements(content);
+            // Processa i post dal JSON
+            allPosts = data.posts.map(post => {
+                return {
+                    title: post.title,
+                    link: post.link,
+                    pubDate: post.pubDate,
+                    formattedDate: formatDate(post.pubDate),
+                    categories: [], // Le categorie non sono nel JSON semplificato
+                    elements: {
+                        subtitle: '',
+                        image: post.image || '',
+                        excerpt: post.excerpt || 'No excerpt available'
+                    }
+                };
+            });
             
-            return {
-                title,
-                link,
-                pubDate,
-                formattedDate,
-                categories,
-                elements
-            };
+            // Aggiorna il display della pagina
+            updatePageDisplay();
+            
+            // Mostra i post della pagina corrente
+            displayPosts();
+        })
+        .catch(error => {
+            console.error(`Medium attempt ${attempt} failed:`, error);
+            
+            if (attempt < maxAttempts) {
+                // Riprova dopo 2 secondi
+                setTimeout(() => {
+                    window.fetchPosts(attempt + 1, maxAttempts);
+                }, 2000);
+            } else {
+                // Fallback al metodo CORS proxy se il file JSON non è disponibile
+                console.log('Falling back to CORS proxy method...');
+                window.fetchPostsWithProxy(1, 10);
+            }
+        });
+};
+
+// Funzione fallback con CORS proxy (mantenuta per compatibilità)
+window.fetchPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
+    const corsProxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://cors-anywhere.herokuapp.com/',
+        'https://corsproxy.io/?'
+    ];
+    const mediumFeedUrl = 'https://medium.com/feed/@thegoodprogrammer';
+    const feedContainer = document.getElementById('feed-container');
+    
+    if (!feedContainer) return;
+    
+    feedContainer.innerHTML = `<div class="loading">Loading posts via proxy... ${attempt}/${maxAttempts}</div>`;
+    
+    // Usa un proxy diverso per ogni tentativo (ciclico)
+    const proxyIndex = (attempt - 1) % corsProxies.length;
+    const proxyUrl = `${corsProxies[proxyIndex]}${encodeURIComponent(mediumFeedUrl)}`;
+    
+    // Recupera e analizza il feed RSS
+    fetch(proxyUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(data => {
+            const items = data.querySelectorAll('item');
+            
+            if (items.length === 0) {
+                throw new Error('No posts found in feed');
+            }
+            
+            // Salva tutti i post
+            allPosts = Array.from(items).map(item => {
+                return processItem(item);
+            });
+            
+            // Aggiorna il display della pagina
+            updatePageDisplay();
+            
+            // Mostra i post della pagina corrente
+            displayPosts();
+        })
+        .catch(error => {
+            console.error(`Proxy attempt ${attempt} failed:`, error);
+            
+            if (attempt < maxAttempts) {
+                // Riprova dopo 2 secondi
+                setTimeout(() => {
+                    window.fetchPostsWithProxy(attempt + 1, maxAttempts);
+                }, 2000);
+            } else {
+                // Tutti i tentativi falliti
+                feedContainer.innerHTML = `
+                    <div class="error">
+                        <p>Error loading posts from Medium after ${maxAttempts} attempts.</p>
+                        <p>This may be due to CORS restrictions or network issues.</p>
+                        <p><button onclick="fetchPosts(1, 3)" style="background: #03a87c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                        <p>Or try opening the feed directly: <a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
+                    </div>
+                `;
+            }
+        });
+};
+
+// ========================================
+// FUNZIONI SUBSTACK
+// ========================================
+
+// Funzione per aggiornare il display della pagina Substack
+function updateSubstackPageDisplay() {
+    const substackPageInfo = document.getElementById('substack-page-info');
+    const substackPrevButton = document.getElementById('substack-prev-page');
+    const substackNextButton = document.getElementById('substack-next-page');
+    
+    if (!substackPageInfo || !substackPrevButton || !substackNextButton) return;
+    
+    substackPageInfo.textContent = `Page ${substackCurrentPage}`;
+    
+    substackPrevButton.disabled = substackCurrentPage === 1;
+    substackNextButton.disabled = substackCurrentPage * SUBSTACK_POSTS_PER_PAGE >= substackAllPosts.length;
+    
+    if (substackPrevButton.disabled) {
+        substackPrevButton.style.opacity = "0.5";
+        substackPrevButton.style.cursor = "not-allowed";
+    } else {
+        substackPrevButton.style.opacity = "1";
+        substackPrevButton.style.cursor = "pointer";
+    }
+    
+    if (substackNextButton.disabled) {
+        substackNextButton.style.opacity = "0.5";
+        substackNextButton.style.cursor = "not-allowed";
+    } else {
+        substackNextButton.style.opacity = "1";
+        substackNextButton.style.cursor = "pointer";
+    }
+}
+
+// Funzione per mostrare i post Substack della pagina corrente
+function displaySubstackPosts() {
+    const substackFeedContainer = document.getElementById('substack-feed-container');
+    if (!substackFeedContainer) return;
+    
+    const startIndex = (substackCurrentPage - 1) * SUBSTACK_POSTS_PER_PAGE;
+    const endIndex = Math.min(startIndex + SUBSTACK_POSTS_PER_PAGE, substackAllPosts.length);
+    
+    const postsToShow = substackAllPosts.slice(startIndex, endIndex);
+    
+    let feedHTML = '';
+    
+    postsToShow.forEach(post => {
+        let subtitleHTML = '';
+        if (post.subtitle) {
+            subtitleHTML = `<div class="substack-subtitle">${post.subtitle}</div>`;
         }
         
-        // Gestione dei pulsanti di paginazione
+        feedHTML += `
+            <div class="substack-feed-item">
+                ${post.imageUrl ? `
+                <div class="substack-post-image-container">
+                    <div class="substack-post-image">
+                        <img src="${post.imageUrl}" alt="${post.title}" />
+                    </div>
+                </div>` : ''}
+                <div class="substack-post-content">
+                    <div class="substack-title"><a href="${post.link}" target="_blank">${post.title}</a></div>
+                    ${subtitleHTML}
+                    <div class="substack-date"><i class="far fa-calendar-alt"></i> ${post.formattedDate}</div>
+                    <div class="substack-excerpt">${post.excerpt || 'No excerpt available'}</div>
+                    <a href="${post.link}" class="substack-read-more" target="_blank">Read the full post</a>
+                </div>
+            </div>
+        `;
+    });
+    
+    substackFeedContainer.innerHTML = feedHTML;
+}
+
+// Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
+function processSubstackItem(item) {
+    const title = item.querySelector('title')?.textContent || 'No title';
+    const link = item.querySelector('link')?.textContent || '#';
+    const pubDate = item.querySelector('pubDate')?.textContent || '';
+    const formattedDate = pubDate ? formatSubstackDate(pubDate) : 'Unknown date';
+    const description = item.querySelector('description')?.textContent || '';
+    
+    // Estrai l'immagine dall'elemento enclosure
+    let imageUrl = '';
+    const enclosure = item.querySelector('enclosure');
+    if (enclosure && enclosure.getAttribute('url')) {
+        imageUrl = enclosure.getAttribute('url');
+    }
+    
+    // Ottieni contenuto da content:encoded
+    let excerpt = '';
+    let contentEncoded = null;
+    
+    try {
+        contentEncoded = 
+            item.querySelector('content\\:encoded')?.textContent ||
+            item.querySelector('encoded')?.textContent ||
+            item.getElementsByTagName('content:encoded')[0]?.textContent;
+    } catch (e) {
+        console.error("Error getting content:encoded:", e);
+    }
+    
+    if (!contentEncoded) {
+        const itemXml = new XMLSerializer().serializeToString(item);
+        const regex = /<content:encoded>([\s\S]*?)<\/content:encoded>/;
+        const encodedMatch = itemXml.match(regex);
+        if (encodedMatch && encodedMatch[1]) {
+            contentEncoded = encodedMatch[1];
+        }
+    }
+    
+    // Estrai l'excerpt dal contenuto
+    if (contentEncoded) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = contentEncoded;
+
+        let fullText = '';
+        for (let node of wrapper.childNodes) {
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'p') {
+                fullText = node.textContent.trim();
+                break;
+            }
+        }
+
+        if (fullText) {
+            excerpt = fullText.length > SUBSTACK_LENGTH_EXCERPT
+                ? fullText.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...'
+                : fullText;
+        }
+    }
+    
+    // Se non è stato trovato alcun estratto, usa la descrizione come fallback
+    if (!excerpt && description) {
+        excerpt = description.trim();
+        if (excerpt.length > SUBSTACK_LENGTH_EXCERPT) {
+            excerpt = excerpt.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...';
+        }
+    }
+    
+    // Estrai il sottotitolo dalla descrizione
+    let subtitle = description;
+    if (subtitle && subtitle.length > 100) {
+        subtitle = subtitle.substring(0, 100) + '...';
+    }
+    
+    return {
+        title,
+        link,
+        pubDate,
+        formattedDate,
+        imageUrl,
+        excerpt,
+        subtitle
+    };
+}
+
+// Funzione globale per caricare i post Substack dal file JSON locale
+window.fetchSubstackPosts = function(attempt = 1, maxAttempts = 3) {
+    const substackFeedContainer = document.getElementById('substack-feed-container');
+    if (!substackFeedContainer) return;
+    
+    substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts... ${attempt}/${maxAttempts}</div>`;
+    
+    // Carica i dati dal file JSON locale generato da GitHub Actions
+    fetch('/data/feeds/substack.json?' + new Date().getTime()) // Cache busting
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load Substack data: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.posts || data.posts.length === 0) {
+                throw new Error('No posts found in Substack data');
+            }
+            
+            // Processa i post dal JSON
+            substackAllPosts = data.posts.map(post => {
+                return {
+                    title: post.title,
+                    link: post.link,
+                    pubDate: post.pubDate,
+                    formattedDate: formatSubstackDate(post.pubDate),
+                    imageUrl: post.image || '',
+                    excerpt: post.excerpt || 'No excerpt available',
+                    subtitle: post.description ? 
+                        (post.description.length > 100 ? post.description.substring(0, 100) + '...' : post.description) 
+                        : ''
+                };
+            });
+            
+            updateSubstackPageDisplay();
+            displaySubstackPosts();
+        })
+        .catch(error => {
+            console.error(`Substack attempt ${attempt} failed:`, error);
+            
+            if (attempt < maxAttempts) {
+                // Riprova dopo 2 secondi
+                setTimeout(() => {
+                    window.fetchSubstackPosts(attempt + 1, maxAttempts);
+                }, 2000);
+            } else {
+                // Fallback al metodo CORS proxy se il file JSON non è disponibile
+                console.log('Falling back to CORS proxy method for Substack...');
+                window.fetchSubstackPostsWithProxy(1, 10);
+            }
+        });
+};
+
+// Funzione fallback con CORS proxy per Substack (mantenuta per compatibilità)
+window.fetchSubstackPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
+    const substackCorsProxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://cors-anywhere.herokuapp.com/',
+        'https://corsproxy.io/?'
+    ];
+    const substackFeedUrl = 'https://bematic.substack.com/feed';
+    const substackFeedContainer = document.getElementById('substack-feed-container');
+    
+    if (!substackFeedContainer) return;
+    
+    substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts via proxy... ${attempt}/${maxAttempts}</div>`;
+    
+    // Usa un proxy diverso per ogni tentativo (ciclico)
+    const proxyIndex = (attempt - 1) % substackCorsProxies.length;
+    const proxyUrl = `${substackCorsProxies[proxyIndex]}${encodeURIComponent(substackFeedUrl)}`;
+    
+    fetch(proxyUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(data => {
+            const items = data.querySelectorAll('item');
+            
+            if (items.length === 0) {
+                throw new Error('No Substack posts found in feed');
+            }
+            
+            // Salva tutti i post Substack
+            substackAllPosts = Array.from(items).map(item => {
+                return processSubstackItem(item);
+            });
+            
+            updateSubstackPageDisplay();
+            displaySubstackPosts();
+        })
+        .catch(error => {
+            console.error(`Substack proxy attempt ${attempt} failed:`, error);
+            
+            if (attempt < maxAttempts) {
+                // Riprova dopo 2 secondi
+                setTimeout(() => {
+                    window.fetchSubstackPostsWithProxy(attempt + 1, maxAttempts);
+                }, 2000);
+            } else {
+                // Tutti i tentativi falliti
+                substackFeedContainer.innerHTML = `
+                    <div class="substack-error">
+                        <p>Error loading posts from Substack after ${maxAttempts} attempts.</p>
+                        <p>This may be due to CORS restrictions or network issues.</p>
+                        <p><button onclick="fetchSubstackPosts(1, 3)" style="background: #FF6719; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                        <p>Or try opening the feed directly: <a href="${substackFeedUrl}" target="_blank">${substackFeedUrl}</a></p>
+                    </div>
+                `;
+            }
+        });
+};
+
+// ========================================
+// INIZIALIZZAZIONE E EVENT LISTENERS
+// ========================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestione dei pulsanti di paginazione Medium
+    const prevButton = document.getElementById('prev-page');
+    const nextButton = document.getElementById('next-page');
+    
+    if (prevButton && nextButton) {
         prevButton.addEventListener('click', function() {
             if (currentPage > 1) {
                 currentPage--;
@@ -881,392 +1236,13 @@
                 displayPosts();
             }
         });
-        
-        // Funzione per aggiornare il display della pagina
-        function updatePageDisplay() {
-            pageInfo.textContent = `Page ${currentPage}`;
-            
-            // Abilita/disabilita i pulsanti in base alla pagina corrente
-            prevButton.disabled = currentPage === 1;
-            nextButton.disabled = currentPage * POSTS_PER_PAGE >= allPosts.length;
-            
-            // Applica stile visivo per i pulsanti disabilitati
-            if (prevButton.disabled) {
-                prevButton.style.opacity = "0.5";
-                prevButton.style.cursor = "not-allowed";
-            } else {
-                prevButton.style.opacity = "1";
-                prevButton.style.cursor = "pointer";
-            }
-            
-            if (nextButton.disabled) {
-                nextButton.style.opacity = "0.5";
-                nextButton.style.cursor = "not-allowed";
-            } else {
-                nextButton.style.opacity = "1";
-                nextButton.style.cursor = "pointer";
-            }
-        }
-        
-        // Usa CORS proxy (prova diversi in caso uno fallisca)
-        const corsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://corsproxy.io/?'
-        ];
-        
-        const mediumFeedUrl = `https://medium.com/feed/@${username}`;
-        
-        // Funzione per estrarre elementi dal contenuto
-        function extractContentElements(content) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            
-            // Estrai elementi
-            const result = {
-                subtitle: '',
-                image: '',
-                excerpt: ''
-            };
-            
-            // Trova il primo h4 come sottotitolo
-            const h4 = tempDiv.querySelector('h4');
-            if (h4) {
-                result.subtitle = h4.textContent.trim();
-            }
-            
-            // Trova la prima figura con immagine
-            const figure = tempDiv.querySelector('figure');
-            if (figure) {
-                const img = figure.querySelector('img');
-                if (img && img.src) {
-                    result.image = img.src;
-                }
-            }
-            
-            // Trova il primo paragrafo per l'estratto
-            const firstP = tempDiv.querySelector('p');
-            if (firstP) {
-                let excerpt = firstP.textContent.trim();
-                if (excerpt.length > LENGTH_EXCERPT) {
-                    excerpt = excerpt.substring(0, LENGTH_EXCERPT) + '...';
-                }
-                result.excerpt = excerpt;
-            }
-
-            return result;
-        }
-        
-        // Funzione per estrarre categorie dal contenuto
-        function extractCategories(item) {
-            const categories = [];
-            const categoryElements = item.querySelectorAll('category');
-            
-            categoryElements.forEach(category => {
-                const categoryText = category.textContent.trim();
-                if (categoryText && !categories.includes(categoryText)) {
-                    categories.push(categoryText);
-                }
-            });
-            
-            return categories;
-        }
-        
-        // Funzione per processare un singolo item
-        function processItem(item) {
-            const title = item.querySelector('title')?.textContent || 'No title';
-            const link = item.querySelector('link')?.textContent || '#';
-            const pubDate = item.querySelector('pubDate')?.textContent || '';
-            const formattedDate = pubDate ? formatDate(pubDate) : 'Unknown date';
-            
-            // Ottieni categorie
-            const categories = extractCategories(item);
-            
-            // Ottieni contenuto
-            let content = '';
-            const contentEncoded = item.querySelector('content\\:encoded, encoded')?.textContent;
-            const description = item.querySelector('description')?.textContent;
-            
-            if (contentEncoded) {
-                content = contentEncoded;
-            } else if (description) {
-                content = description;
-            }
-            
-            // Estrai elementi dal contenuto
-            const elements = extractContentElements(content);
-            
-            return {
-                title,
-                link,
-                pubDate,
-                formattedDate,
-                categories,
-                elements
-            };
-        }
-        
-        // Funzione per mostrare i post della pagina corrente
-        function displayPosts() {
-            // Calcola l'indice di inizio e fine per la pagina corrente
-            const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-            const endIndex = Math.min(startIndex + POSTS_PER_PAGE, allPosts.length);
-            
-            // Ottieni i post per la pagina corrente
-            const postsToShow = allPosts.slice(startIndex, endIndex);
-            
-            // Genera l'HTML per i post
-            let feedHTML = '';
-            
-            postsToShow.forEach(post => {
-                // Crea HTML del sottotitolo se disponibile
-                const subtitleHTML = post.elements.subtitle 
-                    ? `<div class="subtitle">${post.elements.subtitle}</div>` 
-                    : '';
-                
-                feedHTML += `
-                    <div class="feed-item">
-                        ${post.elements.image ? `
-                        <div class="post-image-container">
-                            <div class="post-image">
-                                <img src="${post.elements.image}" alt="${post.title}" />
-                            </div>
-                        </div>` : ''}
-                        <div class="post-content">
-                            <div class="title"><a href="${post.link}" target="_blank">${post.title}</a></div>
-                            ${subtitleHTML}
-                            <div class="date"><i class="far fa-calendar-alt"></i> ${post.formattedDate}</div>
-                            <div class="excerpt">${post.elements.excerpt || 'No excerpt available'}</div>
-                            <div class="categories">
-                                ${post.categories.map(cat => `<span class="category">${cat}</span>`).join('')}
-                            </div>
-                            <a href="${post.link}" class="read-more" target="_blank">Read the full post</a>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Aggiorna il contenitore
-            feedContainer.innerHTML = feedHTML;
-        }
-        
-        // Inizializza la paginazione
-        updatePageDisplay();
-        
-        // Avvia il caricamento dei post all'inizio con retry automatico
-        window.fetchPosts(1, 10);
-    });
-</script>
-
-<script>
-    // Configurazione Substack
-    const SUBSTACK_LENGTH_EXCERPT = 500;
-    const SUBSTACK_POSTS_PER_PAGE = 4;
-    let substackCurrentPage = 1;
-    let substackAllPosts = [];
+    }
     
-    // Funzione globale per caricare i post Substack dal file JSON locale
-    window.fetchSubstackPosts = function(attempt = 1, maxAttempts = 3) {
-        const substackFeedContainer = document.getElementById('substack-feed-container');
-        
-        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts... ${attempt}/${maxAttempts}</div>`;
-        
-        // Carica i dati dal file JSON locale generato da GitHub Actions
-        fetch('/data/feeds/substack.json?' + new Date().getTime()) // Cache busting
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load Substack data: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.posts || data.posts.length === 0) {
-                    throw new Error('No posts found in Substack data');
-                }
-                
-                // Processa i post dal JSON
-                substackAllPosts = data.posts.map(post => {
-                    return {
-                        title: post.title,
-                        link: post.link,
-                        pubDate: post.pubDate,
-                        formattedDate: formatSubstackDate(post.pubDate),
-                        imageUrl: post.image || '',
-                        excerpt: post.excerpt || 'No excerpt available',
-                        subtitle: post.description ? 
-                            (post.description.length > 100 ? post.description.substring(0, 100) + '...' : post.description) 
-                            : ''
-                    };
-                });
-                
-                updateSubstackPageDisplay();
-                displaySubstackPosts();
-            })
-            .catch(error => {
-                console.error(`Substack attempt ${attempt} failed:`, error);
-                
-                if (attempt < maxAttempts) {
-                    // Riprova dopo 2 secondi
-                    setTimeout(() => {
-                        window.fetchSubstackPosts(attempt + 1, maxAttempts);
-                    }, 2000);
-                } else {
-                    // Fallback al metodo CORS proxy se il file JSON non è disponibile
-                    console.log('Falling back to CORS proxy method for Substack...');
-                    fetchSubstackPostsWithProxy(1, 10);
-                }
-            });
-    };
+    // Gestione dei pulsanti di paginazione Substack
+    const substackPrevButton = document.getElementById('substack-prev-page');
+    const substackNextButton = document.getElementById('substack-next-page');
     
-    // Funzione fallback con CORS proxy per Substack (mantenuta per compatibilità)
-    window.fetchSubstackPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
-        const substackCorsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://corsproxy.io/?'
-        ];
-        const substackFeedUrl = 'https://bematic.substack.com/feed';
-        
-        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts via proxy... ${attempt}/${maxAttempts}</div>`;
-        
-        // Usa un proxy diverso per ogni tentativo (ciclico)
-        const proxyIndex = (attempt - 1) % substackCorsProxies.length;
-        const proxyUrl = `${substackCorsProxies[proxyIndex]}${encodeURIComponent(substackFeedUrl)}`;
-        
-        fetch(proxyUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-            .then(data => {
-                const items = data.querySelectorAll('item');
-                
-                if (items.length === 0) {
-                    throw new Error('No Substack posts found in feed');
-                }
-                
-                // Salva tutti i post Substack
-                substackAllPosts = Array.from(items).map(item => {
-                    return processSubstackItem(item);
-                });
-                
-                updateSubstackPageDisplay();
-                displaySubstackPosts();
-            })
-            .catch(error => {
-                console.error(`Substack proxy attempt ${attempt} failed:`, error);
-                
-                if (attempt < maxAttempts) {
-                    // Riprova dopo 2 secondi
-                    setTimeout(() => {
-                        window.fetchSubstackPostsWithProxy(attempt + 1, maxAttempts);
-                    }, 2000);
-                } else {
-                    // Tutti i tentativi falliti
-                    substackFeedContainer.innerHTML = `
-                        <div class="substack-error">
-                            <p>Error loading posts from Substack after ${maxAttempts} attempts.</p>
-                            <p>This may be due to CORS restrictions or network issues.</p>
-                            <p><button onclick="fetchSubstackPosts(1, 3)" style="background: #FF6719; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
-                            <p>Or try opening the feed directly: <a href="${substackFeedUrl}" target="_blank">${substackFeedUrl}</a></p>
-                        </div>
-                    `;
-                }
-            });
-    };
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const substackFeedContainer = document.getElementById('substack-feed-container');
-        const substackPrevButton = document.getElementById('substack-prev-page');
-        const substackNextButton = document.getElementById('substack-next-page');
-        const substackPageInfo = document.getElementById('substack-page-info');
-        
-        // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
-        function processSubstackItem(item) {
-            const title = item.querySelector('title')?.textContent || 'No title';
-            const link = item.querySelector('link')?.textContent || '#';
-            const pubDate = item.querySelector('pubDate')?.textContent || '';
-            const formattedDate = pubDate ? formatSubstackDate(pubDate) : 'Unknown date';
-            const description = item.querySelector('description')?.textContent || '';
-            
-            // Estrai l'immagine dall'elemento enclosure
-            let imageUrl = '';
-            const enclosure = item.querySelector('enclosure');
-            if (enclosure && enclosure.getAttribute('url')) {
-                imageUrl = enclosure.getAttribute('url');
-            }
-            
-            // Ottieni contenuto da content:encoded
-            let excerpt = '';
-            let contentEncoded = null;
-            
-            try {
-                contentEncoded = 
-                    item.querySelector('content\\:encoded')?.textContent ||
-                    item.querySelector('encoded')?.textContent ||
-                    item.getElementsByTagName('content:encoded')[0]?.textContent;
-            } catch (e) {
-                console.error("Error getting content:encoded:", e);
-            }
-            
-            if (!contentEncoded) {
-                const itemXml = new XMLSerializer().serializeToString(item);
-                const regex = /<content:encoded>([\s\S]*?)<\/content:encoded>/;
-                const encodedMatch = itemXml.match(regex);
-                if (encodedMatch && encodedMatch[1]) {
-                    contentEncoded = encodedMatch[1];
-                }
-            }
-            
-            // Estrai l'excerpt dal contenuto
-            if (contentEncoded) {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = contentEncoded;
-
-                let fullText = '';
-                for (let node of wrapper.childNodes) {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'p') {
-                        fullText = node.textContent.trim();
-                        break;
-                    }
-                }
-
-                if (fullText) {
-                    excerpt = fullText.length > SUBSTACK_LENGTH_EXCERPT
-                        ? fullText.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...'
-                        : fullText;
-                }
-            }
-            
-            // Se non è stato trovato alcun estratto, usa la descrizione come fallback
-            if (!excerpt && description) {
-                excerpt = description.trim();
-                if (excerpt.length > SUBSTACK_LENGTH_EXCERPT) {
-                    excerpt = excerpt.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...';
-                }
-            }
-            
-            // Estrai il sottotitolo dalla descrizione
-            let subtitle = description;
-            if (subtitle && subtitle.length > 100) {
-                subtitle = subtitle.substring(0, 100) + '...';
-            }
-            
-            return {
-                title,
-                link,
-                pubDate,
-                formattedDate,
-                imageUrl,
-                excerpt,
-                subtitle
-            };
-        }
-        
-        // Gestione dei pulsanti di paginazione Substack
+    if (substackPrevButton && substackNextButton) {
         substackPrevButton.addEventListener('click', function() {
             if (substackCurrentPage > 1) {
                 substackCurrentPage--;
@@ -1282,165 +1258,16 @@
                 displaySubstackPosts();
             }
         });
-        
-        // Funzione per aggiornare il display della pagina Substack
-        function updateSubstackPageDisplay() {
-            substackPageInfo.textContent = `Page ${substackCurrentPage}`;
-            
-            substackPrevButton.disabled = substackCurrentPage === 1;
-            substackNextButton.disabled = substackCurrentPage * SUBSTACK_POSTS_PER_PAGE >= substackAllPosts.length;
-            
-            if (substackPrevButton.disabled) {
-                substackPrevButton.style.opacity = "0.5";
-                substackPrevButton.style.cursor = "not-allowed";
-            } else {
-                substackPrevButton.style.opacity = "1";
-                substackPrevButton.style.cursor = "pointer";
-            }
-            
-            if (substackNextButton.disabled) {
-                substackNextButton.style.opacity = "0.5";
-                substackNextButton.style.cursor = "not-allowed";
-            } else {
-                substackNextButton.style.opacity = "1";
-                substackNextButton.style.cursor = "pointer";
-            }
-        }
-        
-        // CORS proxy per Substack
-        const substackCorsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://corsproxy.io/?'
-        ];
-        
-        const substackFeedUrl = 'https://bematic.substack.com/feed';
-        
-        // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
-        function processSubstackItem(item) {
-            const title = item.querySelector('title')?.textContent || 'No title';
-            const link = item.querySelector('link')?.textContent || '#';
-            const pubDate = item.querySelector('pubDate')?.textContent || '';
-            const formattedDate = pubDate ? formatSubstackDate(pubDate) : 'Unknown date';
-            const description = item.querySelector('description')?.textContent || '';
-            
-            // Estrai l'immagine dall'elemento enclosure
-            let imageUrl = '';
-            const enclosure = item.querySelector('enclosure');
-            if (enclosure && enclosure.getAttribute('url')) {
-                imageUrl = enclosure.getAttribute('url');
-            }
-            
-            // Ottieni contenuto da content:encoded
-            let excerpt = '';
-            let contentEncoded = null;
-            
-            try {
-                contentEncoded = 
-                    item.querySelector('content\\:encoded')?.textContent ||
-                    item.querySelector('encoded')?.textContent ||
-                    item.getElementsByTagName('content:encoded')[0]?.textContent;
-            } catch (e) {
-                console.error("Error getting content:encoded:", e);
-            }
-            
-            if (!contentEncoded) {
-                const itemXml = new XMLSerializer().serializeToString(item);
-                const regex = /<content:encoded>([\s\S]*?)<\/content:encoded>/;
-                const encodedMatch = itemXml.match(regex);
-                if (encodedMatch && encodedMatch[1]) {
-                    contentEncoded = encodedMatch[1];
-                }
-            }
-            
-            // Estrai l'excerpt dal contenuto
-            if (contentEncoded) {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = contentEncoded;
-
-                let fullText = '';
-                for (let node of wrapper.childNodes) {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'p') {
-                        fullText = node.textContent.trim();
-                        break;
-                    }
-                }
-
-                if (fullText) {
-                    excerpt = fullText.length > SUBSTACK_LENGTH_EXCERPT
-                        ? fullText.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...'
-                        : fullText;
-                }
-            }
-            
-            // Se non è stato trovato alcun estratto, usa la descrizione come fallback
-            if (!excerpt && description) {
-                excerpt = description.trim();
-                if (excerpt.length > SUBSTACK_LENGTH_EXCERPT) {
-                    excerpt = excerpt.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...';
-                }
-            }
-            
-            // Estrai il sottotitolo dalla descrizione
-            let subtitle = description;
-            if (subtitle && subtitle.length > 100) {
-                subtitle = subtitle.substring(0, 100) + '...';
-            }
-            
-            return {
-                title,
-                link,
-                pubDate,
-                formattedDate,
-                imageUrl,
-                excerpt,
-                subtitle
-            };
-        }
-        
-        // Funzione per mostrare i post Substack della pagina corrente
-        function displaySubstackPosts() {
-            const startIndex = (substackCurrentPage - 1) * SUBSTACK_POSTS_PER_PAGE;
-            const endIndex = Math.min(startIndex + SUBSTACK_POSTS_PER_PAGE, substackAllPosts.length);
-            
-            const postsToShow = substackAllPosts.slice(startIndex, endIndex);
-            
-            let feedHTML = '';
-            
-            postsToShow.forEach(post => {
-                let subtitleHTML = '';
-                if (post.subtitle) {
-                    subtitleHTML = `<div class="substack-subtitle">${post.subtitle}</div>`;
-                }
-                
-                feedHTML += `
-                    <div class="substack-feed-item">
-                        ${post.imageUrl ? `
-                        <div class="substack-post-image-container">
-                            <div class="substack-post-image">
-                                <img src="${post.imageUrl}" alt="${post.title}" />
-                            </div>
-                        </div>` : ''}
-                        <div class="substack-post-content">
-                            <div class="substack-title"><a href="${post.link}" target="_blank">${post.title}</a></div>
-                            ${subtitleHTML}
-                            <div class="substack-date"><i class="far fa-calendar-alt"></i> ${post.formattedDate}</div>
-                            <div class="substack-excerpt">${post.excerpt || 'No excerpt available'}</div>
-                            <a href="${post.link}" class="substack-read-more" target="_blank">Read the full post</a>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            substackFeedContainer.innerHTML = feedHTML;
-        }
-        
-        // Inizializza la paginazione Substack
-        updateSubstackPageDisplay();
-        
-        // Avvia il caricamento dei post Substack con retry automatico
-        window.fetchSubstackPosts(1, 10);
-    });
+    }
+    
+    // Inizializza la paginazione
+    updatePageDisplay();
+    updateSubstackPageDisplay();
+    
+    // Avvia il caricamento dei post all'inizio con retry automatico
+    window.fetchPosts(1, 3);
+    window.fetchSubstackPosts(1, 3);
+});
 </script>
 
 <!--Start Cookie Script--> <script type="text/javascript" charset="UTF-8" src="//cookie-script.com/s/f67066386a32612237b658624241e0af.js"></script> <!--End Cookie Script-->
