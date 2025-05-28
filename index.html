@@ -1216,7 +1216,7 @@ window.fetchSubstackPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
 // INIZIALIZZAZIONE E EVENT LISTENERS
 // ========================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestione dei pulsanti di paginazione Medium
+    // Gestione dei pulsanti di paginazione Medium con scroll automatico
     const prevButton = document.getElementById('prev-page');
     const nextButton = document.getElementById('next-page');
     
@@ -1226,6 +1226,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentPage--;
                 updatePageDisplay();
                 displayPosts();
+                
+                // Scroll smooth verso l'inizio del blocco Medium
+                const mediumContainer = document.querySelector('.medium-container');
+                if (mediumContainer) {
+                    const yOffset = -20; // Offset di 20px dal top
+                    const y = mediumContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
         
@@ -1234,11 +1245,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentPage++;
                 updatePageDisplay();
                 displayPosts();
+                
+                // Scroll smooth verso l'inizio del blocco Medium
+                const mediumContainer = document.querySelector('.medium-container');
+                if (mediumContainer) {
+                    const yOffset = -20; // Offset di 20px dal top
+                    const y = mediumContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
     }
     
-    // Gestione dei pulsanti di paginazione Substack
+    // Gestione dei pulsanti di paginazione Substack con scroll automatico
     const substackPrevButton = document.getElementById('substack-prev-page');
     const substackNextButton = document.getElementById('substack-next-page');
     
@@ -1248,6 +1270,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 substackCurrentPage--;
                 updateSubstackPageDisplay();
                 displaySubstackPosts();
+                
+                // Scroll smooth verso l'inizio del blocco Substack
+                const substackContainer = document.querySelector('.substack-container');
+                if (substackContainer) {
+                    const yOffset = -20; // Offset di 20px dal top
+                    const y = substackContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
         
@@ -1256,6 +1289,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 substackCurrentPage++;
                 updateSubstackPageDisplay();
                 displaySubstackPosts();
+                
+                // Scroll smooth verso l'inizio del blocco Substack
+                const substackContainer = document.querySelector('.substack-container');
+                if (substackContainer) {
+                    const yOffset = -20; // Offset di 20px dal top
+                    const y = substackContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
     }
