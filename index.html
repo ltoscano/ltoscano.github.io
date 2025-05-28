@@ -172,6 +172,7 @@
           /* Support for multi-line ellipsis */
           display: -webkit-box;
           -webkit-line-clamp: 3;
+          line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
           flex-grow: 1;
@@ -400,6 +401,7 @@
           font-size: 0.9rem;
           display: -webkit-box;
           -webkit-line-clamp: 3;
+          line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
           flex-grow: 1;
@@ -603,9 +605,65 @@
     let currentPage = 1;
     let allPosts = []; // Array per conservare tutti i post
     
-    // Funzioni globali per i pulsanti retry
-    window.fetchPosts = function(attempt = 1, maxAttempts = 10) {
+    // Funzione globale per caricare i post Medium dal file JSON locale
+    window.fetchPosts = function(attempt = 1, maxAttempts = 3) {
         const feedContainer = document.getElementById('feed-container');
+        
+        feedContainer.innerHTML = `<div class="loading">Loading Medium posts... ${attempt}/${maxAttempts}</div>`;
+        
+        // Carica i dati dal file JSON locale generato da GitHub Actions
+        fetch('/data/feeds/medium.json?' + new Date().getTime()) // Cache busting
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load Medium data: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.posts || data.posts.length === 0) {
+                    throw new Error('No posts found in Medium data');
+                }
+                
+                // Processa i post dal JSON
+                allPosts = data.posts.map(post => {
+                    return {
+                        title: post.title,
+                        link: post.link,
+                        pubDate: post.pubDate,
+                        formattedDate: formatDate(post.pubDate),
+                        categories: [], // Le categorie non sono nel JSON semplificato
+                        elements: {
+                            subtitle: '',
+                            image: post.image || '',
+                            excerpt: post.excerpt || 'No excerpt available'
+                        }
+                    };
+                });
+                
+                // Aggiorna il display della pagina
+                updatePageDisplay();
+                
+                // Mostra i post della pagina corrente
+                displayPosts();
+            })
+            .catch(error => {
+                console.error(`Medium attempt ${attempt} failed:`, error);
+                
+                if (attempt < maxAttempts) {
+                    // Riprova dopo 2 secondi
+                    setTimeout(() => {
+                        window.fetchPosts(attempt + 1, maxAttempts);
+                    }, 2000);
+                } else {
+                    // Fallback al metodo CORS proxy se il file JSON non è disponibile
+                    console.log('Falling back to CORS proxy method...');
+                    fetchPostsWithProxy(1, 10);
+                }
+            });
+    };
+    
+    // Funzione fallback con CORS proxy (mantenuta per compatibilità)
+    window.fetchPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
         const corsProxies = [
             'https://api.allorigins.win/raw?url=',
             'https://cors-anywhere.herokuapp.com/',
@@ -613,7 +671,7 @@
         ];
         const mediumFeedUrl = 'https://medium.com/feed/@thegoodprogrammer';
         
-        feedContainer.innerHTML = `<div class="loading">Loading posts... ${attempt}/${maxAttempts}</div>`;
+        feedContainer.innerHTML = `<div class="loading">Loading posts via proxy... ${attempt}/${maxAttempts}</div>`;
         
         // Usa un proxy diverso per ogni tentativo (ciclico)
         const proxyIndex = (attempt - 1) % corsProxies.length;
@@ -647,12 +705,12 @@
                 displayPosts();
             })
             .catch(error => {
-                console.error(`Attempt ${attempt} failed:`, error);
+                console.error(`Proxy attempt ${attempt} failed:`, error);
                 
                 if (attempt < maxAttempts) {
                     // Riprova dopo 2 secondi
                     setTimeout(() => {
-                        window.fetchPosts(attempt + 1, maxAttempts);
+                        window.fetchPostsWithProxy(attempt + 1, maxAttempts);
                     }, 2000);
                 } else {
                     // Tutti i tentativi falliti
@@ -660,7 +718,7 @@
                         <div class="error">
                             <p>Error loading posts from Medium after ${maxAttempts} attempts.</p>
                             <p>This may be due to CORS restrictions or network issues.</p>
-                            <p><button onclick="fetchPosts(1, 10)" style="background: #03a87c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                            <p><button onclick="fetchPosts(1, 3)" style="background: #03a87c; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
                             <p>Or try opening the feed directly: <a href="${mediumFeedUrl}" target="_blank">${mediumFeedUrl}</a></p>
                         </div>
                     `;
@@ -674,6 +732,113 @@
         const nextButton = document.getElementById('next-page');
         const pageInfo = document.getElementById('page-info');
         const username = 'thegoodprogrammer';
+        
+        // Funzione per formattare la data
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return 'Today';
+            } else if (diffDays === 1) {
+                return 'Yesterday';
+            } else if (diffDays < 7) {
+                return `${diffDays} days ago`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+            } else if (diffDays < 365) {
+                const months = Math.floor(diffDays / 30);
+                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+            } else {
+                const years = Math.floor(diffDays / 365);
+                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+            }
+        }
+        
+        // Funzione per estrarre elementi dal contenuto (per compatibilità con CORS proxy)
+        function extractContentElements(content) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            
+            const result = {
+                subtitle: '',
+                image: '',
+                excerpt: ''
+            };
+            
+            const h4 = tempDiv.querySelector('h4');
+            if (h4) {
+                result.subtitle = h4.textContent.trim();
+            }
+            
+            const figure = tempDiv.querySelector('figure');
+            if (figure) {
+                const img = figure.querySelector('img');
+                if (img && img.src) {
+                    result.image = img.src;
+                }
+            }
+            
+            const firstP = tempDiv.querySelector('p');
+            if (firstP) {
+                let excerpt = firstP.textContent.trim();
+                if (excerpt.length > LENGTH_EXCERPT) {
+                    excerpt = excerpt.substring(0, LENGTH_EXCERPT) + '...';
+                }
+                result.excerpt = excerpt;
+            }
+
+            return result;
+        }
+        
+        // Funzione per estrarre categorie dal contenuto (per compatibilità con CORS proxy)
+        function extractCategories(item) {
+            const categories = [];
+            const categoryElements = item.querySelectorAll('category');
+            
+            categoryElements.forEach(category => {
+                const categoryText = category.textContent.trim();
+                if (categoryText && !categories.includes(categoryText)) {
+                    categories.push(categoryText);
+                }
+            });
+            
+            return categories;
+        }
+        
+        // Funzione per processare un singolo item (per compatibilità con CORS proxy)
+        function processItem(item) {
+            const title = item.querySelector('title')?.textContent || 'No title';
+            const link = item.querySelector('link')?.textContent || '#';
+            const pubDate = item.querySelector('pubDate')?.textContent || '';
+            const formattedDate = pubDate ? formatDate(pubDate) : 'Unknown date';
+            
+            const categories = extractCategories(item);
+            
+            let content = '';
+            const contentEncoded = item.querySelector('content\\:encoded, encoded')?.textContent;
+            const description = item.querySelector('description')?.textContent;
+            
+            if (contentEncoded) {
+                content = contentEncoded;
+            } else if (description) {
+                content = description;
+            }
+            
+            const elements = extractContentElements(content);
+            
+            return {
+                title,
+                link,
+                pubDate,
+                formattedDate,
+                categories,
+                elements
+            };
+        }
         
         // Gestione dei pulsanti di paginazione
         prevButton.addEventListener('click', function() {
@@ -726,31 +891,6 @@
         ];
         
         const mediumFeedUrl = `https://medium.com/feed/@${username}`;
-        
-        // Funzione per formattare la data
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffTime = Math.abs(now - date);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return 'Today';
-            } else if (diffDays === 1) {
-                return 'Yesterday';
-            } else if (diffDays < 7) {
-                return `${diffDays} days ago`;
-            } else if (diffDays < 30) {
-                const weeks = Math.floor(diffDays / 7);
-                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-            } else if (diffDays < 365) {
-                const months = Math.floor(diffDays / 30);
-                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-            } else {
-                const years = Math.floor(diffDays / 365);
-                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-            }
-        }
         
         // Funzione per estrarre elementi dal contenuto
         function extractContentElements(content) {
@@ -900,9 +1040,61 @@
     let substackCurrentPage = 1;
     let substackAllPosts = [];
     
-    // Funzione globale per retry Substack
-    window.fetchSubstackPosts = function(attempt = 1, maxAttempts = 10) {
+    // Funzione globale per caricare i post Substack dal file JSON locale
+    window.fetchSubstackPosts = function(attempt = 1, maxAttempts = 3) {
         const substackFeedContainer = document.getElementById('substack-feed-container');
+        
+        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts... ${attempt}/${maxAttempts}</div>`;
+        
+        // Carica i dati dal file JSON locale generato da GitHub Actions
+        fetch('/data/feeds/substack.json?' + new Date().getTime()) // Cache busting
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load Substack data: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.posts || data.posts.length === 0) {
+                    throw new Error('No posts found in Substack data');
+                }
+                
+                // Processa i post dal JSON
+                substackAllPosts = data.posts.map(post => {
+                    return {
+                        title: post.title,
+                        link: post.link,
+                        pubDate: post.pubDate,
+                        formattedDate: formatSubstackDate(post.pubDate),
+                        imageUrl: post.image || '',
+                        excerpt: post.excerpt || 'No excerpt available',
+                        subtitle: post.description ? 
+                            (post.description.length > 100 ? post.description.substring(0, 100) + '...' : post.description) 
+                            : ''
+                    };
+                });
+                
+                updateSubstackPageDisplay();
+                displaySubstackPosts();
+            })
+            .catch(error => {
+                console.error(`Substack attempt ${attempt} failed:`, error);
+                
+                if (attempt < maxAttempts) {
+                    // Riprova dopo 2 secondi
+                    setTimeout(() => {
+                        window.fetchSubstackPosts(attempt + 1, maxAttempts);
+                    }, 2000);
+                } else {
+                    // Fallback al metodo CORS proxy se il file JSON non è disponibile
+                    console.log('Falling back to CORS proxy method for Substack...');
+                    fetchSubstackPostsWithProxy(1, 10);
+                }
+            });
+    };
+    
+    // Funzione fallback con CORS proxy per Substack (mantenuta per compatibilità)
+    window.fetchSubstackPostsWithProxy = function(attempt = 1, maxAttempts = 10) {
         const substackCorsProxies = [
             'https://api.allorigins.win/raw?url=',
             'https://cors-anywhere.herokuapp.com/',
@@ -910,7 +1102,7 @@
         ];
         const substackFeedUrl = 'https://bematic.substack.com/feed';
         
-        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts... ${attempt}/${maxAttempts}</div>`;
+        substackFeedContainer.innerHTML = `<div class="substack-loading">Loading Substack posts via proxy... ${attempt}/${maxAttempts}</div>`;
         
         // Usa un proxy diverso per ogni tentativo (ciclico)
         const proxyIndex = (attempt - 1) % substackCorsProxies.length;
@@ -940,12 +1132,12 @@
                 displaySubstackPosts();
             })
             .catch(error => {
-                console.error(`Substack attempt ${attempt} failed:`, error);
+                console.error(`Substack proxy attempt ${attempt} failed:`, error);
                 
                 if (attempt < maxAttempts) {
                     // Riprova dopo 2 secondi
                     setTimeout(() => {
-                        window.fetchSubstackPosts(attempt + 1, maxAttempts);
+                        window.fetchSubstackPostsWithProxy(attempt + 1, maxAttempts);
                     }, 2000);
                 } else {
                     // Tutti i tentativi falliti
@@ -953,7 +1145,7 @@
                         <div class="substack-error">
                             <p>Error loading posts from Substack after ${maxAttempts} attempts.</p>
                             <p>This may be due to CORS restrictions or network issues.</p>
-                            <p><button onclick="fetchSubstackPosts(1, 10)" style="background: #FF6719; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
+                            <p><button onclick="fetchSubstackPosts(1, 3)" style="background: #FF6719; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 10px 0;">Try Again</button></p>
                             <p>Or try opening the feed directly: <a href="${substackFeedUrl}" target="_blank">${substackFeedUrl}</a></p>
                         </div>
                     `;
@@ -966,6 +1158,113 @@
         const substackPrevButton = document.getElementById('substack-prev-page');
         const substackNextButton = document.getElementById('substack-next-page');
         const substackPageInfo = document.getElementById('substack-page-info');
+        
+        // Funzione per formattare la data Substack
+        function formatSubstackDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return 'Today';
+            } else if (diffDays === 1) {
+                return 'Yesterday';
+            } else if (diffDays < 7) {
+                return `${diffDays} days ago`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+            } else if (diffDays < 365) {
+                const months = Math.floor(diffDays / 30);
+                return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+            } else {
+                const years = Math.floor(diffDays / 365);
+                return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+            }
+        }
+        
+        // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
+        function processSubstackItem(item) {
+            const title = item.querySelector('title')?.textContent || 'No title';
+            const link = item.querySelector('link')?.textContent || '#';
+            const pubDate = item.querySelector('pubDate')?.textContent || '';
+            const formattedDate = pubDate ? formatSubstackDate(pubDate) : 'Unknown date';
+            const description = item.querySelector('description')?.textContent || '';
+            
+            // Estrai l'immagine dall'elemento enclosure
+            let imageUrl = '';
+            const enclosure = item.querySelector('enclosure');
+            if (enclosure && enclosure.getAttribute('url')) {
+                imageUrl = enclosure.getAttribute('url');
+            }
+            
+            // Ottieni contenuto da content:encoded
+            let excerpt = '';
+            let contentEncoded = null;
+            
+            try {
+                contentEncoded = 
+                    item.querySelector('content\\:encoded')?.textContent ||
+                    item.querySelector('encoded')?.textContent ||
+                    item.getElementsByTagName('content:encoded')[0]?.textContent;
+            } catch (e) {
+                console.error("Error getting content:encoded:", e);
+            }
+            
+            if (!contentEncoded) {
+                const itemXml = new XMLSerializer().serializeToString(item);
+                const regex = /<content:encoded>([\s\S]*?)<\/content:encoded>/;
+                const encodedMatch = itemXml.match(regex);
+                if (encodedMatch && encodedMatch[1]) {
+                    contentEncoded = encodedMatch[1];
+                }
+            }
+            
+            // Estrai l'excerpt dal contenuto
+            if (contentEncoded) {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = contentEncoded;
+
+                let fullText = '';
+                for (let node of wrapper.childNodes) {
+                    if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'p') {
+                        fullText = node.textContent.trim();
+                        break;
+                    }
+                }
+
+                if (fullText) {
+                    excerpt = fullText.length > SUBSTACK_LENGTH_EXCERPT
+                        ? fullText.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...'
+                        : fullText;
+                }
+            }
+            
+            // Se non è stato trovato alcun estratto, usa la descrizione come fallback
+            if (!excerpt && description) {
+                excerpt = description.trim();
+                if (excerpt.length > SUBSTACK_LENGTH_EXCERPT) {
+                    excerpt = excerpt.substring(0, SUBSTACK_LENGTH_EXCERPT) + '...';
+                }
+            }
+            
+            // Estrai il sottotitolo dalla descrizione
+            let subtitle = description;
+            if (subtitle && subtitle.length > 100) {
+                subtitle = subtitle.substring(0, 100) + '...';
+            }
+            
+            return {
+                title,
+                link,
+                pubDate,
+                formattedDate,
+                imageUrl,
+                excerpt,
+                subtitle
+            };
+        }
         
         // Gestione dei pulsanti di paginazione Substack
         substackPrevButton.addEventListener('click', function() {
@@ -1042,7 +1341,7 @@
             }
         }
         
-        // Funzione per processare un singolo item Substack
+        // Funzione per processare un singolo item Substack (per compatibilità con CORS proxy)
         function processSubstackItem(item) {
             const title = item.querySelector('title')?.textContent || 'No title';
             const link = item.querySelector('link')?.textContent || '#';

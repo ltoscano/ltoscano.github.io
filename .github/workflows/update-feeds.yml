@@ -1,0 +1,40 @@
+name: Update RSS Feeds
+
+on:
+  schedule:
+    # Esegui ogni 6 ore
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Permetti esecuzione manuale
+
+jobs:
+  update-feeds:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install rss-parser node-fetch
+        
+    - name: Fetch and process feeds
+      run: node scripts/update-feeds.js
+      
+    - name: Commit and push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/feeds/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update RSS feeds data $(date)"
+          git push
+        fi

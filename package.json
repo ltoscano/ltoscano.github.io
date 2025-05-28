@@ -1,0 +1,27 @@
+{
+  "name": "ltoscano.github.io",
+  "version": "1.0.0",
+  "description": "Lorenzo Toscano's personal website with automated RSS feed system",
+  "main": "index.js",
+  "scripts": {
+    "update-feeds": "node scripts/update-feeds.js",
+    "serve": "python3 -m http.server 8080",
+    "dev": "npm run update-feeds && npm run serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ltoscano/ltoscano.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ltoscano/ltoscano.github.io/issues"
+  },
+  "homepage": "https://github.com/ltoscano/ltoscano.github.io#readme",
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
+}

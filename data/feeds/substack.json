@@ -1,0 +1,71 @@
+{
+  "title": "Lorenzo Toscano",
+  "description": "AI expert leading ML/AI teams in multinational corporations. Experienced in entrepreneurship and writing on AI and software engineering automation. Passionate about innovation and transforming ideas into impactful technologies.",
+  "link": "https://bematic.substack.com",
+  "lastUpdated": "2025-05-28T13:37:08.404Z",
+  "posts": [
+    {
+      "title": "Artificial Intelligence in the Society of Positivity: reflections on Byung-Chul Han",
+      "link": "https://bematic.substack.com/p/artificial-intelligence-in-the-society",
+      "pubDate": "Sun, 11 May 2025 19:14:17 GMT",
+      "description": "Can AI Free Us from Digital Fatigue? A Journey Through Work, Life, and Contemplation.",
+      "excerpt": "In his essay M&#252;digkeitsgesellschaft (The Burnout Society), philosopher Byung-Chul Han paints a haunting portrait of modernity: a society dominate...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7cf72e13-958b-4003-bde9-0b173ace7b69_1024x768.heic",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "The Challenge of Visual Tracing in Multimodal Generative Models (LMMs)",
+      "link": "https://bematic.substack.com/p/the-challenge-of-visual-tracing-in",
+      "pubDate": "Sat, 03 May 2025 08:04:53 GMT",
+      "description": "An empirical exploration of visual-path tracing in multimodal LLMs through structured image-based prompts",
+      "excerpt": "Image by Spencer Schiff (https://x.com/SpencerKSchiff)On April 10, 2025, Spencer Schiff, a sharp and curious college student, posted a tweet featuring...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F487b7587-a422-4374-b713-1fd4429344c9_1200x900.jpeg",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "Von Neumann and AI: The Warning We Ignored",
+      "link": "https://bematic.substack.com/p/von-neumann-and-ai-the-warning-we",
+      "pubDate": "Fri, 02 May 2025 11:45:36 GMT",
+      "description": "How a mathematician's insights from 1955 eerily predicted our AI challenges today",
+      "excerpt": "In 1955, John von Neumann&#8212;one of history's greatest mathematical minds&#8212;wrote an essay that reads today like an eerie prophecy: \"Can We Sur...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1c85b36c-c538-4902-bc1f-c71c7ddbf5f8_1024x608.png",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "Generative AI: Amplifying Capabilities in the Software Development Lifecycle",
+      "link": "https://bematic.substack.com/p/generative-ai-amplifying-capabilities",
+      "pubDate": "Wed, 25 Sep 2024 22:34:12 GMT",
+      "description": "Leveraging AI to Enhance Human Expertise and Process Efficiency",
+      "excerpt": "In an era where software defines competitive advantage, generative AI emerges as a game-changing force, promising to revolutionize the entire software...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fae73c4ff-d0af-4bc6-8461-a24e98680576_1024x536.png",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "AutoToS: the Future of Self-Programming AI Systems ",
+      "link": "https://bematic.substack.com/p/autotos-the-future-of-self-programming",
+      "pubDate": "Tue, 17 Sep 2024 17:13:34 GMT",
+      "description": "AI that codes its own solutions",
+      "excerpt": "In brief: an introduction to Automated Thought of Search through a simplified Vehicle Routing Problem, showcasing how AI generates its own solutions a...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F66a9ccb4-8285-475e-9412-cebb6c7c0008_1152x640.jpeg",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "Rethinking Education in the age of Artificial Intelligence: towards a new paradigm",
+      "link": "https://bematic.substack.com/p/rethinking-education-in-the-age-of",
+      "pubDate": "Wed, 21 Aug 2024 22:16:34 GMT",
+      "description": "Educational Innovation in the AI era: strategies for cultivating uniquely human skills",
+      "excerpt": "In brief: this content addresses the need for a new educational paradigm in response to the rise of Artificial Intelligence, which is redefining the s...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0fc0717c-73a2-4523-befc-01f55dbb3fe6_1024x1024.png",
+      "creator": "Lorenzo Toscano"
+    },
+    {
+      "title": "Ripensare l'Istruzione nell'era dell'Intelligenza Artificiale: verso un nuovo paradigma",
+      "link": "https://bematic.substack.com/p/ripensare-listruzione-nellera-dellintelligenza",
+      "pubDate": "Wed, 21 Aug 2024 21:37:12 GMT",
+      "description": "Innovazione educativa nell'era dell'IA: strategie per coltivare competenze unicamente umane",
+      "excerpt": "In breve: questo contenuto affronta la necessit&#224; di un nuovo paradigma educativo in risposta all'ascesa dell'Intelligenza Artificiale, che sta ri...",
+      "image": "https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0fc0717c-73a2-4523-befc-01f55dbb3fe6_1024x1024.png",
+      "creator": "Lorenzo Toscano"
+    }
+  ]
+}
