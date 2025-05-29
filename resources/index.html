@@ -106,6 +106,50 @@
         color: #888;
         margin-top: 0.5em;
     }
+    
+    /* Month/Year grouping styles */
+    .month-year-group {
+        margin-left: 1em;
+        margin-bottom: 1em;
+    }
+    
+    .month-year-header {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.3em;
+        user-select: none;
+        font-size: 0.9em;
+    }
+    
+    .month-year-header:hover {
+        color: #a05b7e;
+    }
+    
+    .month-year-toggle {
+        margin-right: 0.3em;
+        font-size: 0.7em;
+        color: #888;
+        transition: transform 0.2s ease;
+    }
+    
+    .month-year-toggle.collapsed {
+        transform: rotate(-90deg);
+    }
+    
+    .month-year-content {
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        margin-left: 0.5em;
+    }
+    
+    .month-year-content.collapsed {
+        max-height: 0;
+    }
+    
+    .month-year-content.expanded {
+        max-height: none;
+    }
   </style>
 
 </head>
@@ -258,9 +302,66 @@ function groupResourcesByCategory(resources) {
     return grouped;
 }
 
+// Function to group items by month and year
+function groupByMonthYear(items) {
+    const grouped = {};
+    
+    items.forEach(item => {
+        const date = parseDateString(item.resourceDate);
+        const monthYearKey = `${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+        
+        if (!grouped[monthYearKey]) {
+            grouped[monthYearKey] = [];
+        }
+        
+        grouped[monthYearKey].push(item);
+    });
+    
+    // Sort month-year keys chronologically (most recent first)
+    const sortedKeys = Object.keys(grouped).sort((a, b) => {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateB - dateA;
+    });
+    
+    const sortedGrouped = {};
+    sortedKeys.forEach(key => {
+        sortedGrouped[key] = grouped[key];
+    });
+    
+    return sortedGrouped;
+}
+
+// Function to parse Italian date string
+function parseDateString(dateString) {
+    const months = {
+        'gennaio': 0, 'febbraio': 1, 'marzo': 2, 'aprile': 3, 'maggio': 4, 'giugno': 5,
+        'luglio': 6, 'agosto': 7, 'settembre': 8, 'ottobre': 9, 'novembre': 10, 'dicembre': 11
+    };
+    
+    const dateRegex = /(\d{1,2})\s+(\w+)\s+(\d{4})/;
+    const match = dateString.match(dateRegex);
+    
+    if (match) {
+        const day = parseInt(match[1]);
+        const month = months[match[2].toLowerCase()];
+        const year = parseInt(match[3]);
+        
+        if (month !== undefined) {
+            return new Date(year, month, day);
+        }
+    }
+    
+    // Fallback to current date
+    return new Date();
+}
+
 // Function to generate HTML for a category section
 function generateCategoryHTML(categoryName, items) {
     const categoryId = categoryName.replace(/\s+/g, '-').toLowerCase();
+    
+    // Group items by month and year
+    const monthYearGroups = groupByMonthYear(items);
     
     let html = `
         <div class="resources-category">
@@ -269,54 +370,74 @@ function generateCategoryHTML(categoryName, items) {
                 <h2 class="content-listing-header sans">${categoryName} (${items.length})</h2>
             </div>
             <div class="category-content expanded" id="content-${categoryId}">
-                <ul class="content-listing">
     `;
     
-    items.forEach(item => {
+    // Generate HTML for each month-year group
+    Object.entries(monthYearGroups).forEach(([monthYear, monthItems]) => {
+        const monthYearId = `${categoryId}-${monthYear.replace(/\s+/g, '-').toLowerCase()}`;
+        
         html += `
-                <li class="listing resources-item">
-                    <hr class="slender" />
+                <div class="month-year-group">
+                    <div class="month-year-header" onclick="toggleMonthYear('${monthYearId}')">
+                        <span class="month-year-toggle" id="toggle-${monthYearId}">▼</span>
+                        <h3>${monthYear} (${monthItems.length})</h3>
+                    </div>
+                    <div class="month-year-content expanded" id="content-${monthYearId}">
+                        <ul class="content-listing">
         `;
         
-        // Add concept title (with link if available)
-        if (item.link) {
-            html += `<a href="${item.link}" target="_blank"><h3 class="contrast">${item.concept}</h3></a>`;
-        } else {
-            html += `<h3 class="contrast">${item.concept}</h3>`;
-        }
-        
-        // Add explanation if available
-        if (item.explain) {
-            html += `<br /><span class="smaller">${item.explain}</span><br />`;
-        }
-        
-        // Add link section if available
-        if (item.link) {
-            // Abbreviate long URLs for display
-            let displayLink = item.link;
-            if (displayLink.length > 60) {
-                displayLink = displayLink.substring(0, 57) + '...';
+        // Generate items for this month-year
+        monthItems.forEach(item => {
+            html += `
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+            `;
+            
+            // Add concept title (with link if available)
+            if (item.link) {
+                html += `<a href="${item.link}" target="_blank"><h3 class="contrast">${item.concept}</h3></a>`;
+            } else {
+                html += `<h3 class="contrast">${item.concept}</h3>`;
             }
             
+            // Add explanation if available
+            if (item.explain) {
+                html += `<br /><span class="smaller">${item.explain}</span><br />`;
+            }
+            
+            // Add link section if available
+            if (item.link) {
+                // Abbreviate long URLs for display
+                let displayLink = item.link;
+                if (displayLink.length > 60) {
+                    displayLink = displayLink.substring(0, 57) + '...';
+                }
+                
+                html += `
+                        <div>
+                            <a href="${item.link}" target="_blank" title="${item.link}">${displayLink}</a>
+                        </div>
+                `;
+            }
+            
+            // Add resource info
             html += `
-                    <div>
-                        <a href="${item.link}" target="_blank" title="${item.link}">${displayLink}</a>
-                    </div>
+                        <div class="resources-meta">
+                            From: ${item.resourceTitle} | 
+                            Added: ${formatResourceDate(item.resourceDate)}
+                        </div>
+                    </li>
             `;
-        }
+        });
         
-        // Add resource info
         html += `
-                    <div class="resources-meta">
-                        From: ${item.resourceTitle} | 
-                        Added: ${formatResourceDate(item.resourceDate)}
+                        </ul>
                     </div>
-                </li>
+                </div>
         `;
     });
     
     html += `
-                </ul>
             </div>
         </div>
     `;
@@ -345,12 +466,35 @@ function toggleCategory(categoryId) {
     }
 }
 
+// Function to toggle month-year group visibility
+function toggleMonthYear(monthYearId) {
+    const content = document.getElementById(`content-${monthYearId}`);
+    const toggle = document.getElementById(`toggle-${monthYearId}`);
+    
+    if (content && toggle) {
+        if (content.classList.contains('collapsed')) {
+            // Expand month-year group
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+            toggle.classList.remove('collapsed');
+            toggle.textContent = '▼';
+        } else {
+            // Collapse month-year group
+            content.classList.remove('expanded');
+            content.classList.add('collapsed');
+            toggle.classList.add('collapsed');
+            toggle.textContent = '▶';
+        }
+    }
+}
+
 // Function to toggle all categories
 function toggleAllCategories(expand) {
-    const allContents = document.querySelectorAll('.category-content');
-    const allToggles = document.querySelectorAll('.category-toggle');
+    // Handle main categories
+    const allCategoryContents = document.querySelectorAll('.category-content');
+    const allCategoryToggles = document.querySelectorAll('.category-toggle');
     
-    allContents.forEach(content => {
+    allCategoryContents.forEach(content => {
         if (expand) {
             content.classList.remove('collapsed');
             content.classList.add('expanded');
@@ -360,7 +504,31 @@ function toggleAllCategories(expand) {
         }
     });
     
-    allToggles.forEach(toggle => {
+    allCategoryToggles.forEach(toggle => {
+        if (expand) {
+            toggle.classList.remove('collapsed');
+            toggle.textContent = '▼';
+        } else {
+            toggle.classList.add('collapsed');
+            toggle.textContent = '▶';
+        }
+    });
+    
+    // Handle nested month-year groups
+    const allMonthYearContents = document.querySelectorAll('.month-year-content');
+    const allMonthYearToggles = document.querySelectorAll('.month-year-toggle');
+    
+    allMonthYearContents.forEach(content => {
+        if (expand) {
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+        } else {
+            content.classList.remove('expanded');
+            content.classList.add('collapsed');
+        }
+    });
+    
+    allMonthYearToggles.forEach(toggle => {
         if (expand) {
             toggle.classList.remove('collapsed');
             toggle.textContent = '▼';
