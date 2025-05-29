@@ -49,6 +49,43 @@
     /* Resources specific styles */
     .resources-category {
         font-size: 0.9em;
+        margin-bottom: 1.5em;
+    }
+    
+    .category-header {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5em;
+        user-select: none;
+    }
+    
+    .category-header:hover {
+        color: #a05b7e;
+    }
+    
+    .category-toggle {
+        margin-right: 0.5em;
+        font-size: 0.8em;
+        color: #666;
+        transition: transform 0.2s ease;
+    }
+    
+    .category-toggle.collapsed {
+        transform: rotate(-90deg);
+    }
+    
+    .category-content {
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .category-content.collapsed {
+        max-height: 0;
+    }
+    
+    .category-content.expanded {
+        max-height: none;
     }
     
     .resources-item {
@@ -101,6 +138,11 @@
 
 <div id="loading-message">
   <p>Loading resources...</p>
+</div>
+
+<div id="category-controls" style="display: none; margin-bottom: 1em;">
+  <button onclick="toggleAllCategories(true)" style="margin-right: 0.5em; padding: 0.3em 0.8em; font-size: 0.8em;">Expand All</button>
+  <button onclick="toggleAllCategories(false)" style="padding: 0.3em 0.8em; font-size: 0.8em;">Collapse All</button>
 </div>
 
 <div id="resources-content">
@@ -218,16 +260,22 @@ function groupResourcesByCategory(resources) {
 
 // Function to generate HTML for a category section
 function generateCategoryHTML(categoryName, items) {
+    const categoryId = categoryName.replace(/\s+/g, '-').toLowerCase();
+    
     let html = `
         <div class="resources-category">
-            <h2 class="content-listing-header sans">${categoryName}</h2>
-            <ul class="content-listing">
+            <div class="category-header" onclick="toggleCategory('${categoryId}')">
+                <span class="category-toggle" id="toggle-${categoryId}">▼</span>
+                <h2 class="content-listing-header sans">${categoryName} (${items.length})</h2>
+            </div>
+            <div class="category-content expanded" id="content-${categoryId}">
+                <ul class="content-listing">
     `;
     
     items.forEach(item => {
         html += `
-            <li class="listing resources-item">
-                <hr class="slender" />
+                <li class="listing resources-item">
+                    <hr class="slender" />
         `;
         
         // Add concept title (with link if available)
@@ -251,27 +299,76 @@ function generateCategoryHTML(categoryName, items) {
             }
             
             html += `
-                <div>
-                    <a href="${item.link}" target="_blank" title="${item.link}">${displayLink}</a>
-                </div>
+                    <div>
+                        <a href="${item.link}" target="_blank" title="${item.link}">${displayLink}</a>
+                    </div>
             `;
         }
         
         // Add resource info
         html += `
-                <div class="resources-meta">
-                    From: ${item.resourceTitle} | 
-                    Added: ${formatResourceDate(item.resourceDate)}
-                </div>
-            </li>
+                    <div class="resources-meta">
+                        From: ${item.resourceTitle} | 
+                        Added: ${formatResourceDate(item.resourceDate)}
+                    </div>
+                </li>
         `;
     });
     
     html += `
-            </ul>
+                </ul>
+            </div>
         </div>
     `;
     return html;
+}
+
+// Function to toggle category visibility
+function toggleCategory(categoryId) {
+    const content = document.getElementById(`content-${categoryId}`);
+    const toggle = document.getElementById(`toggle-${categoryId}`);
+    
+    if (content && toggle) {
+        if (content.classList.contains('collapsed')) {
+            // Expand category
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+            toggle.classList.remove('collapsed');
+            toggle.textContent = '▼';
+        } else {
+            // Collapse category
+            content.classList.remove('expanded');
+            content.classList.add('collapsed');
+            toggle.classList.add('collapsed');
+            toggle.textContent = '▶';
+        }
+    }
+}
+
+// Function to toggle all categories
+function toggleAllCategories(expand) {
+    const allContents = document.querySelectorAll('.category-content');
+    const allToggles = document.querySelectorAll('.category-toggle');
+    
+    allContents.forEach(content => {
+        if (expand) {
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+        } else {
+            content.classList.remove('expanded');
+            content.classList.add('collapsed');
+        }
+    });
+    
+    allToggles.forEach(toggle => {
+        if (expand) {
+            toggle.classList.remove('collapsed');
+            toggle.textContent = '▼';
+        } else {
+            toggle.classList.add('collapsed');
+            toggle.textContent = '▶';
+        }
+    });
 }
 
 // Function to load and display resources
@@ -289,6 +386,12 @@ function loadResources() {
         .then(data => {
             // Hide loading message
             loadingMessage.style.display = 'none';
+            
+            // Show category controls
+            const categoryControls = document.getElementById('category-controls');
+            if (categoryControls) {
+                categoryControls.style.display = 'block';
+            }
             
             // Group resources by category
             const groupedResources = groupResourcesByCategory(data);
