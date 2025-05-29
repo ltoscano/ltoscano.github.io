@@ -75,20 +75,13 @@
 <p>This page contains links to resources that I found useful when developing my models, preparing my presentations, making courses and doing consulting.</p>
 <hr class="slender" />
 
-<h2 class="content-listing-header sans">The Social Impact of Artificial Intelligence</h2>
-<p><span class="newthought">Artificial Intelligence has the potential</span> to change our existence; changing the way in which labour is organised, and more importantly how society is structured.</p>
+<div id="loading-message">
+  <p>Loading resources...</p>
+</div>
 
-<ul class="content-listing">
-          <li class="listing">
-          <hr class="slender" />
-          <a href="http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML%20TA%20P8-TA-2017-0051%200%20DOC%20PDF%20V0//EN"><h3 class="contrast">Civil Law Rules on Robotics</h3></a>
-          <br /><span class="smaller">European Parliament resolution of 16 February 2017 with recommendations to the Commission on Civil Law Rules on Robotics.</span>  <br />
-          <div>
-          <a href="http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML%20TA%20P8-TA-2017-0051%200%20DOC%20PDF%20V0//IT">Italian Version</a>
-          </div>
-          </li>
-</ul>
-<!--<hr class="slender">-->
+<div id="resources-content">
+  <!-- Content will be dynamically generated here -->
+</div>
 
     </article>
     <span class="print-footer">Resources - lorenzo toscano</span>
@@ -130,6 +123,169 @@
           scrollTop: 100
       });
 </script>
+
+<script>
+// ========================================
+// RESOURCES MANAGEMENT
+// ========================================
+
+// Function to format date for display
+function formatResourceDate(dateString) {
+    // Try to parse Italian date format: "mercoledì 28 maggio 2025 alle ore 20:16:02"
+    const months = {
+        'gennaio': 0, 'febbraio': 1, 'marzo': 2, 'aprile': 3, 'maggio': 4, 'giugno': 5,
+        'luglio': 6, 'agosto': 7, 'settembre': 8, 'ottobre': 9, 'novembre': 10, 'dicembre': 11
+    };
+    
+    const dateRegex = /(\d{1,2})\s+(\w+)\s+(\d{4})/;
+    const match = dateString.match(dateRegex);
+    
+    if (match) {
+        const day = parseInt(match[1]);
+        const month = months[match[2].toLowerCase()];
+        const year = parseInt(match[3]);
+        
+        if (month !== undefined) {
+            const date = new Date(year, month, day);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+    }
+    
+    // Fallback: return original string
+    return dateString;
+}
+
+// Function to group resources by category
+function groupResourcesByCategory(resources) {
+    const grouped = {};
+    
+    resources.forEach(resource => {
+        if (resource.ai_analysis && Array.isArray(resource.ai_analysis)) {
+            resource.ai_analysis.forEach(analysis => {
+                // Only include items that have either link or explain
+                if (analysis.link || analysis.explain) {
+                    const category = analysis.category || 'Other';
+                    
+                    if (!grouped[category]) {
+                        grouped[category] = [];
+                    }
+                    
+                    grouped[category].push({
+                        ...analysis,
+                        resourceTitle: resource.title,
+                        resourceDate: resource.created
+                    });
+                }
+            });
+        }
+    });
+    
+    return grouped;
+}
+
+// Function to generate HTML for a category section
+function generateCategoryHTML(categoryName, items) {
+    let html = `
+        <h2 class="content-listing-header sans">${categoryName}</h2>
+        <ul class="content-listing">
+    `;
+    
+    items.forEach(item => {
+        html += `
+            <li class="listing">
+                <hr class="slender" />
+        `;
+        
+        // Add concept title (with link if available)
+        if (item.link) {
+            html += `<a href="${item.link}" target="_blank"><h3 class="contrast">${item.concept}</h3></a>`;
+        } else {
+            html += `<h3 class="contrast">${item.concept}</h3>`;
+        }
+        
+        // Add explanation if available
+        if (item.explain) {
+            html += `<br /><span class="smaller">${item.explain}</span><br />`;
+        }
+        
+        // Add link section if available
+        if (item.link) {
+            html += `
+                <div>
+                    <a href="${item.link}" target="_blank">View Resource</a>
+                </div>
+            `;
+        }
+        
+        // Add resource info
+        html += `
+                <br />
+                <span class="smaller" style="color: #888;">
+                    From: ${item.resourceTitle} | 
+                    Added: ${formatResourceDate(item.resourceDate)}
+                </span>
+            </li>
+        `;
+    });
+    
+    html += `</ul>`;
+    return html;
+}
+
+// Function to load and display resources
+function loadResources() {
+    const loadingMessage = document.getElementById('loading-message');
+    const resourcesContent = document.getElementById('resources-content');
+    
+    fetch('/data/resources/resources.json?' + new Date().getTime())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load resources: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Hide loading message
+            loadingMessage.style.display = 'none';
+            
+            // Group resources by category
+            const groupedResources = groupResourcesByCategory(data);
+            
+            // Sort categories alphabetically
+            const sortedCategories = Object.keys(groupedResources).sort();
+            
+            // Generate HTML for each category
+            let html = '';
+            sortedCategories.forEach(category => {
+                html += generateCategoryHTML(category, groupedResources[category]);
+            });
+            
+            // Update the content
+            resourcesContent.innerHTML = html;
+            
+            console.log(`Resources loaded successfully: ${data.length} resources organized into ${sortedCategories.length} categories`);
+        })
+        .catch(error => {
+            console.error('Failed to load resources:', error);
+            loadingMessage.innerHTML = `
+                <p style="color: red;">
+                    Failed to load resources. Please try refreshing the page.
+                    <br />Error: ${error.message}
+                </p>
+            `;
+        });
+}
+
+// Load resources when the page is ready
+document.addEventListener('DOMContentLoaded', function() {
+    loadResources();
+});
+</script>
+
 <!--Start Cookie Script--> <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/16e3db281c42af01a577129631f150a2.js"></script> <!--End Cookie Script-->
 
   </body>

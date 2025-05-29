@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Materio - Next.js Admin Template - MUI Store",
+    "body": "<div><b><span style=\"font-size: 24px\">Materio - Next.js Admin Template - MUI Store</span></b><br></div>\n<div><u><font color=\"#0000EE\">https://mui.com/store/previews/materio-mui-react-nextjs-admin-template/</font></u><br></div>\n<div><b><span style=\"font-size: 24px\"><br></span></b></div>\n<div><br></div>\n<div></div>\n<div><br></div>",
+    "created": "mercoledì 28 maggio 2025 alle ore 20:16:02",
+    "modified": "giovedì 29 maggio 2025 alle ore 15:10:51",
+    "ai_analysis": [
+      {
+        "concept": "Materio - Next.js Admin Template",
+        "link": "https://mui.com/store/previews/materio-mui-react-nextjs-admin-template/",
+        "explain": "The content showcases a preview of the Materio - Next.js Admin Template, a professional admin dashboard built with React, Next.js, and Material-UI. It provides users with a modern, customizable template for building admin panels and dashboards. The page offers options to view the live demo or purchase the template.",
+        "category": "Tools & Frameworks"
+      },
+      {
+        "concept": "MUI Store",
+        "link": "",
+        "explain": "",
+        "category": "Tools & Frameworks"
+      },
+      {
+        "concept": "Next.js",
+        "link": "",
+        "explain": "",
+        "category": "Tools & Frameworks"
+      }
+    ]
+  },
+  {
+    "title": "golf-mcp/golf: Open-source framework for building MCP servers. Built…",
+    "body": "<div><b><span style=\"font-size: 24px\">golf-mcp/golf: Open-source framework for building MCP servers. Built in auth, telemetry, debugging and deployment</span></b><br></div>\n<div><u><font color=\"#0000EE\">https://github.com/golf-mcp/golf</font></u><br></div>\n<div><b><span style=\"font-size: 24px\"><br></span></b></div>\n<div><u>https://github.com/langflow-ai/langflow</u><br></div>\n<div><u>https://github.com/microsoft/magentic-ui</u><br></div>\n<div><br></div>\n<div></div>\n<div><br></div>\n<div><br></div>\n<div><br></div>\n<div><br></div>",
+    "created": "lunedì 26 maggio 2025 alle ore 23:42:33",
+    "modified": "giovedì 29 maggio 2025 alle ore 15:10:48",
+    "ai_analysis": [
+      {
+        "concept": "golf-mcp/golf is an open-source framework designed for building MCP servers, featuring built-in authentication, telemetry, debugging, and deployment capabilities.",
+        "link": "https://github.com/golf-mcp/golf",
+        "explain": "The content is the GitHub repository page for golf-mcp/golf, an open-source framework for building MCP servers. It aligns with the reference concept by providing tools for authentication, telemetry, debugging, and deployment, making it easier for developers to create and manage MCP server applications. The most important information is that golf-mcp/golf streamlines the development of MCP servers with built-in support for essential server features.",
+        "category": "Tools & Frameworks"
+      },
+      {
+        "concept": "Langflow is an open-source project available on GitHub, likely related to AI or machine learning workflows.",
+        "link": "https://github.com/langflow-ai/langflow",
+        "explain": "The provided content is primarily GitHub's navigation and interface elements, not the actual Langflow project details. Based on the reference concept, Langflow is an open-source project on GitHub focused on building or managing AI and machine learning workflows. The most important information is that Langflow is accessible via GitHub, where users can explore, contribute to, or utilize the project for AI workflow development.",
+        "category": "Tools & Frameworks"
+      },
+      {
+        "concept": "Magentic UI is a project by Microsoft available on GitHub, potentially focused on user interface tools or frameworks.",
+        "link": "https://github.com/microsoft/magentic-ui",
+        "explain": "The provided content is primarily GitHub's navigation and interface elements, not specific information about the Magentic UI project. There are no details about Magentic UI's purpose, features, or documentation in the visible content, so it does not offer insight into the project's relation to user interface tools or frameworks by Microsoft. For more information about Magentic UI, the actual repository content would need to be accessed.",
+        "category": "Tools & Frameworks"
+      }
+    ]
+  }
+]
