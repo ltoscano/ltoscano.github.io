@@ -45,6 +45,30 @@
               padding: 0 30px;
               font-size: 18px;
       }
+      
+    /* Resources specific styles */
+    .resources-category {
+        font-size: 0.9em;
+    }
+    
+    .resources-item {
+        font-size: 0.85em;
+    }
+    
+    .resources-item h3 {
+        font-size: 1.1em;
+        margin-bottom: 0.5em;
+    }
+    
+    .resources-item .smaller {
+        font-size: 0.9em;
+    }
+    
+    .resources-meta {
+        font-size: 0.8em;
+        color: #888;
+        margin-top: 0.5em;
+    }
   </style>
 
 </head>
@@ -184,19 +208,25 @@ function groupResourcesByCategory(resources) {
         }
     });
     
+    // Sort items within each category alphabetically by concept
+    Object.keys(grouped).forEach(category => {
+        grouped[category].sort((a, b) => a.concept.localeCompare(b.concept));
+    });
+    
     return grouped;
 }
 
 // Function to generate HTML for a category section
 function generateCategoryHTML(categoryName, items) {
     let html = `
-        <h2 class="content-listing-header sans">${categoryName}</h2>
-        <ul class="content-listing">
+        <div class="resources-category">
+            <h2 class="content-listing-header sans">${categoryName}</h2>
+            <ul class="content-listing">
     `;
     
     items.forEach(item => {
         html += `
-            <li class="listing">
+            <li class="listing resources-item">
                 <hr class="slender" />
         `;
         
@@ -229,16 +259,18 @@ function generateCategoryHTML(categoryName, items) {
         
         // Add resource info
         html += `
-                <br />
-                <span class="smaller" style="color: #888;">
+                <div class="resources-meta">
                     From: ${item.resourceTitle} | 
                     Added: ${formatResourceDate(item.resourceDate)}
-                </span>
+                </div>
             </li>
         `;
     });
     
-    html += `</ul>`;
+    html += `
+            </ul>
+        </div>
+    `;
     return html;
 }
 
