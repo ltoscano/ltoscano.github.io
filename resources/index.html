@@ -214,9 +214,15 @@ function generateCategoryHTML(categoryName, items) {
         
         // Add link section if available
         if (item.link) {
+            // Abbreviate long URLs for display
+            let displayLink = item.link;
+            if (displayLink.length > 60) {
+                displayLink = displayLink.substring(0, 57) + '...';
+            }
+            
             html += `
                 <div>
-                    <a href="${item.link}" target="_blank">View Resource</a>
+                    <a href="${item.link}" target="_blank" title="${item.link}">${displayLink}</a>
                 </div>
             `;
         }
