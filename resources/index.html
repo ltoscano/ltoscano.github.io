@@ -122,6 +122,16 @@
         margin-bottom: 0.5em;
     }
     
+    /* Style for titles in square brackets */
+    .resources-item h3 a {
+        position: relative;
+    }
+    
+    /* Make text inside square brackets bold */
+    .resources-item h3 a {
+        font-weight: normal;
+    }
+    
     .resources-item .smaller {
         font-size: 0.9em;
     }
@@ -484,6 +494,23 @@ function toggleAllCategories(expand) {
         }
     });
 }
+
+// Function to make text inside square brackets bold
+function formatSquareBracketTitles() {
+    const titleLinks = document.querySelectorAll('.resources-item h3 a');
+    
+    titleLinks.forEach(link => {
+        let text = link.innerHTML;
+        // Replace text inside square brackets with bold version
+        text = text.replace(/[([^]]+)]/g, '<strong>[$1]</strong>');
+        link.innerHTML = text;
+    });
+}
+
+// Initialize formatting when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    formatSquareBracketTitles();
+});
 </script>
 
 </body>
