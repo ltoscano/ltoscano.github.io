@@ -1,685 +1,267 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Synthetici Links - Resources</title>
-  <meta name="description" content="Lorenzo Toscano's Curated Links Collection">
-
-  <script src="https://use.fontawesome.com/42ac583ec1.js"></script>
-
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
-  
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
-  
-
-  <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  
-
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
-  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
-
-  <link rel="canonical" href="https://synthetici.com/resources/">
-
-  <link rel="alternate" type="application/rss+xml" title="Machine Learning & Cognitive" href="https://synthetici.com/feed.xml" />
-
-  <script src="/assets/jquery-1.12.4.min.js"></script>
-  <script src="/assets/totop.min.js"></script>
-
-  <style>
-    .totop {
-              position: fixed;
-              bottom: 50px;
-              right: 50px;
-              cursor: pointer;
-              display: none;
-              background: #a05b7e;
-              color: #fff;
-              border-radius: 25px;
-              height: 50px;
-              line-height: 50px;
-              padding: 0 30px;
-              font-size: 18px;
-      }
-      
-    /* Resources specific styles */
-    .resources-category {
-        font-size: 0.9em;
-        margin-bottom: 1.5em;
-    }
-    
-    .category-header {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5em;
-        user-select: none;
-    }
-    
-    .category-header:hover {
-        color: #a05b7e;
-    }
-    
-    .category-toggle {
-        margin-right: 0.5em;
-        font-size: 0.9em;
-        color: #a05b7e;
-        transition: all 0.2s ease;
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-    }
-    
-    .category-toggle:hover {
-        background: #a05b7e;
-        color: white;
-        border-color: #a05b7e;
-        transform: scale(1.1);
-    }
-    
-    .category-toggle.collapsed {
-        transform: rotate(-90deg);
-    }
-    
-    .category-toggle.collapsed:hover {
-        transform: rotate(-90deg) scale(1.1);
-    }
-    
-    .category-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-    }
-    
-    .category-content.collapsed {
-        max-height: 0;
-    }
-    
-    .category-content.expanded {
-        max-height: none;
-    }
-    
-    .resources-item {
-        font-size: 0.85em;
-    }
-    
-    .resources-item h3 {
-        font-size: 1.1em;
-        margin-bottom: 0.5em;
-    }
-    
-    .resources-item .smaller {
-        font-size: 0.9em;
-    }
-    
-    .resources-meta {
-        font-size: 0.8em;
-        color: #888;
-        margin-top: 0.5em;
-    }
-    
-    /* Month/Year grouping styles */
-    .month-year-group {
-        margin-left: 1em;
-        margin-bottom: 1em;
-    }
-    
-    .month-year-header {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.3em;
-        user-select: none;
-        font-size: 0.9em;
-    }
-    
-    .month-year-header:hover {
-        color: #a05b7e;
-    }
-    
-    .month-year-toggle {
-        margin-right: 0.4em;
-        font-size: 0.8em;
-        color: #6c757d;
-        transition: all 0.2s ease;
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-    }
-    
-    .month-year-toggle:hover {
-        background: #6c757d;
-        color: white;
-        border-color: #6c757d;
-        transform: scale(1.1);
-    }
-    
-    .month-year-toggle.collapsed {
-        transform: rotate(-90deg);
-    }
-    
-    .month-year-toggle.collapsed:hover {
-        transform: rotate(-90deg) scale(1.1);
-    }
-    
-    .month-year-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        margin-left: 0.5em;
-    }
-    
-    .month-year-content.collapsed {
-        max-height: 0;
-    }
-    
-    .month-year-content.expanded {
-        max-height: none;
-    }
-    
-    /* Control buttons styling */
-    .control-button {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border: 2px solid #dee2e6;
-        border-radius: 25px;
-        padding: 0.5em 1.2em;
-        margin-right: 0.8em;
-        font-size: 0.85em;
-        font-family: "Lato", sans-serif;
-        font-weight: 400;
-        color: #495057;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        display: inline-block;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .control-button:hover {
-        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-        border-color: #a05b7e;
-        color: #a05b7e;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    
-    .control-button:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .expand-btn:hover {
-        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-        border-color: #28a745;
-        color: #155724;
-    }
-    
-    .collapse-btn:hover {
-        background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
-        border-color: #dc3545;
-        color: #721c24;
-    }
-
-    /* Base Tufte CSS styles */
-    body {
-        font-family: "Lato", Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-        background-color: #fffff8;
-        width: 87.5%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 12.5%;
-        color: #111;
-        max-width: 1400px;
-        counter-reset: sidenote-counter;
-    }
-
-    h1, h2, h3 {
-        font-weight: 400;
-        margin-top: 1.568rem;
-        margin-bottom: 1.568rem;
-        line-height: 1;
-    }
-
-    h1 {
-        font-size: 3.2rem;
-        line-height: 1;
-        margin-top: 0;
-        margin-bottom: 1.5rem;
-    }
-
-    h2 {
-        font-style: italic;
-        font-size: 2.2rem;
-        line-height: 1;
-        margin-top: 2.1rem;
-        margin-bottom: 1.4rem;
-    }
-
-    h3 {
-        font-size: 1.7rem;
-        line-height: 1;
-        margin-top: 2rem;
-        margin-bottom: 1.4rem;
-    }
-
-    .content-listing-header {
-        font-family: "Lato", sans-serif;
-        font-weight: 400;
-    }
-
-    .sans {
-        font-family: "Lato", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-        letter-spacing: .03em;
-    }
-
-    hr {
-        display: block;
-        height: 1px;
-        width: 55%;
-        border: 0;
-        border-top: 1px solid #ccc;
-        margin: 1em 0;
-        padding: 0;
-    }
-
-    hr.slender {
-        border-top: 1px solid #eee;
-        width: 100%;
-        margin-top: 1.4rem;
-        margin-bottom: 1.4rem;
-    }
-
-    .contrast {
-        color: #a05b7e;
-    }
-
-    ul.content-listing {
-        width: 87.5%;
-        margin-left: 0;
-        margin-top: 1rem;
-        padding-left: 0;
-        list-style-type: none;
-    }
-
-    li.listing {
-        margin-bottom: 1rem;
-    }
-
-    header {
-        margin-bottom: 4rem;
-        padding-top: 1rem;
-    }
-
-    nav {
-        font-family: "Lato", sans-serif;
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-top: 1.5rem;
-    }
-
-    nav a {
-        text-decoration: none;
-        margin-right: 2rem;
-        color: #111;
-    }
-
-    nav a:hover {
-        color: #a05b7e;
-    }
-
-    nav a.active {
-        color: #a05b7e;
-        font-weight: 600;
-    }
-
-    .badge {
-        height: 50px;
-        width: 50px;
-        float: left;
-        margin-right: 1rem;
-        margin-top: -0.2rem;
-    }
-
-    .blogtitle {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-    footer {
-        border-top: thin solid #888;
-        margin-top: 6rem;
-        padding-top: 2rem;
-        color: #777;
-        font-size: 0.9rem;
-    }
-
-    .footer-links {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .footer-links li {
-        display: inline-block;
-        margin-right: 1rem;
-    }
-
-    .credits {
-        margin-top: 1rem;
-        font-size: 0.8rem;
-    }
-
-    a {
-        color: #a05b7e;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    article {
-        position: relative;
-        padding: 1rem 0;
-    }
-
-    p {
-        margin-top: 1.4rem;
-        margin-bottom: 1.4rem;
-        padding-right: 0;
-        vertical-align: baseline;
-    }
-  </style>
-
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthetici Links - Collezione di Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .category-group {
+            margin-bottom: 30px;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #fafbfc;
+        }
+        
+        .category-title {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-title:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+        }
+        
+        .category-content {
+            padding: 20px;
+        }
+        
+        .month-group {
+            margin-bottom: 20px;
+            border: 1px solid #d1d9e0;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .month-title {
+            background: #f8f9fa;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .month-title:hover {
+            background: #e9ecef;
+        }
+        
+        .month-links {
+            padding: 15px;
+        }
+        
+        .link-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+        
+        .link-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .link-item h4 {
+            margin-bottom: 10px;
+        }
+        
+        .link-item a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+        
+        .link-item a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+        
+        .date {
+            color: #6c757d;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        
+        .stats {
+            background: #e8f4fd;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stats p {
+            color: #2c3e50;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .category-title {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-
-  <body class="full-width">
-    <a name="TopOfPage"></a>
-<!--- Header and nav template site-wide -->
-<header>
-    <nav class="group">
-	<a href="/"><img class="badge" src="/assets/img/badge_1.png" alt="LT"></a>
-  <span class="blogtitle">Synthetici Links - Lorenzo Toscano</span><br/>
-  
-    <a href="/">Dashboard</a>
-  
-    <a href="/links/">Links</a>
-  
-    <a href="/resources/" class="active">Resources</a>
-  
-    <a href="/about/">About</a>
-  
-	</nav>
-</header>
-
-    <article>
-      <h1 class="content-listing-header sans">Synthetici Links Resources</h1>
-<p>This page contains my curated collection of links organized by category and date. These resources are useful for AI development, machine learning research, and general development tools.</p>
-<hr class="slender" />
-
-<div id="category-controls" style="margin-bottom: 1.5em;">
-  <button class="control-button expand-btn" onclick="toggleAllCategories(true)">Expand All</button>
-  <button class="control-button collapse-btn" onclick="toggleAllCategories(false)">Collapse All</button>
-</div>
-
-<div id="resources-content">
-  
-  <!-- Models & Architectures Category -->
-  <div class="resources-category">
-    <div class="category-header" onclick="toggleCategory('models-architectures')">
-      <span class="category-toggle" id="toggle-models-architectures">▼</span>
-      <h2 class="content-listing-header sans">Models & Architectures (1)</h2>
-    </div>
-    <div class="category-content expanded" id="content-models-architectures">
-      
-      <!-- May 2025 Group -->
-      <div class="month-year-group">
-        <div class="month-year-header" onclick="toggleMonthYear('models-architectures-may-2025')">
-          <span class="month-year-toggle" id="toggle-models-architectures-may-2025">▼</span>
-          <h3>May 2025 (1)</h3>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 Synthetici Links</h1>
+            <p>La mia collezione personale di link organizzati per categoria</p>
         </div>
-        <div class="month-year-content expanded" id="content-models-architectures-may-2025">
-          <ul class="content-listing">
-            <li class="listing resources-item">
-              <hr class="slender" />
-              <a href="https://openai.com/chatgpt" target="_blank"><h3 class="contrast">ChatGPT - AI Language Model</h3></a>
-              <br /><span class="smaller">Advanced conversational AI model by OpenAI for natural language understanding and generation</span><br />
-              <div>
-                <a href="https://openai.com/chatgpt" target="_blank" title="https://openai.com/chatgpt">https://openai.com/chatgpt</a>
-              </div>
-              <div class="resources-meta">
-                Added: May 30, 2025
-              </div>
-            </li>
-          </ul>
+        
+        <div class="content">
+            <div class="stats">
+                <p>📊 Totale link: <strong>3</strong> | 📂 Categorie: <strong>3</strong></p>
+            </div>
+            
+            
+      <details class="category-group" open>
+        <summary class="category-title">Models & Architectures (1)</summary>
+        <div class="category-content">
+          
+        <details class="month-group" open>
+          <summary class="month-title">maggio 2025</summary>
+          <div class="month-links">
+            
+        <div class="link-item">
+          <h4><a href="https://openai.com/chatgpt" target="_blank">ChatGPT - AI Language Model
+</a></h4>
+          <p class="date">venerdì 30 maggio 2025 alle ore 16:00:01 alle ore 16:00:01</p>
         </div>
-      </div>
       
-    </div>
-  </div>
-
-  <!-- Tools & Frameworks Category -->
-  <div class="resources-category">
-    <div class="category-header" onclick="toggleCategory('tools-frameworks')">
-      <span class="category-toggle" id="toggle-tools-frameworks">▼</span>
-      <h2 class="content-listing-header sans">Tools & Frameworks (1)</h2>
-    </div>
-    <div class="category-content expanded" id="content-tools-frameworks">
+          </div>
+        </details>
       
-      <!-- April 2025 Group -->
-      <div class="month-year-group">
-        <div class="month-year-header" onclick="toggleMonthYear('tools-frameworks-april-2025')">
-          <span class="month-year-toggle" id="toggle-tools-frameworks-april-2025">▼</span>
-          <h3>April 2025 (1)</h3>
         </div>
-        <div class="month-year-content expanded" id="content-tools-frameworks-april-2025">
-          <ul class="content-listing">
-            <li class="listing resources-item">
-              <hr class="slender" />
-              <a href="https://github.com/microsoft/vscode" target="_blank"><h3 class="contrast">Visual Studio Code Repository</h3></a>
-              <br /><span class="smaller">Popular open-source code editor developed by Microsoft with extensive plugin ecosystem</span><br />
-              <div>
-                <a href="https://github.com/microsoft/vscode" target="_blank" title="https://github.com/microsoft/vscode">https://github.com/microsoft/vscode</a>
-              </div>
-              <div class="resources-meta">
-                Added: April 15, 2025
-              </div>
-            </li>
-          </ul>
+      </details>
+    
+      <details class="category-group" open>
+        <summary class="category-title">Foundations & Theory (1)</summary>
+        <div class="category-content">
+          
+        <details class="month-group" open>
+          <summary class="month-title">aprile 2025</summary>
+          <div class="month-links">
+            
+        <div class="link-item">
+          <h4><a href="https://arxiv.org/abs/2303.08774" target="_blank">GPT-4 Technical Report</a></h4>
+          <p class="date">martedì 15 aprile 2025 alle ore 14:20:00 alle ore 14:20:00</p>
         </div>
-      </div>
       
-    </div>
-  </div>
-
-  <!-- Foundations & Theory Category -->
-  <div class="resources-category">
-    <div class="category-header" onclick="toggleCategory('foundations-theory')">
-      <span class="category-toggle" id="toggle-foundations-theory">▼</span>
-      <h2 class="content-listing-header sans">Foundations & Theory (1)</h2>
-    </div>
-    <div class="category-content expanded" id="content-foundations-theory">
+          </div>
+        </details>
       
-      <!-- April 2025 Group -->
-      <div class="month-year-group">
-        <div class="month-year-header" onclick="toggleMonthYear('foundations-theory-april-2025')">
-          <span class="month-year-toggle" id="toggle-foundations-theory-april-2025">▼</span>
-          <h3>April 2025 (1)</h3>
         </div>
-        <div class="month-year-content expanded" id="content-foundations-theory-april-2025">
-          <ul class="content-listing">
-            <li class="listing resources-item">
-              <hr class="slender" />
-              <a href="https://arxiv.org/abs/2303.08774" target="_blank"><h3 class="contrast">GPT-4 Technical Report</h3></a>
-              <br /><span class="smaller">Comprehensive technical documentation and research paper detailing GPT-4 architecture and capabilities</span><br />
-              <div>
-                <a href="https://arxiv.org/abs/2303.08774" target="_blank" title="https://arxiv.org/abs/2303.08774">https://arxiv.org/abs/2303.08774</a>
-              </div>
-              <div class="resources-meta">
-                Added: April 15, 2025
-              </div>
-            </li>
-          </ul>
+      </details>
+    
+      <details class="category-group" open>
+        <summary class="category-title">Tools & Frameworks (1)</summary>
+        <div class="category-content">
+          
+        <details class="month-group" open>
+          <summary class="month-title">aprile 2025</summary>
+          <div class="month-links">
+            
+        <div class="link-item">
+          <h4><a href="https://github.com/microsoft/vscode" target="_blank">Visual Studio Code Repository</a></h4>
+          <p class="date">martedì 15 aprile 2025 alle ore 10:30:00 alle ore 10:30:00</p>
         </div>
-      </div>
       
+          </div>
+        </details>
+      
+        </div>
+      </details>
+    
+        </div>
+        
+        <div class="footer">
+            <p>Generato automaticamente il domenica 1 giugno 2025 alle ore 15:31</p>
+        </div>
     </div>
-  </div>
-
-</div>
-
-    </article>
-    <span class="print-footer">Synthetici Links Resources - Lorenzo Toscano</span>
-    <footer>
-  <hr class="slender">
-  <ul class="footer-links">
-    <li><a href="mailto:lt@synthetici.com"><span class="icon-mail">✉</span></a></li>
-    
-      <li>
-        <a href="//www.twitter.com/BEmatic"><span class="icon-twitter">🐦</span></a>
-      </li>
-    
-      <li>
-        <a href="//www.linkedin.com/in/lorenzotoscano"><span class="icon-linkedin">💼</span></a>
-      </li>
-    
-      <li>
-        <a href="//github.com/ltoscano"><span class="icon-github">🐙</span></a>
-      </li>
-    
-      <li>
-        <a href="/feed"><span class="icon-feed">📡</span></a>
-      </li>
-    
-  </ul>
-<div class="credits">
-<span>&copy; 2025 &nbsp;&nbsp;LORENZO TOSCANO</span></br> <br>
-<a href="/disclaimer">Blog Disclaimer</a>
-</div>
-</footer>
-<div class="totop"><i class="fa fa-angle-up"></i> To Top</div>
-
-<script>
-// ========================================
-// RESOURCES MANAGEMENT
-// ========================================
-
-// Function to toggle category visibility
-function toggleCategory(categoryId) {
-    const content = document.getElementById(`content-${categoryId}`);
-    const toggle = document.getElementById(`toggle-${categoryId}`);
-    
-    if (content && toggle) {
-        if (content.classList.contains('collapsed')) {
-            // Expand category
-            content.classList.remove('collapsed');
-            content.classList.add('expanded');
-            toggle.classList.remove('collapsed');
-            toggle.textContent = '▼';
-        } else {
-            // Collapse category
-            content.classList.remove('expanded');
-            content.classList.add('collapsed');
-            toggle.classList.add('collapsed');
-            toggle.textContent = '▶';
-        }
-    }
-}
-
-// Function to toggle month-year group visibility
-function toggleMonthYear(monthYearId) {
-    const content = document.getElementById(`content-${monthYearId}`);
-    const toggle = document.getElementById(`toggle-${monthYearId}`);
-    
-    if (content && toggle) {
-        if (content.classList.contains('collapsed')) {
-            // Expand month-year group
-            content.classList.remove('collapsed');
-            content.classList.add('expanded');
-            toggle.classList.remove('collapsed');
-            toggle.textContent = '▼';
-        } else {
-            // Collapse month-year group
-            content.classList.remove('expanded');
-            content.classList.add('collapsed');
-            toggle.classList.add('collapsed');
-            toggle.textContent = '▶';
-        }
-    }
-}
-
-// Function to toggle all categories
-function toggleAllCategories(expand) {
-    // Handle main categories
-    const allCategoryContents = document.querySelectorAll('.category-content');
-    const allCategoryToggles = document.querySelectorAll('.category-toggle');
-    
-    allCategoryContents.forEach(content => {
-        if (expand) {
-            content.classList.remove('collapsed');
-            content.classList.add('expanded');
-        } else {
-            content.classList.remove('expanded');
-            content.classList.add('collapsed');
-        }
-    });
-    
-    allCategoryToggles.forEach(toggle => {
-        if (expand) {
-            toggle.classList.remove('collapsed');
-            toggle.textContent = '▼';
-        } else {
-            toggle.classList.add('collapsed');
-            toggle.textContent = '▶';
-        }
-    });
-    
-    // Handle nested month-year groups
-    const allMonthYearContents = document.querySelectorAll('.month-year-content');
-    const allMonthYearToggles = document.querySelectorAll('.month-year-toggle');
-    
-    allMonthYearContents.forEach(content => {
-        if (expand) {
-            content.classList.remove('collapsed');
-            content.classList.add('expanded');
-        } else {
-            content.classList.remove('expanded');
-            content.classList.add('collapsed');
-        }
-    });
-    
-    allMonthYearToggles.forEach(toggle => {
-        if (expand) {
-            toggle.classList.remove('collapsed');
-            toggle.textContent = '▼';
-        } else {
-            toggle.classList.add('collapsed');
-            toggle.textContent = '▶';
-        }
-    });
-}
-
-// Initialize page
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Synthetici Links Resources page loaded successfully');
-});
-
-</script>
-
 </body>
 </html>
