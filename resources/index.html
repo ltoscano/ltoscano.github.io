@@ -166,6 +166,45 @@
         margin: 0;
     }
     
+    /* Image-specific styles */
+    .image-item .image-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1em;
+        margin-top: 0.5em;
+    }
+    
+    .image-thumbnail {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid #dee2e6;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    
+    .image-link {
+        display: block;
+        text-decoration: none;
+    }
+    
+    .image-link:hover .image-thumbnail {
+        border-color: #a05b7e;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .image-details {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .image-details h3 {
+        margin-top: 0;
+        margin-bottom: 0.5em;
+    }
+    
     /* Control buttons styling */
     .control-button {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -208,6 +247,20 @@
         border-color: #dc3545;
         color: #721c24;
     }
+    
+    /* Responsive design for images */
+    @media (max-width: 768px) {
+        .image-item .image-content {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .image-thumbnail {
+            width: 150px;
+            height: 150px;
+        }
+    }
   </style>
 
 </head>
@@ -246,6 +299,176 @@
 <div id="resources-content">
   
         <div class="resources-category">
+            <div class="category-header" onclick="toggleCategory('models-&-architectures')">
+                <span class="category-toggle" id="toggle-models-&-architectures">▼</span>
+                <h2 class="content-listing-header sans">Models & Architectures (2)</h2>
+            </div>
+            <div class="category-content expanded" id="content-models-&-architectures">
+    
+                <div class="month-year-group">
+                    <div class="month-year-header" onclick="toggleMonthYear('models-&-architectures-june-2025')">
+                        <span class="month-year-toggle" id="toggle-models-&-architectures-june-2025">▼</span>
+                        <h3>June 2025 (2)</h3>
+                    </div>
+                    <div class="month-year-content expanded" id="content-models-&-architectures-june-2025">
+                        <ul class="content-listing">
+      
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="/resources/images/image_002.png" target="_blank"><h3 class="contrast">The image illustrates various AI agent design patterns, including Reflection, Tool Use, Planning, React, and Multi-Agent Collaboration. Each pattern is explained with key features and examples of application, highlighting how AI agents can handle complex tasks autonomously.</h3></a>
+                            <div style="margin: 0.5em 0;">
+                                <a href="/resources/images/image_002.png" target="_blank" style="display: inline-block;">
+                                    <img src="/resources/images/thumb_002.png" alt="The image illustrates various AI agent design patterns, including Reflection, Tool Use, Planning, React, and Multi-Agent Collaboration. Each pattern is explained with key features and examples of application, highlighting how AI agents can handle complex tasks autonomously." style="width: 120px; height: auto; border: 2px solid #dee2e6; border-radius: 6px; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#a05b7e'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='#dee2e6'; this.style.transform='scale(1)'" />
+                                </a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Models & Architectures | 
+                                Added: Monday 2 June 2025 alle ore 19:55:32
+                                 | Original: image.png
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://github.com/NVlabs/describe-anything" target="_blank"><h3 class="contrast"><strong>[GitHub - NVlabs/describe-anything: Implementation for Describe Anything: Detailed Localized Image and Video Captioning]</strong> This repository provides the implementation of the Describe Anything Model (DAM), which generates detailed, localized captions for specific regions in images and videos using user-provided annotations such as points, boxes, scribbles, or masks. It includes installation instructions, interactive demos, and tools for both image and video captioning tasks.</h3></a>
+                            <div>
+                                <a href="https://github.com/NVlabs/describe-anything" target="_blank" title="https://github.com/NVlabs/describe-anything">https://github.com/NVlabs/describe-anything</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Models & Architectures | 
+                                Added: Sunday 1 June 2025 alle ore 23:24:47
+                            </div>
+                        </li>
+          
+                        </ul>
+                    </div>
+                </div>
+      
+            </div>
+        </div>
+    
+        <div class="resources-category">
+            <div class="category-header" onclick="toggleCategory('foundations-&-theory')">
+                <span class="category-toggle" id="toggle-foundations-&-theory">▼</span>
+                <h2 class="content-listing-header sans">Foundations & Theory (8)</h2>
+            </div>
+            <div class="category-content expanded" id="content-foundations-&-theory">
+    
+                <div class="month-year-group">
+                    <div class="month-year-header" onclick="toggleMonthYear('foundations-&-theory-june-2025')">
+                        <span class="month-year-toggle" id="toggle-foundations-&-theory-june-2025">▼</span>
+                        <h3>June 2025 (8)</h3>
+                    </div>
+                    <div class="month-year-content expanded" id="content-foundations-&-theory-june-2025">
+                        <ul class="content-listing">
+      
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="/resources/images/image_001.jpg" target="_blank"><h3 class="contrast">The image is an infographic titled 'Rise of Agentic AI: From Automation to Autonomous Decision-Making'. It outlines eight stages of AI development: 1) Manual Processes (Pre-AI Era), 2) Rule-Based Automation, 3) Robotic Process Automation, 4) Intelligent Automation (IA), 5) Task-Specific AI Assistants, 6) AI Agents (The Turning Point), 7) Proactive AI Agents, and 8) Multi-Step Reasoning Agents. Each stage describes the evolution from human-reliant processes to advanced AI capable of independent decision-making.</h3></a>
+                            <div style="margin: 0.5em 0;">
+                                <a href="/resources/images/image_001.jpg" target="_blank" style="display: inline-block;">
+                                    <img src="/resources/images/thumb_001.jpg" alt="The image is an infographic titled 'Rise of Agentic AI: From Automation to Autonomous Decision-Making'. It outlines eight stages of AI development: 1) Manual Processes (Pre-AI Era), 2) Rule-Based Automation, 3) Robotic Process Automation, 4) Intelligent Automation (IA), 5) Task-Specific AI Assistants, 6) AI Agents (The Turning Point), 7) Proactive AI Agents, and 8) Multi-Step Reasoning Agents. Each stage describes the evolution from human-reliant processes to advanced AI capable of independent decision-making." style="width: 120px; height: auto; border: 2px solid #dee2e6; border-radius: 6px; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#a05b7e'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='#dee2e6'; this.style.transform='scale(1)'" />
+                                </a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Monday 2 June 2025 alle ore 19:54:01
+                                 | Original: Rise of Agentic Al.jpeg
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf" target="_blank"><h3 class="contrast"><strong>[Thinking in Systems]</strong> This book by Donella H. Meadows serves as an introduction to systems thinking, explaining fundamental concepts, structures, and behaviors of systems, and offering practical guidance on analyzing and intervening in complex systems.</h3></a>
+                            <div>
+                                <a href="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf" target="_blank" title="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf">https://research.fit.edu/media/site-specific/researchfite...</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 23:09:45
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1" target="_blank"><h3 class="contrast"><strong>[22365_3_Prompt Engineering_v7 (1).pdf]</strong> This document is a comprehensive guide on prompt engineering, covering techniques for configuring and optimizing prompts for large language models (LLMs), including output settings, sampling controls, and various prompting strategies.</h3></a>
+                            <div>
+                                <a href="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1" target="_blank" title="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1">https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L...</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 22:58:04
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://wayofcode.com" target="_blank"><h3 class="contrast"><strong>[Rick Rubin | The Way of Code: The Timeless Art of Vibe Coding]</strong> This content presents a philosophical and artistic exploration of coding inspired by Lao Tzu, blending reflections on the nature of code with generative visualizations and themes of duality, essence, and manifestation.</h3></a>
+                            <div>
+                                <a href="https://wayofcode.com" target="_blank" title="https://wayofcode.com">https://wayofcode.com</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 22:32:32
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://github.com/microsoft/mcp-for-beginners" target="_blank"><h3 class="contrast"><strong>[GitHub - microsoft/mcp-for-beginners: Teach the concepts and fundamentals of the Model Context Protocol (MCP)]</strong> This resource provides an open-source, multi-language curriculum for learning the Model Context Protocol (MCP), including practical coding examples and community support.</h3></a>
+                            <div>
+                                <a href="https://github.com/microsoft/mcp-for-beginners" target="_blank" title="https://github.com/microsoft/mcp-for-beginners">https://github.com/microsoft/mcp-for-beginners</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 22:25:23
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://osf.io/wehmg_v1/download/" target="_blank"><h3 class="contrast"><strong>[How To Build Conscious Machines]</strong> This doctoral thesis by Michael Timothy Bennett explores the theoretical foundations of consciousness in machines, proposing a formal framework for understanding qualia, abstraction layers, and the emergence of intelligence and consciousness in adaptive systems.</h3></a>
+                            <div>
+                                <a href="https://osf.io/wehmg_v1/download/" target="_blank" title="https://osf.io/wehmg_v1/download/">https://osf.io/wehmg_v1/download/</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 22:24:22
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://zenodo.org/records/15530677" target="_blank"><h3 class="contrast"><strong>[Neural Architectures Comparison: Common Cognitive Patterns between Brain and Artificial Intelligence]</strong> This study investigates functional analogies between hierarchical reference systems in the human neocortex and those found in modern Large Language Models, proposing that artificial neural networks can develop emergent capabilities analogous to specialized cortical areas, and explores universal computational principles underlying both biological and artificial intelligence.</h3></a>
+                            <div>
+                                <a href="https://zenodo.org/records/15530677" target="_blank" title="https://zenodo.org/records/15530677">https://zenodo.org/records/15530677</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 16:54:29
+                            </div>
+                        </li>
+          
+                        <li class="listing resources-item">
+                            <hr class="slender" />
+                            <a href="https://arxiv.org/pdf/2505.17117" target="_blank"><h3 class="contrast"><strong>[From Tokens to Thoughts: How LLMs and Humans Trade Compression for Meaning]</strong> This paper introduces an information-theoretic framework to compare how large language models (LLMs) and humans balance information compression with semantic fidelity in conceptual representations, revealing key differences in their approaches to meaning and categorization.</h3></a>
+                            <div>
+                                <a href="https://arxiv.org/pdf/2505.17117" target="_blank" title="https://arxiv.org/pdf/2505.17117">https://arxiv.org/pdf/2505.17117</a>
+                            </div>
+                            <div class="resources-meta">
+                                Category: Foundations & Theory | 
+                                Added: Sunday 1 June 2025 alle ore 16:30:26
+                            </div>
+                        </li>
+          
+                        </ul>
+                    </div>
+                </div>
+      
+            </div>
+        </div>
+    
+        <div class="resources-category">
             <div class="category-header" onclick="toggleCategory('tools-&-frameworks')">
                 <span class="category-toggle" id="toggle-tools-&-frameworks">▼</span>
                 <h2 class="content-listing-header sans">Tools & Frameworks (81)</h2>
@@ -271,7 +494,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:35:11
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/magnitudedev/magnitude" target="_blank"><h3 class="contrast"><strong>[GitHub - magnitudedev/magnitude: Open source, AI-native testing framework for web apps]</strong> This repository introduces Magnitude, an open source testing framework designed specifically for web applications, leveraging AI to enhance and automate the testing process.</h3></a>
@@ -283,7 +506,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:34:47
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/autoscrape-labs/pydoll" target="_blank"><h3 class="contrast"><strong>[GitHub - autoscrape-labs/pydoll]</strong> This resource introduces Pydoll, a Python library for asynchronous automation of Chromium-based browsers without relying on WebDriver, featuring realistic user interactions and upcoming enhancements.</h3></a>
@@ -295,7 +518,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:34:10
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/krillinai/KrillinAI" target="_blank"><h3 class="contrast"><strong>[GitHub - krillinai/KlicStudio: A video translation and dubbing tool powered by LLMs, offering professional-grade translations and one-click full-process deployment. It can generate content optimized for platforms like YouTube，TikTok, and Shorts.]</strong> This project introduces Klic Studio, an AI-powered tool for automated video translation, dubbing, and localization using large language models, supporting cross-platform content creation with features like voice cloning, subtitle alignment, and one-click deployment.</h3></a>
@@ -307,7 +530,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:33:36
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/pietrozullo/mcp-use" target="_blank"><h3 class="contrast"><strong>[GitHub - mcp-use/mcp-use: mcp-use is the easiest way to interact with mcp servers with custom agents]</strong> This resource introduces mcp-use, an open-source Python library that enables developers to easily connect any LLM to MCP servers and build custom agents with tool access, supporting features like multi-server use, dynamic server selection, and integration with LangChain-supported LLMs.</h3></a>
@@ -319,7 +542,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:33:02
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/getmaxun/maxun" target="_blank"><h3 class="contrast"><strong>[GitHub - getmaxun/maxun: ⚡️ Open Source No Code Web Data Extraction Platform • Turn Websites To APIs & Spreadsheets In Minutes ⚡️]</strong> This repository introduces Maxun, an open-source, no-code platform for automated web data extraction, enabling users to convert websites into APIs or spreadsheets quickly and easily.</h3></a>
@@ -331,7 +554,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:31:57
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/1Panel-dev/MaxKB" target="_blank"><h3 class="contrast"><strong>[GitHub - 1Panel-dev/MaxKB]</strong> MaxKB is an open-source AI assistant for enterprise that integrates RAG pipelines, supports robust workflows, and offers MCP tool-use capabilities.</h3></a>
@@ -343,7 +566,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:31:25
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/block/goose" target="_blank"><h3 class="contrast"><strong>[GitHub - block/goose]</strong> This repository introduces Goose, an open source and extensible AI agent designed to work with any large language model, enabling users to install, execute, edit, and test code beyond simple code suggestions.</h3></a>
@@ -355,7 +578,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:30:21
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/ItzCrazyKns/Perplexica" target="_blank"><h3 class="contrast"><strong>[GitHub - ItzCrazyKns/Perplexica: Perplexica is an AI-powered search engine. It is an Open source alternative to Perplexity AI]</strong> This repository introduces Perplexica, an open-source AI-powered search engine that leverages local LLMs and advanced search techniques to provide up-to-date, privacy-focused web search with multiple specialized modes and API integration.</h3></a>
@@ -367,7 +590,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:28:32
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://www.simular.ai/articles/agent-s2" target="_blank"><h3 class="contrast"><strong>[Agent S2 - Open, Modular, and Scalable Framework for Computer Use Agents | Simular AI]</strong> This article introduces Agent S2, an open-source, modular, and scalable AI framework designed for autonomous computer-use agents that interact with GUIs to perform tasks on behalf of users, highlighting its state-of-the-art performance and architectural innovations.</h3></a>
@@ -379,7 +602,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:27:57
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Skyvern-AI/skyvern" target="_blank"><h3 class="contrast"><strong>[GitHub - Skyvern-AI/skyvern: Automate browser-based workflows with LLMs and Computer Vision]</strong> This repository introduces Skyvern, a tool that automates browser-based workflows using large language models (LLMs) and computer vision, providing a Python API and cloud service to automate tasks across websites without relying on brittle DOM or XPath scripts.</h3></a>
@@ -391,7 +614,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:27:12
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Nixtla/statsforecast" target="_blank"><h3 class="contrast"><strong>[GitHub - Nixtla/statsforecast: Lightning ⚡️ fast forecasting with statistical and econometric models.]</strong> This repository introduces StatsForecast, a high-performance Python library for univariate time series forecasting using statistical and econometric models like ARIMA and ETS, optimized for speed and scalability in production environments.</h3></a>
@@ -403,7 +626,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:26:08
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/agno-agi/agent-ui" target="_blank"><h3 class="contrast"><strong>[GitHub - agno-agi/agent-ui]</strong> This repository provides a modern, open-source chat interface designed for interacting with AI agents, utilizing Next.js, Tailwind CSS, and TypeScript for development.</h3></a>
@@ -415,7 +638,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:23:55
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/browser-use/browser-use/" target="_blank"><h3 class="contrast"><strong>[GitHub - browser-use/browser-use: 🌐 Make websites accessible for AI agents. Automate tasks online with ease.]</strong> This repository provides a Python package that enables AI agents to control web browsers, automating online tasks and making websites accessible for AI-driven workflows. It offers quick setup, cloud-hosted options, and integration with popular AI models for browser automation.</h3></a>
@@ -427,7 +650,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:22:25
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/mudler/LocalAI" target="_blank"><h3 class="contrast"><strong>[GitHub - mudler/LocalAI: :robot: The free, Open Source alternative to OpenAI, Claude and others. Self-hosted and local-first]</strong> LocalAI is an open-source, self-hosted alternative to OpenAI and similar APIs, enabling local inference for text, audio, video, and image generation on consumer hardware without requiring a GPU.</h3></a>
@@ -439,7 +662,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:18:22
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/VoltAgent/voltagent" target="_blank"><h3 class="contrast"><strong>[GitHub - VoltAgent/voltagent: Open Source TypeScript AI Agent Framework]</strong> This resource introduces VoltAgent, an open-source TypeScript framework designed to simplify the development and orchestration of AI agents, providing modular building blocks for creating chatbots, virtual assistants, and multi-agent systems.</h3></a>
@@ -451,7 +674,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:17:13
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/assafelovic/gptr-mcp" target="_blank"><h3 class="contrast"><strong>[GitHub - assafelovic/gptr-mcp]</strong> This repository provides an MCP server that allows LLM applications to conduct deep web research using the MCP protocol, offering higher quality and more relevant research results compared to standard web search tools.</h3></a>
@@ -463,7 +686,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:16:30
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/omnivore-app/omnivore" target="_blank"><h3 class="contrast"><strong>[GitHub - omnivore-app/omnivore]</strong> This GitHub repository hosts Omnivore, an open source application that allows users to save and manage articles or content to read later, similar to services like Pocket or Instapaper.</h3></a>
@@ -475,7 +698,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:15:26
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/NicholasGoh/fastapi-mcp-langgraph-template" target="_blank"><h3 class="contrast"><strong>[GitHub - NicholasGoh/fastapi-mcp-langgraph-template: A modern template for agentic orchestration — built for rapid iteration and scalable deployment using highly customizable, community-supported tools like MCP, LangGraph, and more.]</strong> This repository provides a modern, highly customizable template for building agentic orchestration systems using FastAPI, MCP, and LangGraph, enabling rapid development and scalable deployment of LLM-powered applications.</h3></a>
@@ -487,7 +710,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:14:34
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/CopilotKit/open-multi-agent-canvas" target="_blank"><h3 class="contrast"><strong>[GitHub - CopilotKit/open-multi-agent-canvas: The open-source multi-agent chat interface that lets you manage multiple agents in one dynamic conversation and add MCP servers for deep research]</strong> This project is an open-source multi-agent chat interface built with Next.js, LangGraph, and CopilotKit, enabling users to manage and interact with multiple AI agents in a single conversation and connect to MCP servers for advanced research and task management.</h3></a>
@@ -499,7 +722,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:12:53
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/songquanpeng/one-api" target="_blank"><h3 class="contrast"><strong>[GitHub - songquanpeng/one-api]</strong> One API is an open-source LLM API management and key redistribution system that unifies access to multiple large language model providers (such as OpenAI, Azure, Anthropic, Google, and others) under a single API, supporting key management, load balancing, and multi-provider integration with easy deployment options.</h3></a>
@@ -511,7 +734,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:12:02
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/tambo-ai/tambo" target="_blank"><h3 class="contrast"><strong>[GitHub - tambo-ai/tambo: Add React components to your AI assistant, copilot, or agent.]</strong> This repository provides a tool for integrating React components into AI assistants, copilots, or agents, enabling enhanced UI and interactivity for AI-powered applications.</h3></a>
@@ -523,7 +746,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:10:53
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/langflow-ai/langflow" target="_blank"><h3 class="contrast"><strong>[GitHub - langflow-ai/langflow]</strong> This GitHub repository provides Langflow, a tool designed to help users build and deploy AI-powered agents and workflows efficiently.</h3></a>
@@ -535,7 +758,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:04:26
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/golf-mcp/golf" target="_blank"><h3 class="contrast"><strong>[GitHub - golf-mcp/golf: Production-Ready MCP Server Framework]</strong> This resource introduces Golf, a Python framework for rapidly building, deploying, and managing secure MCP (Multi-Component Process) server infrastructure to support AI agent applications, featuring streamlined project scaffolding, component discovery, and robust configuration options.</h3></a>
@@ -547,7 +770,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:03:29
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/mem0ai/mem0" target="_blank"><h3 class="contrast"><strong>[GitHub - mem0ai/mem0: Memory for AI Agents]</strong> This repository introduces mem0, a state-of-the-art memory management system designed for AI agents, featuring OpenMemory MCP for local and secure handling of agent memory.</h3></a>
@@ -559,7 +782,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:01:05
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://zapier.com/blog/zapier-mcp-claude-guide/" target="_blank"><h3 class="contrast"><strong>[Empower Claude.ai to work across your apps with Zapier MCP]</strong> This resource explains how to integrate Claude.ai, an AI assistant, with various applications using Zapier MCP, enabling automated workflows and enhanced productivity across multiple platforms.</h3></a>
@@ -571,7 +794,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:00:00
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/facebookresearch/Kats" target="_blank"><h3 class="contrast"><strong>[GitHub - facebookresearch/Kats]</strong> Kats is a lightweight, easy-to-use, and extendable framework for time series analysis, providing tools for statistics, change point detection, anomaly detection, and forecasting.</h3></a>
@@ -583,7 +806,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:59:19
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://pypi.org/project/pip-chill/" target="_blank"><h3 class="contrast"><strong>[pip-chill]</strong> pip-chill is a Python tool that generates a requirements file listing only the top-level packages you have installed, excluding dependencies, making dependency management simpler for developers.</h3></a>
@@ -595,7 +818,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:56:53
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/lasso-security/mcp-gateway" target="_blank"><h3 class="contrast"><strong>[GitHub - lasso-security/mcp-gateway]</strong> MCP Gateway is a plugin-based intermediary for Model Context Protocol (MCP) servers, enabling centralized management, request/response sanitization, and unified access to multiple MCPs for building enterprise-grade AI agents.</h3></a>
@@ -607,7 +830,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:56:17
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/rzane/docker2exe" target="_blank"><h3 class="contrast"><strong>[GitHub - rzane/docker2exe: Convert a Docker image to an executable]</strong> This GitHub repository provides a tool that converts Docker images into standalone executable files, simplifying deployment and distribution of containerized applications.</h3></a>
@@ -619,7 +842,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:55:15
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/langwatch/langwatch" target="_blank"><h3 class="contrast"><strong>[GitHub - langwatch/langwatch: The open LLM Ops platform - Traces, Analytics, Evaluations, Datasets and Prompt Optimization ✨]</strong> This GitHub repository hosts Langwatch, an open platform for managing large language model (LLM) operations, including features for tracing, analytics, evaluation, dataset management, and prompt optimization.</h3></a>
@@ -631,7 +854,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:54:44
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/going-doer/Paper2Code" target="_blank"><h3 class="contrast"><strong>[GitHub - going-doer/Paper2Code: Paper2Code: Automating Code Generation from Scientific Papers in Machine Learning]</strong> This repository introduces PaperCoder, a multi-agent LLM system that automates the process of generating code repositories from scientific machine learning papers, supporting both OpenAI and open-source models and providing benchmarks and setup instructions.</h3></a>
@@ -643,7 +866,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:53:55
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/PySpur-Dev/pyspur" target="_blank"><h3 class="contrast"><strong>[GitHub - PySpur-Dev/pyspur: A visual playground for agentic workflows: Iterate over your agents 10x faster]</strong> PySpur is a Python-based visual tool that enables AI engineers to rapidly build, test, and iterate on AI agent workflows with features like human-in-the-loop, multimodal support, and integration with various tools and LLM providers.</h3></a>
@@ -655,7 +878,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:53:19
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/The-Pocket/PocketFlow" target="_blank"><h3 class="contrast"><strong>[GitHub - The-Pocket/PocketFlow: Pocket Flow: 100-line LLM framework. Let Agents build Agents!]</strong> Pocket Flow is an ultra-lightweight, open-source framework for building LLM-based agent workflows in just 100 lines of code, designed to be expressive, dependency-free, and easy to extend across multiple languages.</h3></a>
@@ -667,7 +890,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:52:29
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Klavis-AI/klavis/blob/main/mcp_servers/report_generation/README.md" target="_blank"><h3 class="contrast"><strong>[klavis/mcp_servers/report_generation/README.md at main · Klavis-AI/klavis]</strong> This README documents the Klavis ReportGen MCP Server, an AI-powered tool that generates interactive web reports from user queries by leveraging Anthropic's Claude model, web search APIs, and database storage, with deployment instructions and usage details.</h3></a>
@@ -679,7 +902,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:51:44
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/shcherbak-ai/contextgem" target="_blank"><h3 class="contrast"><strong>[GitHub - shcherbak-ai/contextgem: ContextGem: Effortless LLM extraction from documents]</strong> ContextGem is a free, open-source framework designed to simplify the extraction of information from documents using large language models (LLMs). It provides tools and integrations to make LLM-based document processing more accessible and efficient.</h3></a>
@@ -691,7 +914,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:50:24
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/simstudioai/sim" target="_blank"><h3 class="contrast"><strong>[GitHub - simstudioai/sim: Sim Studio is an open-source AI agent workflow builder.]</strong> Sim Studio is an open-source tool that provides a lightweight and intuitive interface for building and deploying LLM-powered AI agent workflows that integrate with various tools.</h3></a>
@@ -703,7 +926,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:49:59
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Blaizzy/mlx-audio" target="_blank"><h3 class="contrast"><strong>[GitHub - Blaizzy/mlx-audio: A text-to-speech (TTS), speech-to-text (STT) and speech-to-speech (STS) library built on Apple's MLX framework]</strong> This repository provides a library for performing TTS, STT, and STS tasks efficiently on Apple Silicon devices using Apple's MLX framework.</h3></a>
@@ -715,7 +938,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:49:13
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/chonkie-inc/chonkie" target="_blank"><h3 class="contrast"><strong>[GitHub - chonkie-inc/chonkie: 🦛 CHONK your texts with Chonkie ✨ — The no-nonsense RAG chunking library]</strong> Chonkie is a lightweight, fast, and easy-to-use Python library for text chunking, designed for retrieval-augmented generation (RAG) and other NLP workflows. It provides various chunking strategies, supports multiple languages, and integrates with popular tokenizers and embedding models.</h3></a>
@@ -727,7 +950,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:48:35
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/cased/kit" target="_blank"><h3 class="contrast"><strong>[GitHub - cased/kit: The toolkit for codebase mapping, symbol extraction, and many kinds of code search. Build AI-powered devtools]</strong> This resource introduces 'kit', a production-ready toolkit for codebase mapping, symbol extraction, code search, and building AI-powered developer tools, including LLM-based PR reviewers and code exploration utilities.</h3></a>
@@ -739,7 +962,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:47:58
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/httpie/cli" target="_blank"><h3 class="contrast"><strong>[GitHub - httpie/cli: 🥧 HTTPie CLI  — modern, user-friendly command-line HTTP client for the API era. JSON support, colors, sessions, downloads, plugins & more.]</strong> This GitHub repository hosts HTTPie CLI, a modern and user-friendly command-line HTTP client designed for interacting with APIs, featuring JSON support, colorized output, session management, downloads, and plugin extensibility.</h3></a>
@@ -751,7 +974,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:46:18
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/pogjester/company-research-agent" target="_blank"><h3 class="contrast"><strong>[GitHub - pogjester/company-research-agent: An agentic company research tool powered by LangGraph and Tavily that conducts deep diligence on companies using a multi-agent framework]</strong> This repository provides a multi-agent AI-powered tool for conducting comprehensive company research, utilizing a modular pipeline with Gemini 2.0 Flash and GPT-4.1 for data synthesis, curation, and report generation.</h3></a>
@@ -763,7 +986,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:45:46
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/bytedance/deer-flow" target="_blank"><h3 class="contrast"><strong>[GitHub - bytedance/deer-flow]</strong> DeerFlow is a community-driven Deep Research framework that integrates language models with tools such as web search, crawling, and Python execution, enabling advanced research workflows and contributing to the open-source community.</h3></a>
@@ -775,7 +998,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:44:55
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/ag-ui-protocol/ag-ui" target="_blank"><h3 class="contrast"><strong>[GitHub - ag-ui-protocol/ag-ui: AG-UI: the Agent-User Interaction Protocol. Bring Agents into Frontend Applications.]</strong> AG-UI is an open, lightweight, event-based protocol that standardizes how AI agents connect and interact with front-end applications, enabling seamless agent-user communication in web interfaces.</h3></a>
@@ -787,7 +1010,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:44:21
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/awslabs/agent-squad" target="_blank"><h3 class="contrast"><strong>[GitHub - awslabs/agent-squad: Flexible and powerful framework for managing multiple AI agents and handling complex conversations]</strong> Agent Squad is an open-source framework for orchestrating multiple AI agents, enabling intelligent intent classification, context management, and flexible deployment for complex conversational applications.</h3></a>
@@ -799,7 +1022,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:41:36
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/metauto-ai/GPTSwarm" target="_blank"><h3 class="contrast"><strong>[GitHub - metauto-ai/GPTSwarm: 🐝 The First Graph Agentic Framework with RL and Prompt Optimization]</strong> GPTSwarm is a graph-based framework for building and optimizing swarms of LLM-based agents, featuring reinforcement learning, prompt optimization, and self-organizing agent graphs for advanced AI applications.</h3></a>
@@ -811,7 +1034,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:40:57
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://aurachat.io/" target="_blank"><h3 class="contrast"><strong>[Create Beautiful Designs | Aura]</strong> Aura is a platform that enables users to quickly generate and export beautiful designs to HTML or Figma, offering tools for web, mobile, and animation design.</h3></a>
@@ -823,7 +1046,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:40:09
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/nottelabs/notte" target="_blank"><h3 class="contrast"><strong>[GitHub - nottelabs/notte: 🔥 Reliable browser using agents]</strong> Notte is a full-stack web AI agents framework that enables developers to build, deploy, and scale automated browser agents capable of performing complex web tasks using natural language commands and LLMs.</h3></a>
@@ -835,7 +1058,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:39:18
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://docs.llamaindex.ai/en/stable/module_guides/deploying/agents/memory/" target="_blank"><h3 class="contrast"><strong>[Memory - LlamaIndex]</strong> This page explains the memory system in LlamaIndex agentic frameworks, detailing how to configure, use, and customize short-term and long-term memory for AI agents, including code examples and best practices.</h3></a>
@@ -847,7 +1070,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:38:57
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/langchain-ai/open-agent-platform" target="_blank"><h3 class="contrast"><strong>[GitHub - langchain-ai/open-agent-platform: An open-source, no-code agent building platform.]</strong> This repository provides an open-source platform that enables users to build AI agents without coding, making agent development more accessible.</h3></a>
@@ -859,7 +1082,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:36:55
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/strands-agents/sdk-python" target="_blank"><h3 class="contrast"><strong>[GitHub - strands-agents/sdk-python: A model-driven approach to building AI agents in just a few lines of code.]</strong> This GitHub repository provides a Python SDK that enables developers to build AI agents using a model-driven approach with minimal code.</h3></a>
@@ -871,7 +1094,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:35:35
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/tjmlabs/ColiVara" target="_blank"><h3 class="contrast"><strong>[GitHub - tjmlabs/ColiVara]</strong> ColiVara is a suite of services for storing, searching, and retrieving documents using visual embeddings, enabling state-of-the-art retrieval performance on both text and visually rich documents without relying on OCR or text extraction.</h3></a>
@@ -883,7 +1106,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:31:55
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Capsize-Games/airunner" target="_blank"><h3 class="contrast"><strong>[GitHub - Capsize-Games/airunner: Offline inference engine for art, real-time voice conversations, LLM powered chatbots and automated workflows]</strong> This project provides an offline AI engine supporting real-time voice conversations, customizable AI agents, image generation, and automated workflows, with a focus on privacy and local execution.</h3></a>
@@ -895,7 +1118,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:31:30
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/open-webui/open-webui" target="_blank"><h3 class="contrast"><strong>[GitHub - open-webui/open-webui: User-friendly AI Interface (Supports Ollama, OpenAI API, ...)]</strong> Open WebUI is a self-hosted, extensible AI platform that provides a user-friendly interface for managing and deploying large language models, supporting integrations with Ollama, OpenAI-compatible APIs, and more, with features like granular permissions and responsive design.</h3></a>
@@ -907,7 +1130,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:31:04
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/trycua/cua/tree/main/libs/lumier" target="_blank"><h3 class="contrast"><strong>[cua/libs/lumier at main · trycua/cua]</strong> Lumier is an interface for running macOS and Linux virtual machines with minimal setup, leveraging Docker and the Apple Virtualization Framework for easy VM management and browser-based access.</h3></a>
@@ -919,7 +1142,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:30:40
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/langchain-ai/open-agent-platform" target="_blank"><h3 class="contrast"><strong>[GitHub - langchain-ai/open-agent-platform: An open-source, no-code agent building platform.]</strong> This resource is a GitHub repository for an open-source platform that enables users to build AI agents without coding, making agent development accessible and streamlined.</h3></a>
@@ -931,7 +1154,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:30:05
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/langwatch/create-agent-app" target="_blank"><h3 class="contrast"><strong>[GitHub - langwatch/create-agent-app: Helping you select an AI agent framework]</strong> This GitHub repository provides resources and tools to help users select and compare different AI agent frameworks for building AI-powered applications.</h3></a>
@@ -943,7 +1166,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:29:33
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/ashishps1/awesome-leetcode-resources" target="_blank"><h3 class="contrast"><strong>[GitHub - ashishps1/awesome-leetcode-resources: Awesome LeetCode resources to learn Data Structures and Algorithms and prepare for Coding Interviews]</strong> This repository provides a curated list of resources to help users learn data structures, algorithms, and prepare for coding interviews, especially using LeetCode.</h3></a>
@@ -955,7 +1178,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:29:12
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/leaningtech/webvm" target="_blank"><h3 class="contrast"><strong>[GitHub - leaningtech/webvm: Virtual Machine for the Web]</strong> This repository provides WebVM, a serverless Linux virtual machine that runs entirely in the browser using HTML5/WebAssembly, enabling safe, client-side execution of x86 binaries and offering tools for customization and deployment.</h3></a>
@@ -967,7 +1190,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:28:44
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/HeyPuter/puter" target="_blank"><h3 class="contrast"><strong>[GitHub - HeyPuter/puter: 🌐 The Internet OS! Free, Open-Source, and Self-Hostable.]</strong> This is a GitHub repository for 'puter', an open-source, self-hostable operating system designed for the web, allowing users to run and manage applications in a browser-based environment.</h3></a>
@@ -979,7 +1202,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:28:26
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/cocoindex-io/cocoindex" target="_blank"><h3 class="contrast"><strong>[GitHub - cocoindex-io/cocoindex: Real-time data transformation framework for AI. Ultra performant, with incremental processing]</strong> This repository provides a high-performance, real-time data transformation framework designed for AI applications, supporting incremental data processing.</h3></a>
@@ -991,7 +1214,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:27:41
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/mindsdb/mindsdb" target="_blank"><h3 class="contrast"><strong>[GitHub - mindsdb/mindsdb: AI's query engine - Platform for building AI that can answer questions over large scale federated data]</strong> This GitHub repository hosts MindsDB, an open-source platform that enables users to build AI systems capable of querying and answering questions over large-scale, federated datasets.</h3></a>
@@ -1003,7 +1226,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:27:07
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://rdkit.org/docs/Overview.html" target="_blank"><h3 class="contrast"><strong>[An overview of the RDKit]</strong> This page provides an overview of RDKit, an open-source toolkit for cheminformatics that offers core molecular data structures, algorithms, and integration with various programming languages and platforms for molecular modeling and machine learning.</h3></a>
@@ -1015,7 +1238,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:26:37
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://deepwiki.com/" target="_blank"><h3 class="contrast"><strong>[DeepWiki | AI documentation you can talk to, for every repo]</strong> DeepWiki is an AI-powered documentation platform that allows users to interactively explore and understand the documentation of various software repositories using conversational AI.</h3></a>
@@ -1027,7 +1250,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:21:39
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://tldv.io/" target="_blank"><h3 class="contrast"><strong>[tl;dv.io | AI Meeting Note taker for Zoom, Google Meet & MS Teams]</strong> This page describes tl;dv.io, an AI-powered tool that automatically takes meeting notes for Zoom, Google Meet, and Microsoft Teams.</h3></a>
@@ -1039,7 +1262,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:21:17
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://gamma.app" target="_blank"><h3 class="contrast"><strong>[Instant Presentations, Websites, and More with AI | Gamma]</strong> Gamma is an AI-powered tool that streamlines the creation of presentations, websites, and documents, enabling users to work more efficiently and creatively.</h3></a>
@@ -1051,7 +1274,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:20:40
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://rork.com/" target="_blank"><h3 class="contrast"><strong>[Rork — vibe code a mobile app in minutes]</strong> Rork is an AI-powered platform that enables users to quickly build complete, cross-platform mobile apps using React Native, offering templates for various app types such as visual novels, habit trackers, and fitness trackers.</h3></a>
@@ -1063,7 +1286,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:19:44
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/e-p-armstrong/augmentoolkit" target="_blank"><h3 class="contrast"><strong>[GitHub - e-p-armstrong/augmentoolkit: Convert Compute And Books Into Instruct-Tuning Datasets! Makes: QA, RP, Classifiers.]</strong> This repository introduces Augmentoolkit, an open-source tool for generating high-quality, domain-specific datasets for training custom LLMs and classifiers using open-source AI, supporting pipelines for QA, roleplay, and creative writing data.</h3></a>
@@ -1075,7 +1298,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:19:13
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Vexa-ai/vexa" target="_blank"><h3 class="contrast"><strong>[GitHub - Vexa-ai/vexa: Self-hosted, multi-user API that drops bots into Google Meet for real-time transcripts.]</strong> This project provides an open source, privacy-focused API for real-time meeting transcription by deploying bots into Google Meet (and soon Zoom/Teams), enabling developers to build custom transcription and meeting assistant solutions.</h3></a>
@@ -1087,7 +1310,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:18:48
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Intelligent-Internet/ii-agent/" target="_blank"><h3 class="contrast"><strong>[GitHub - Intelligent-Internet/ii-agent: II-Agent: a new open-source framework to build and deploy intelligent agents]</strong> This GitHub repository introduces II-Agent, an open-source framework designed for building and deploying intelligent agents, providing tools and resources for AI agent development.</h3></a>
@@ -1099,7 +1322,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:18:21
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/microsoft/data-formulator" target="_blank"><h3 class="contrast"><strong>[GitHub - microsoft/data-formulator: 🪄 Create rich visualizations with AI]</strong> Data Formulator is an AI-powered tool by Microsoft that enables users to transform data and create rich visualizations iteratively, supporting large datasets, multiple data sources, and integration with various AI models.</h3></a>
@@ -1111,7 +1334,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:17:01
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/awslabs/agent-squad" target="_blank"><h3 class="contrast"><strong>[GitHub - awslabs/agent-squad: Flexible and powerful framework for managing multiple AI agents and handling complex conversations]</strong> This resource introduces Agent Squad, an open-source framework for orchestrating multiple AI agents to manage complex conversations, featuring intelligent intent classification, context management, and extensible architecture in both Python and TypeScript.</h3></a>
@@ -1123,7 +1346,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:16:35
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/karakeep-app/karakeep" target="_blank"><h3 class="contrast"><strong>[GitHub - karakeep-app/karakeep: A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search]</strong> This is an open-source, self-hostable application for bookmarking links, notes, and images, featuring AI-powered automatic tagging and full-text search capabilities.</h3></a>
@@ -1135,7 +1358,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:16:06
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/cloudflare/agents/blob/main/packages/agents/README.md" target="_blank"><h3 class="contrast"><strong>[cloudflare/agents]</strong> This resource introduces the 'agents' framework by Cloudflare, a platform for building persistent, stateful, and autonomous AI agents that can communicate, learn, and operate globally using Cloudflare's infrastructure.</h3></a>
@@ -1147,7 +1370,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:15:10
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/resemble-ai/chatterbox" target="_blank"><h3 class="contrast"><strong>[GitHub - resemble-ai/chatterbox: SoTA open-source TTS]</strong> This repository provides Chatterbox, a state-of-the-art open-source text-to-speech (TTS) system developed by resemble-ai, enabling high-quality speech synthesis for various applications.</h3></a>
@@ -1159,7 +1382,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:14:00
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://gitingest.com" target="_blank"><h3 class="contrast"><strong>[Gitingest]</strong> Gitingest is a tool that converts any Git repository into a concise text digest of its codebase, making it easier to feed codebases into large language models (LLMs). It helps users summarize repositories for AI applications by limiting file sizes and supporting easy URL modification.</h3></a>
@@ -1171,7 +1394,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:13:30
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/evalstate/fast-agent" target="_blank"><h3 class="contrast"><strong>[GitHub - evalstate/fast-agent: Define, Prompt and Test MCP enabled Agents and Workflows]</strong> This repository introduces 'fast-agent', a Python framework for rapidly defining, prompting, and testing multi-modal, MCP-enabled AI agents and workflows, supporting Anthropic and OpenAI models with a focus on easy configuration and extensibility.</h3></a>
@@ -1183,7 +1406,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:12:27
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Zie619/n8n-workflows" target="_blank"><h3 class="contrast"><strong>[GitHub - Zie619/n8n-workflows: all of the workflows of n8n i could find (also from the site itself)]</strong> This GitHub repository collects and shares a wide range of n8n automation workflows sourced from the community and the official site, providing resources for workflow automation and integration.</h3></a>
@@ -1195,7 +1418,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:11:51
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://www.rowboatlabs.com" target="_blank"><h3 class="contrast"><strong>[Rowboat - Let AI build your agents for you]</strong> Rowboat is an open-source platform that enables users to build, manage, and deploy AI agent workflows using a no-code interface, AI-powered copilot, and integrations with various tools and large language models.</h3></a>
@@ -1207,7 +1430,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:10:49
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Fosowl/agenticSeek" target="_blank"><h3 class="contrast"><strong>[GitHub - Fosowl/agenticSeek: Fully Local Manus AI. Enjoy an autonomous agent that thinks, browses the web, and code for the sole cost of electricity]</strong> This project introduces AgenticSeek, an open-source, fully local AI assistant that autonomously browses the web, writes code, and manages tasks on your device with complete privacy and no cloud dependency.</h3></a>
@@ -1219,7 +1442,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:09:04
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/manticoresoftware/manticoresearch" target="_blank"><h3 class="contrast"><strong>[GitHub - manticoresoftware/manticoresearch: Easy to use open source fast database for search]</strong> This resource introduces Manticore Search, an open-source, high-performance search database positioned as an alternative to Elasticsearch, highlighting its speed, cost-efficiency, and compatibility for search and analytics use cases.</h3></a>
@@ -1231,7 +1454,7 @@
                                 Added: Sunday 1 June 2025 alle ore 21:59:26
                             </div>
                         </li>
-        
+          
                         </ul>
                     </div>
                 </div>
@@ -1265,7 +1488,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:25:30
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://arxiv.org/abs/2505.07865" target="_blank"><h3 class="contrast"><strong>[CellVerse: Do Large Language Models Really Understand Cell Biology?]</strong> This paper introduces CellVerse, a benchmark for evaluating large language models on single-cell biology tasks, and presents a comprehensive assessment of various LLMs' abilities to understand and analyze cell biology data, highlighting current limitations and challenges.</h3></a>
@@ -1277,7 +1500,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:37:59
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://arxiv.org/pdf/2505.13840" target="_blank"><h3 class="contrast"><strong>[EFFICIENT LLM: EFFICIENCY IN LARGE LANGUAGE MODELS]</strong> This paper introduces EfficientLLM, a comprehensive benchmark and empirical study evaluating efficiency techniques for large language models (LLMs) across architecture pretraining, fine-tuning, and quantization, providing insights into trade-offs between performance, resource usage, and scalability.</h3></a>
@@ -1289,41 +1512,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:34:33
                             </div>
                         </li>
-        
-                        </ul>
-                    </div>
-                </div>
-      
-            </div>
-        </div>
-    
-        <div class="resources-category">
-            <div class="category-header" onclick="toggleCategory('models-&-architectures')">
-                <span class="category-toggle" id="toggle-models-&-architectures">▼</span>
-                <h2 class="content-listing-header sans">Models & Architectures (1)</h2>
-            </div>
-            <div class="category-content expanded" id="content-models-&-architectures">
-    
-                <div class="month-year-group">
-                    <div class="month-year-header" onclick="toggleMonthYear('models-&-architectures-june-2025')">
-                        <span class="month-year-toggle" id="toggle-models-&-architectures-june-2025">▼</span>
-                        <h3>June 2025 (1)</h3>
-                    </div>
-                    <div class="month-year-content expanded" id="content-models-&-architectures-june-2025">
-                        <ul class="content-listing">
-      
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://github.com/NVlabs/describe-anything" target="_blank"><h3 class="contrast"><strong>[GitHub - NVlabs/describe-anything: Implementation for Describe Anything: Detailed Localized Image and Video Captioning]</strong> This repository provides the implementation of the Describe Anything Model (DAM), which generates detailed, localized captions for specific regions in images and videos using user-provided annotations such as points, boxes, scribbles, or masks. It includes installation instructions, interactive demos, and tools for both image and video captioning tasks.</h3></a>
-                            <div>
-                                <a href="https://github.com/NVlabs/describe-anything" target="_blank" title="https://github.com/NVlabs/describe-anything">https://github.com/NVlabs/describe-anything</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Models & Architectures | 
-                                Added: Sunday 1 June 2025 alle ore 23:24:47
-                            </div>
-                        </li>
-        
+          
                         </ul>
                     </div>
                 </div>
@@ -1357,7 +1546,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:23:19
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/microsoft/magentic-ui" target="_blank"><h3 class="contrast"><strong>[GitHub - microsoft/magentic-ui: A research prototype of a human-centered web agent]</strong> Magentic-UI is a research prototype web application from Microsoft that provides a human-centered interface for automating web tasks using a multi-agent system, enabling users to collaboratively plan, execute, and control web actions and code execution.</h3></a>
@@ -1369,7 +1558,7 @@
                                 Added: Sunday 1 June 2025 alle ore 23:05:00
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/Shubhamsaboo/awesome-llm-apps" target="_blank"><h3 class="contrast"><strong>[GitHub - Shubhamsaboo/awesome-llm-apps: Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.]</strong> This repository is a curated collection of practical and creative applications built with large language models (LLMs), featuring AI agents, retrieval-augmented generation (RAG), and integrations with models from OpenAI, Anthropic, Google, and open-source providers.</h3></a>
@@ -1381,7 +1570,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:17:42
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/KodyKendall/LlamaBot" target="_blank"><h3 class="contrast"><strong>[GitHub - KodyKendall/LlamaBot: An AI Coding Agent Powered by LangGraph]</strong> LlamaBot is an open-source AI agent that enables users to chat, write, and live-preview web applications by generating and editing HTML, CSS, and JavaScript code in real time using LangGraph and FastAPI.</h3></a>
@@ -1393,7 +1582,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:17:27
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/SWE-agent/SWE-agent" target="_blank"><h3 class="contrast"><strong>[GitHub - SWE-agent/SWE-agent]</strong> SWE-agent is a tool that automatically attempts to fix GitHub issues using a language model of your choice, and can also be used for offensive cybersecurity or competitive coding challenges.</h3></a>
@@ -1405,7 +1594,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:12:51
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://github.com/virattt/ai-hedge-fund" target="_blank"><h3 class="contrast"><strong>[GitHub - virattt/ai-hedge-fund: An AI Hedge Fund Team]</strong> This project is a proof-of-concept AI-powered hedge fund simulation that uses multiple AI agents modeled after famous investors to generate simulated trading decisions for educational purposes.</h3></a>
@@ -1417,113 +1606,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:10:04
                             </div>
                         </li>
-        
-                        </ul>
-                    </div>
-                </div>
-      
-            </div>
-        </div>
-    
-        <div class="resources-category">
-            <div class="category-header" onclick="toggleCategory('foundations-&-theory')">
-                <span class="category-toggle" id="toggle-foundations-&-theory">▼</span>
-                <h2 class="content-listing-header sans">Foundations & Theory (7)</h2>
-            </div>
-            <div class="category-content expanded" id="content-foundations-&-theory">
-    
-                <div class="month-year-group">
-                    <div class="month-year-header" onclick="toggleMonthYear('foundations-&-theory-june-2025')">
-                        <span class="month-year-toggle" id="toggle-foundations-&-theory-june-2025">▼</span>
-                        <h3>June 2025 (7)</h3>
-                    </div>
-                    <div class="month-year-content expanded" id="content-foundations-&-theory-june-2025">
-                        <ul class="content-listing">
-      
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf" target="_blank"><h3 class="contrast"><strong>[Thinking in Systems]</strong> This book by Donella H. Meadows serves as an introduction to systems thinking, explaining fundamental concepts, structures, and behaviors of systems, and offering practical guidance on analyzing and intervening in complex systems.</h3></a>
-                            <div>
-                                <a href="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf" target="_blank" title="https://research.fit.edu/media/site-specific/researchfitedu/coast-climate-adaptation-library/climate-communications/psychology-amp-behavior/Meadows-2008.-Thinking-in-Systems.pdf">https://research.fit.edu/media/site-specific/researchfite...</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 23:09:45
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1" target="_blank"><h3 class="contrast"><strong>[22365_3_Prompt Engineering_v7 (1).pdf]</strong> This document is a comprehensive guide on prompt engineering, covering techniques for configuring and optimizing prompts for large language models (LLMs), including output settings, sampling controls, and various prompting strategies.</h3></a>
-                            <div>
-                                <a href="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1" target="_blank" title="https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view?pli=1">https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L...</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 22:58:04
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://wayofcode.com" target="_blank"><h3 class="contrast"><strong>[Rick Rubin | The Way of Code: The Timeless Art of Vibe Coding]</strong> This content presents a philosophical and artistic exploration of coding inspired by Lao Tzu, blending reflections on the nature of code with generative visualizations and themes of duality, essence, and manifestation.</h3></a>
-                            <div>
-                                <a href="https://wayofcode.com" target="_blank" title="https://wayofcode.com">https://wayofcode.com</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 22:32:32
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://github.com/microsoft/mcp-for-beginners" target="_blank"><h3 class="contrast"><strong>[GitHub - microsoft/mcp-for-beginners: Teach the concepts and fundamentals of the Model Context Protocol (MCP)]</strong> This resource provides an open-source, multi-language curriculum for learning the Model Context Protocol (MCP), including practical coding examples and community support.</h3></a>
-                            <div>
-                                <a href="https://github.com/microsoft/mcp-for-beginners" target="_blank" title="https://github.com/microsoft/mcp-for-beginners">https://github.com/microsoft/mcp-for-beginners</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 22:25:23
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://osf.io/wehmg_v1/download/" target="_blank"><h3 class="contrast"><strong>[How To Build Conscious Machines]</strong> This doctoral thesis by Michael Timothy Bennett explores the theoretical foundations of consciousness in machines, proposing a formal framework for understanding qualia, abstraction layers, and the emergence of intelligence and consciousness in adaptive systems.</h3></a>
-                            <div>
-                                <a href="https://osf.io/wehmg_v1/download/" target="_blank" title="https://osf.io/wehmg_v1/download/">https://osf.io/wehmg_v1/download/</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 22:24:22
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://zenodo.org/records/15530677" target="_blank"><h3 class="contrast"><strong>[Neural Architectures Comparison: Common Cognitive Patterns between Brain and Artificial Intelligence]</strong> This study investigates functional analogies between hierarchical reference systems in the human neocortex and those found in modern Large Language Models, proposing that artificial neural networks can develop emergent capabilities analogous to specialized cortical areas, and explores universal computational principles underlying both biological and artificial intelligence.</h3></a>
-                            <div>
-                                <a href="https://zenodo.org/records/15530677" target="_blank" title="https://zenodo.org/records/15530677">https://zenodo.org/records/15530677</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 16:54:29
-                            </div>
-                        </li>
-        
-                        <li class="listing resources-item">
-                            <hr class="slender" />
-                            <a href="https://arxiv.org/pdf/2505.17117" target="_blank"><h3 class="contrast"><strong>[From Tokens to Thoughts: How LLMs and Humans Trade Compression for Meaning]</strong> This paper introduces an information-theoretic framework to compare how large language models (LLMs) and humans balance information compression with semantic fidelity in conceptual representations, revealing key differences in their approaches to meaning and categorization.</h3></a>
-                            <div>
-                                <a href="https://arxiv.org/pdf/2505.17117" target="_blank" title="https://arxiv.org/pdf/2505.17117">https://arxiv.org/pdf/2505.17117</a>
-                            </div>
-                            <div class="resources-meta">
-                                Category: Foundations & Theory | 
-                                Added: Sunday 1 June 2025 alle ore 16:30:26
-                            </div>
-                        </li>
-        
+          
                         </ul>
                     </div>
                 </div>
@@ -1557,7 +1640,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:42:45
                             </div>
                         </li>
-        
+          
                         <li class="listing resources-item">
                             <hr class="slender" />
                             <a href="https://drive.google.com/file/d/1KwLpmAKf7T_bY05t9Gq6hXoLw0CsgyXV/view" target="_blank"><h3 class="contrast"><strong>[Mary Meeker's Report ChatGPT.pdf - Google Drive]</strong> This document is an investment team memo summarizing Mary Meeker's background and her influential role in identifying technology and internet trends, with a focus on capital and AI trends for 2025.</h3></a>
@@ -1569,7 +1652,7 @@
                                 Added: Sunday 1 June 2025 alle ore 22:42:22
                             </div>
                         </li>
-        
+          
                         </ul>
                     </div>
                 </div>
@@ -1621,10 +1704,6 @@
 </script>
 
 <script>
-// ========================================
-// RESOURCES MANAGEMENT
-// ========================================
-
 // Function to toggle category visibility
 function toggleCategory(categoryId) {
     const content = document.getElementById('content-' + categoryId);
@@ -1701,5 +1780,5 @@ function toggleAllCategories(expand) {
 }
 </script>
 
-</body>
+  </body>
 </html>
